@@ -1,53 +1,68 @@
 import 'package:flutter/material.dart';
-import 'package:rifq_v2/core/constants/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-abstract class AppTextTheme {
-  static TextTheme lightTextTheme = const TextTheme(
-    displayLarge: TextStyle(
-      fontSize: 32,
-      fontWeight: FontWeight.bold,
-      color: AppColors.textPrimary,
-    ),
-    displayMedium: TextStyle(
-      fontSize: 28,
-      fontWeight: FontWeight.bold,
-      color: AppColors.textPrimary,
-    ),
-    displaySmall: TextStyle(
-      fontSize: 24,
-      fontWeight: FontWeight.bold,
-      color: AppColors.textPrimary,
-    ),
-    headlineMedium: TextStyle(
-      fontSize: 20,
-      fontWeight: FontWeight.w600,
-      color: AppColors.textPrimary,
-    ),
-    titleLarge: TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w600,
-      color: AppColors.textPrimary,
-    ),
-    bodyLarge: TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.normal,
-      color: AppColors.textPrimary,
-    ),
-    bodyMedium: TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.normal,
-      color: AppColors.textSecondary,
-    ),
-    bodySmall: TextStyle(
-      fontSize: 12,
-      fontWeight: FontWeight.normal,
-      color: AppColors.textHint,
-    ),
-  );
+abstract class AppTextStyles {
+  static TextStyle _poppins({
+    required double fontSize,
+    required FontWeight fontWeight,
+    required double lineHeightPx,
+  }) {
+    return GoogleFonts.poppins(
+      fontSize: fontSize.sp,              
+      fontWeight: fontWeight,
+      height: lineHeightPx.h / fontSize.sp, 
+      letterSpacing: 0,
+    );
+  }
 
-  static TextTheme darkTextTheme = lightTextTheme.apply(
-    bodyColor: Colors.white,
-    displayColor: Colors.white,
-  );
+  // Headings
+  static TextStyle get h1 => _poppins(
+        fontSize: 46,
+        fontWeight: FontWeight.w700,
+        lineHeightPx: 69,
+      );
+
+  static TextStyle get h2 => _poppins(
+        fontSize: 38,
+        fontWeight: FontWeight.w700,
+        lineHeightPx: 57,
+      );
+
+  static TextStyle get h3 => _poppins(
+        fontSize: 32,
+        fontWeight: FontWeight.w700,
+        lineHeightPx: 48,
+      );
+
+  static TextStyle get h4 => _poppins(
+        fontSize: 26,
+        fontWeight: FontWeight.w700,
+        lineHeightPx: 39,
+      );
+
+  static TextStyle get h5 => _poppins(
+        fontSize: 22,
+        fontWeight: FontWeight.w700,
+        lineHeightPx: 33,
+      );
+
+  // Body
+  static TextStyle get body1 => _poppins(
+        fontSize: 18,
+        fontWeight: FontWeight.w500, // Medium
+        lineHeightPx: 27,
+      );
+
+  static TextStyle get body2 => _poppins(
+        fontSize: 16,
+        fontWeight: FontWeight.w400, // Regular
+        lineHeightPx: 24,
+      );
+
+  static TextStyle get body3 => _poppins(
+        fontSize: 14,
+        fontWeight: FontWeight.w400, // Regular
+        lineHeightPx: 21,
+      );
 }
-
