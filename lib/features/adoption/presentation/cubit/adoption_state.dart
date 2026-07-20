@@ -1,19 +1,19 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../domain/entities/adoption_entity.dart';
 
-abstract class AdoptionState extends Equatable {
-  const AdoptionState();
+part 'adoption_state.freezed.dart';
 
-  @override
-  List<Object?> get props => [];
+@freezed
+class AdoptionState with _$AdoptionState {
+  const factory AdoptionState.initial() = _Initial;
+  const factory AdoptionState.loading() = _Loading;
+
+  const factory AdoptionState.feedLoaded(List<AdoptionPostEntity> posts) =
+      _FeedLoaded;
+  const factory AdoptionState.myListingsLoaded(List<AdoptionPostEntity> posts) =
+      _MyListingsLoaded;
+
+  const factory AdoptionState.actionSuccess() =
+      _ActionSuccess; // Used after successful creation
+  const factory AdoptionState.error(String message) = _Error;
 }
-
-class AdoptionInitialState extends AdoptionState {}
-class AdoptionSuccessState extends AdoptionState {}
-
-class AdoptionErrorState extends AdoptionState {
-  final String message;
-  const AdoptionErrorState({required this.message});
-  @override
-  List<Object?> get props => [message];
-}
-

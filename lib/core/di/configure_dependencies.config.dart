@@ -24,12 +24,14 @@ import '../../features/add_pet/domain/usecases/add_pet_use_case.dart' as _i151;
 import '../../features/add_pet/presentation/cubit/add_pet_cubit.dart' as _i493;
 import '../../features/adoption/data/datasources/adoption_remote_data_source.dart'
     as _i956;
-import '../../features/adoption/data/repositories/adoption_repository_data.dart'
-    as _i321;
 import '../../features/adoption/domain/repositories/adoption_repository_domain.dart'
     as _i785;
-import '../../features/adoption/domain/use_cases/adoption_use_case.dart'
-    as _i367;
+import '../../features/adoption/domain/use_cases/create_adoption_post_use_case.dart'
+    as _i824;
+import '../../features/adoption/domain/use_cases/fetch_adoption_posts_use_case.dart'
+    as _i425;
+import '../../features/adoption/presentation/cubit/adoption_cubit.dart'
+    as _i430;
 import '../../features/auth/data/datasources/auth_data_source.dart' as _i970;
 import '../../features/auth/data/repositories/auth_repo_data.dart' as _i400;
 import '../../features/auth/domain/repositories/auth_repository_domain.dart'
@@ -58,19 +60,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i792.GetStorage>(() => thirdPartyModule.storage);
     gh.singleton<_i454.SupabaseClient>(() => thirdPartyModule.supabaseClient);
     gh.lazySingleton<_i667.DioClient>(() => _i667.DioClient());
+    gh.lazySingleton<_i956.AdoptionRemoteDataSource>(
+      () => _i956.AdoptionRemoteDataSourceImpl(gh<_i454.SupabaseClient>()),
+    );
     gh.lazySingleton<_i734.BaseAddPetDataSource>(
       () => _i734.AddPetDataSource(gh<_i454.SupabaseClient>()),
-    );
-    gh.lazySingleton<_i956.BaseAdoptionRemoteDataSource>(
-      () => _i956.AdoptionRemoteDataSource(
-        gh<_i945.LocalKeysService>(),
-        gh<_i454.SupabaseClient>(),
-      ),
-    );
-    gh.lazySingleton<_i785.AdoptionRepositoryDomain>(
-      () => _i321.AdoptionRepositoryData(
-        gh<_i956.BaseAdoptionRemoteDataSource>(),
-      ),
     );
     gh.lazySingleton<_i362.BaseHomeDataSource>(
       () => _i362.HomeDataSource(gh<_i454.SupabaseClient>()),
@@ -81,11 +75,16 @@ extension GetItInjectableX on _i174.GetIt {
         box: gh<_i792.GetStorage>(),
       ),
     );
+    gh.factory<_i824.CreateAdoptionPostUseCase>(
+      () =>
+          _i824.CreateAdoptionPostUseCase(gh<_i785.AdoptionRepositoryDomain>()),
+    );
+    gh.factory<_i425.FetchAdoptionPostsUseCase>(
+      () =>
+          _i425.FetchAdoptionPostsUseCase(gh<_i785.AdoptionRepositoryDomain>()),
+    );
     gh.lazySingleton<_i998.AuthRepoDomain>(
       () => _i400.AuthRepoData(authDataSource: gh<_i970.BaseAuthDataSource>()),
-    );
-    gh.lazySingleton<_i367.AdoptionUseCase>(
-      () => _i367.AdoptionUseCase(gh<_i785.AdoptionRepositoryDomain>()),
     );
     gh.lazySingleton<_i52.AddPetRepoDomain>(
       () => _i63.AddPetRepoData(gh<_i734.BaseAddPetDataSource>()),
@@ -98,6 +97,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i283.AuthUseCase>(
       () => _i283.AuthUseCase(authRepoData: gh<_i998.AuthRepoDomain>()),
+    );
+    gh.factory<_i430.AdoptionCubit>(
+      () => _i430.AdoptionCubit(
+        gh<_i425.FetchAdoptionPostsUseCase>(),
+        gh<_i824.CreateAdoptionPostUseCase>(),
+      ),
     );
     gh.factory<_i151.AddPetUseCase>(
       () => _i151.AddPetUseCase(gh<_i52.AddPetRepoDomain>()),
