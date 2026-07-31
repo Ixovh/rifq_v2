@@ -52,6 +52,7 @@ class SubaBaseDataSource implements BaseAuthDataSource {
     try {
       await _supabase.auth.signUp(
         email: email,
+          emailRedirectTo: 'io.supabase.rifq://login',
         password: password,
         data: {
           'full_name': name,

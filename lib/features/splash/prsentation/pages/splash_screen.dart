@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,6 +8,7 @@ import 'package:rifq_v2/core/theme/app_theme.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:rifq_v2/core/navigation/app_router.dart';
+
 @RoutePage()
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,79 +18,149 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final Duration minDuration = 2000.ms;
+  //   final Duration minDuration = 2000.ms;
+
+  //   @override
+  //   void initState() {
+  //     super.initState();
+  //       debugPrint("Splash init");
+  //     Future.delayed(minDuration, _checkAuth);
+  //   }
+
+  //   Future<void> _checkAuth() async {
+  //   final session = Supabase.instance.client.auth.currentUser;
+  //   PageRouteInfo route = const ChoosePathRoute();
+
+  //     if (session != null) {
+  //     // ✅ هذا هو الإصلاح - تحقق أولاً
+  //     if (session.emailConfirmedAt == null) {
+  //       await Supabase.instance.client.auth.signOut();
+  //       if (!mounted) return;
+  //       context.router.replace(const ChoosePathRoute());
+  //       return;
+  //     }
+
+  //     final profile = await Supabase.instance.client
+  //         .from('profiles')
+  //         .select('id, role')
+  //         .eq('id', session.id)
+  //         .maybeSingle();
+
+  //     if (profile != null) {
+  //       final role = profile['role'] as String?;
+  //       if (role == 'pet_owner') {
+  //         route = const NavWrapperRoute();
+  //       } else if (role == 'service_provider') {
+  //         route = const NavWrapperRoute(); // غيّره لاحقاً لشاشة مقدم الخدمة
+  //       }
+  //     }
+  //   }
+
+  //   if (!mounted) return;
+  //   context.router.replace(route);
+  // }
+  // //حق حاتم القديم
+  // //   Future<void> _checkAuth() async {
+  // //     final session = Supabase.instance.client.auth.currentUser;
+  // //     PageRouteInfo route = const ChoosePathRoute();
+
+  // //     if (session != null) {
+  // //       final provider = await Supabase.instance.client
+  // //           .from('profiles')
+  // //           .select('id')
+  // //           .eq('id', session.id)
+  // //           .maybeSingle();
+
+  // //       final user = await Supabase.instance.client
+  // //           .from('users')
+  // //           .select('id')
+  // //           .eq('id', session.id)
+  // //           .maybeSingle();
+
+  // //       // if (user != null) {
+  // //       //   route = Routes.navbar;
+  // //       // } else if (provider != null) {
+  // //       //   route = Routes.providerNavbar;
+  // //       // }
+  // //     }
+  // //     if (!mounted) return;
+  // // context.router.replace(route);
+  // //  }
+
+  //   @override
+
+  StreamSubscription<AuthState>? _authSub;
+  Timer? _fallbackTimer;
+  bool _navigated = false;
 
   @override
   void initState() {
     super.initState();
-      debugPrint("Splash init");
-    Future.delayed(minDuration, _checkAuth);
-  }
+    debugPrint("Splash init");
 
-
-
-  Future<void> _checkAuth() async {
-  final session = Supabase.instance.client.auth.currentUser;
-  PageRouteInfo route = const ChoosePathRoute();
-
-
-    if (session != null) {
-    // ✅ هذا هو الإصلاح - تحقق أولاً
-    if (session.emailConfirmedAt == null) {
-      await Supabase.instance.client.auth.signOut();
-      if (!mounted) return;
-      context.router.replace(const ChoosePathRoute());
+    final existingSession = Supabase.instance.client.auth.currentSession;
+    if (existingSession != null) {
+      _handleNavigation();
       return;
     }
 
-    final profile = await Supabase.instance.client
-        .from('profiles')
-        .select('id, role')
-        .eq('id', session.id)
-        .maybeSingle();
-
-    if (profile != null) {
-      final role = profile['role'] as String?;
-      if (role == 'pet_owner') {
-        route = const NavWrapperRoute();
-      } else if (role == 'service_provider') {
-        route = const NavWrapperRoute(); // غيّره لاحقاً لشاشة مقدم الخدمة
+    _authSub = Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+      if (data.event == AuthChangeEvent.signedIn ||
+          data.event == AuthChangeEvent.initialSession) {
+        _handleNavigation();
       }
-    }
+    });
+
+    _fallbackTimer = Timer(const Duration(milliseconds: 3500), () {
+      if (!_navigated) _handleNavigation();
+    });
   }
 
-  if (!mounted) return;
-  context.router.replace(route);
-}
-//حق حاتم القديم
-//   Future<void> _checkAuth() async {
-//     final session = Supabase.instance.client.auth.currentUser;
-//     PageRouteInfo route = const ChoosePathRoute();
+  Future<void> _handleNavigation() async {
+    if (_navigated || !mounted) return;
+    _navigated = true;
+    _fallbackTimer?.cancel();
+    await _authSub?.cancel();
+    await _checkAuth();
+  }
 
-//     if (session != null) {
-//       final provider = await Supabase.instance.client
-//           .from('profiles')
-//           .select('id')
-//           .eq('id', session.id)
-//           .maybeSingle();
+  Future<void> _checkAuth() async {
+    final user = Supabase.instance.client.auth.currentUser;
+    PageRouteInfo route = const ChoosePathRoute();
 
-//       final user = await Supabase.instance.client
-//           .from('users')
-//           .select('id')
-//           .eq('id', session.id)
-//           .maybeSingle();
+    if (user != null) {
+      if (user.emailConfirmedAt == null) {
+        await Supabase.instance.client.auth.signOut();
+        if (!mounted) return;
+        context.router.replace(const ChoosePathRoute());
+        return;
+      }
 
-//       // if (user != null) {
-//       //   route = Routes.navbar;
-//       // } else if (provider != null) {
-//       //   route = Routes.providerNavbar;
-//       // }
-//     }
-//     if (!mounted) return;
-// context.router.replace(route); 
-//  }
+      final profile = await Supabase.instance.client
+          .from('profiles')
+          .select('id, role')
+          .eq('id', user.id)
+          .maybeSingle();
+
+      if (profile != null) {
+        final role = profile['role'] as String?;
+        if (role == 'pet_owner' || role == 'service_provider') {
+          route = const NavWrapperRoute();
+        }
+      }
+    }
+
+    if (!mounted) return;
+    context.router.replace(route);
+  }
 
   @override
+  void dispose() {
+    _authSub?.cancel();
+    _fallbackTimer?.cancel();
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.primary,
@@ -264,6 +337,7 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
+
 /// Custom clipper for trapezoidal door shape
 class _TrapezoidalClipper extends CustomClipper<Path> {
   final double leftOffset;

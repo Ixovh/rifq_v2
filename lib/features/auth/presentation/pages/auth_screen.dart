@@ -14,8 +14,8 @@ import '../../../../../core/theme/app_theme.dart';
 
 @RoutePage()
 class AuthScreen extends StatelessWidget {
-  const AuthScreen({super.key,required  this.role});
-    final String role;
+  const AuthScreen({super.key, required this.role});
+  final String role;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,11 @@ class AuthScreen extends StatelessWidget {
                   context.replaceRoute(const NavWrapperRoute());
                   break;
                 case AuthSignUPSuccessState _:
-                  context.pushRoute(OtpRoute(isResetPassword: false,email: cubit.sinUpEmailController.text,));
+                case AuthSignUPSuccessState _:
+                  context.pushRoute(
+                    CheckEmailRoute(email: cubit.sinUpEmailController.text),
+                  );
+                  // context.pushRoute(OtpRoute(isResetPassword: false,email: cubit.sinUpEmailController.text,));
                   // context.push(Routes.otpScreen, extra: {"cubit":cubit, "isPassword": false});
                   break;
                 case AuthErrorState _:
@@ -54,7 +58,12 @@ class AuthScreen extends StatelessWidget {
                     children: [
                       const AuthTabBar(),
                       Expanded(
-                        child: TabBarView(children: [LoginTab(), SignUpTab(role: role)]),
+                        child: TabBarView(
+                          children: [
+                            LoginTab(),
+                            SignUpTab(role: role),
+                          ],
+                        ),
                       ),
                     ],
                   ),

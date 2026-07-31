@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'core/setup.dart';
 import 'core/di/configure_dependencies.dart';
 import 'core/navigation/app_router.dart';
-
+import 'package:supabase_flutter/supabase_flutter.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -13,6 +13,12 @@ Future<void> main() async {
   await setup();
   await configureDependencies();
   GoogleFonts.config.allowRuntimeFetching = false;
+
+    Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+    if (data.event == AuthChangeEvent.signedIn) {
+      _appRouter.replaceAll([const NavWrapperRoute()]);
+    }
+  });
 
   runApp(
     EasyLocalization(

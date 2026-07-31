@@ -17,7 +17,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rifq_v2/features/home/presentation/pages/home_feature_screen.dart';
 import 'package:rifq_v2/features/home/presentation/cubit/home_cubit.dart';
 
-
+import 'package:rifq_v2/features/auth/presentation/pages/check_email_screen.dart';
 part 'app_router.gr.dart'; 
 
 @AutoRouterConfig(replaceInRouteName: 'Screen,Route')
@@ -31,6 +31,7 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: WelcomeRoute.page, path: '/welcome'),
     AutoRoute(page: AuthRoute.page, path: '/auth'),
     AutoRoute(page: OtpRoute.page, path: '/otp'),
+    AutoRoute(page: CheckEmailRoute.page, path: '/check-email'),
     AutoRoute(page: SendsToEmailRoute.page, path: '/send-email'),
     AutoRoute(page: ResetPasswordRoute.page, path: '/reset-password'),
     AutoRoute(page: NavWrapperRoute.page, path: '/navbar'),

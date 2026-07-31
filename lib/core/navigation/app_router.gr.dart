@@ -99,6 +99,53 @@ class AuthRouteArgs {
 }
 
 /// generated route for
+/// [CheckEmailScreen]
+class CheckEmailRoute extends PageRouteInfo<CheckEmailRouteArgs> {
+  CheckEmailRoute({
+    Key? key,
+    required String email,
+    List<PageRouteInfo>? children,
+  }) : super(
+         CheckEmailRoute.name,
+         args: CheckEmailRouteArgs(key: key, email: email),
+         initialChildren: children,
+       );
+
+  static const String name = 'CheckEmailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<CheckEmailRouteArgs>();
+      return CheckEmailScreen(key: args.key, email: args.email);
+    },
+  );
+}
+
+class CheckEmailRouteArgs {
+  const CheckEmailRouteArgs({this.key, required this.email});
+
+  final Key? key;
+
+  final String email;
+
+  @override
+  String toString() {
+    return 'CheckEmailRouteArgs{key: $key, email: $email}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! CheckEmailRouteArgs) return false;
+    return key == other.key && email == other.email;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ email.hashCode;
+}
+
+/// generated route for
 /// [ChoosePathScreen]
 class ChoosePathRoute extends PageRouteInfo<void> {
   const ChoosePathRoute({List<PageRouteInfo>? children})
