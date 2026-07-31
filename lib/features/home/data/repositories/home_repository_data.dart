@@ -28,7 +28,7 @@ class HomeRepoImpl implements HomeRepoDomain {
         return Error("User not found");
       }
 
-      final username = profile['name'] ?? "User";
+      final username = profile['full_name'] ?? "User";
       final ownerId = profile['id'];
 
       //!!-----------pets-----------

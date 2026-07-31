@@ -25,8 +25,8 @@ class HomeDataSource implements BaseHomeDataSource {
       final userId = AuthHelper.getUserId();
       if (userId == null) return null;
       final profile = await supabase
-          .from('users')
-          .select('id, name')
+          .from('profiles')
+          .select('id, full_name')
           .eq('id', userId)
           .maybeSingle();
       return profile;

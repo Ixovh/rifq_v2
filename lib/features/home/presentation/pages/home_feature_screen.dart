@@ -43,6 +43,14 @@ class HomeScreen extends StatelessWidget {
             );
           }
 
+          if (state is HomeEmptyState) {
+              return HomeContent(
+                username: state.username,
+                isGuest: false,
+                  pets: const [],
+                  );
+                  }
+
           if (state is HomeError) {
             return Center(child: Text(state.message));
           }
