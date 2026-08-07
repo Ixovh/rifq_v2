@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:rifq_v2/features/add_pet/presentation/pages/add_pet_screen.dart';
-import 'package:rifq_v2/features/auth/presentation/pages/auth_screen.dart';
-import 'package:rifq_v2/features/auth/presentation/pages/otp_screen.dart';
-import 'package:rifq_v2/features/auth/presentation/pages/reset_password_screen.dart';
-import 'package:rifq_v2/features/auth/presentation/pages/sends_to_email_screen.dart';
-import 'package:rifq_v2/features/auth/presentation/pages/welcomscreen.dart';
+import 'package:rifq_v2/features/auth/presentation/screens/auth_screen.dart';
+import 'package:rifq_v2/features/auth/presentation/screens/otp_screen.dart';
+import 'package:rifq_v2/features/auth/presentation/screens/reset_password_screen.dart';
+import 'package:rifq_v2/features/auth/presentation/screens/sends_to_email_screen.dart';
+import 'package:rifq_v2/features/auth/presentation/screens/welcome_screen.dart';
 import 'package:rifq_v2/features/nav/prsentaion/pages/nav_screen.dart';
 import 'package:rifq_v2/features/onboarding/presentation/pages/onboarding_feature_screen.dart';
 import 'package:rifq_v2/features/splash/prsentation/pages/choose_path.dart';

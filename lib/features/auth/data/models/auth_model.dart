@@ -1,6 +1,6 @@
 // This file is "model.dart"
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:rifq_v2/core/widgets/shared/shared_in_owner_flow/shared_auth/entities/auth_entity.dart';
+import 'package:rifq_v2/features/auth/domain/entities/auth_entity.dart';
 
 
 

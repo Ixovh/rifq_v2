@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:rifq_v2/shared/errors/custome_exception.dart';
 import 'package:rifq_v2/shared/storage_service/auth_helper.dart';
-import 'package:rifq_v2/core/widgets/shared/shared_in_owner_flow/shared_auth/models/auth_model.dart';
+import 'package:rifq_v2/features/auth/data/models/auth_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class BaseAuthDataSource {
@@ -203,7 +203,7 @@ class SubaBaseDataSource implements BaseAuthDataSource {
 // import 'package:multiple_result/multiple_result.dart';
 // import 'package:rifq_v2/shared/errors/custome_exception.dart';
 // import 'package:rifq_v2/shared/storage_service/auth_helper.dart';
-// import 'package:rifq_v2/core/widgets/shared/shared_in_owner_flow/shared_auth/models/auth_model.dart';
+// import 'package:rifq_v2/features/auth/data/models/auth_model.dart';
 
 // import 'package:supabase_flutter/supabase_flutter.dart';
 
