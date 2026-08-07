@@ -24,6 +24,8 @@ import '../../features/add_pet/domain/usecases/add_pet_use_case.dart' as _i151;
 import '../../features/add_pet/presentation/cubit/add_pet_cubit.dart' as _i493;
 import '../../features/adoption/data/datasources/adoption_remote_data_source.dart'
     as _i956;
+import '../../features/adoption/data/repositories/adoption_repository_data.dart'
+    as _i321;
 import '../../features/adoption/domain/repositories/adoption_repository_domain.dart'
     as _i785;
 import '../../features/adoption/domain/use_cases/create_adoption_post_use_case.dart'
@@ -62,6 +64,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i201.DioClient>(() => _i201.DioClient());
     gh.lazySingleton<_i956.AdoptionRemoteDataSource>(
       () => _i956.AdoptionRemoteDataSourceImpl(gh<_i454.SupabaseClient>()),
+    );
+    gh.lazySingleton<_i785.AdoptionRepositoryDomain>(
+      () => _i321.AdoptionRepositoryData(gh<_i454.SupabaseClient>()),
     );
     gh.lazySingleton<_i734.BaseAddPetDataSource>(
       () => _i734.AddPetDataSource(gh<_i454.SupabaseClient>()),

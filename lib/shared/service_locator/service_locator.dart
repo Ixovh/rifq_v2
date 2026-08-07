@@ -1,25 +1,3 @@
-// import 'package:get_it/get_it.dart';
-// import 'package:rifq_v2/shared/service_locator/service_locator.config.dart';
-// import 'package:injectable/injectable.dart';
-// import 'package:rifq_v2/features/auth/di/auth_di.dart';
-// import 'package:rifq_v2/features/adoption/di/adoption_di.dart';
-
-// @InjectableInit(
-//   initializerName: 'init', 
-//   preferRelativeImports: true,
-//   asExtension: true, 
-//   generateForDir: ['lib/core'],
-// )
-
-// Future<void> configureDependencies() async {
-//   final getIt = GetIt.instance;
-//   getIt.init();
-//     configureAuth(getIt);
-//     configureAdoption(getIt);
-//     // configureOnboarding(getIt);
-//     configureHome(getIt);
-// }
-
 import 'package:get_it/get_it.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:injectable/injectable.dart';

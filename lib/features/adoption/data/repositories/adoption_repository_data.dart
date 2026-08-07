@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 import '../../domain/entities/adoption_entity.dart';
 import '../../domain/repositories/adoption_repository_domain.dart';
 import '../models/adoption_model.dart';
 
+@LazySingleton(as: AdoptionRepositoryDomain)
 class AdoptionRepositoryData implements AdoptionRepositoryDomain {
   final SupabaseClient _supabase;
   final Uuid _uuid = const Uuid();
