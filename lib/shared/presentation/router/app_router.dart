@@ -7,7 +7,7 @@ import 'package:rifq_v2/features/auth/presentation/screens/reset_password_screen
 import 'package:rifq_v2/features/auth/presentation/screens/sends_to_email_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/welcome_screen.dart';
 import 'package:rifq_v2/features/nav/prsentaion/pages/nav_screen.dart';
-import 'package:rifq_v2/features/onboarding/presentation/pages/onboarding_feature_screen.dart';
+import 'package:rifq_v2/features/onboarding/presentation/screens/onboarding_feature_screen.dart';
 import 'package:rifq_v2/features/splash/prsentation/pages/choose_path.dart';
 import 'package:rifq_v2/features/splash/prsentation/pages/splash_screen.dart';
 import 'package:go_router/go_router.dart';
