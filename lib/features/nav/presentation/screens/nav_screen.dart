@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
-import 'package:rifq_v2/features/nav/prsentaion/cubit/nav_cubit.dart';
-import 'package:rifq_v2/features/nav/prsentaion/cubit/nav_state.dart';
+import 'package:rifq_v2/features/nav/presentation/cubit/nav_cubit.dart';
+import 'package:rifq_v2/features/nav/presentation/cubit/nav_state.dart';
 
 class NavScreen extends StatelessWidget {
   const NavScreen({super.key});

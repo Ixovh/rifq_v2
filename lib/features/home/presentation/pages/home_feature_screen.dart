@@ -13,7 +13,7 @@ import 'package:rifq_v2/features/home/presentation/cubit/home_cubit.dart';
 import 'package:rifq_v2/features/home/presentation/widgets/add_pet_circle_widget.dart';
 import 'package:rifq_v2/features/home/presentation/widgets/quick_service_widget.dart';
 import 'package:rifq_v2/features/home/presentation/widgets/recommendation_carousel_widget.dart';
-import 'package:rifq_v2/features/nav/prsentaion/cubit/nav_cubit.dart';
+import 'package:rifq_v2/features/nav/presentation/cubit/nav_cubit.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
