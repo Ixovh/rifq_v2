@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:multiple_result/multiple_result.dart';
-import 'package:rifq_v2/core/widgets/shared/shared_in_owner_flow/shared_auth/helpers/auth_helper.dart';
+import 'package:rifq_v2/shared/storage_service/auth_helper.dart';
 import 'package:rifq_v2/features/home/data/datasources/home_remote_data_source.dart';
 import 'package:rifq_v2/features/home/domain/entities/home_entity.dart';
 import 'package:rifq_v2/features/home/domain/repositories/home_repository_domain.dart';

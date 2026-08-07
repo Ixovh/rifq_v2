@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:rifq_v2/core/theme/app_text_theme.dart';
-import 'app_color.dart';
+import 'package:rifq_v2/shared/presentation/theme/app_text_theme.dart';
+import 'package:rifq_v2/shared/presentation/theme/app_color.dart';
 
 extension AppThemeX on BuildContext {
   // ---------- Colors ----------

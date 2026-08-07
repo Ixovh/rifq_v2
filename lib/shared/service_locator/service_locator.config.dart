@@ -45,9 +45,9 @@ import '../../features/home/domain/repositories/home_repository_domain.dart'
     as _i257;
 import '../../features/home/domain/use_cases/home_use_case.dart' as _i933;
 import '../../features/home/presentation/cubit/home_cubit.dart' as _i9;
-import '../network/dio_client.dart' as _i667;
-import '../services/local_keys_service.dart' as _i945;
-import 'third_part.dart' as _i423;
+import '../networking/dio_client.dart' as _i201;
+import '../storage_service/local_keys_service.dart' as _i261;
+import 'shared/main_dependencies.dart' as _i1013;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -59,7 +59,7 @@ extension GetItInjectableX on _i174.GetIt {
     final thirdPartyModule = _$ThirdPartyModule();
     gh.singleton<_i792.GetStorage>(() => thirdPartyModule.storage);
     gh.singleton<_i454.SupabaseClient>(() => thirdPartyModule.supabaseClient);
-    gh.lazySingleton<_i667.DioClient>(() => _i667.DioClient());
+    gh.lazySingleton<_i201.DioClient>(() => _i201.DioClient());
     gh.lazySingleton<_i956.AdoptionRemoteDataSource>(
       () => _i956.AdoptionRemoteDataSourceImpl(gh<_i454.SupabaseClient>()),
     );
@@ -113,9 +113,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i493.AddPetCubit>(
       () => _i493.AddPetCubit(gh<_i151.AddPetUseCase>()),
     );
-    gh.singleton<_i945.LocalKeysService>(() => _i945.LocalKeysService());
+    gh.singleton<_i261.LocalKeysService>(() => _i261.LocalKeysService());
     return this;
   }
 }
 
-class _$ThirdPartyModule extends _i423.ThirdPartyModule {}
+class _$ThirdPartyModule extends _i1013.ThirdPartyModule {}

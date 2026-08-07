@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
-import 'package:rifq_v2/core/navigation/app_router.dart';
+import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/features/auth/domain/use_cases/auth_use_case.dart';
 import 'package:rifq_v2/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:rifq_v2/features/auth/presentation/pages/auth_tab_bar.dart';
 import 'package:rifq_v2/features/auth/presentation/pages/login_tab.dart';
 import 'package:rifq_v2/features/auth/presentation/pages/sign_up_tab.dart';
 import 'package:rifq_v2/features/auth/presentation/widgets/custom_bottom_sheet.dart';
-import '../../../../../core/theme/app_theme.dart';
+import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
 @RoutePage()
 class AuthScreen extends StatelessWidget {

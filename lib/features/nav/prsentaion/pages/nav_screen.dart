@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:rifq_v2/core/theme/app_theme.dart';
+import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/features/nav/prsentaion/cubit/nav_cubit.dart';
 import 'package:rifq_v2/features/nav/prsentaion/cubit/nav_state.dart';
 

@@ -2,9 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'core/setup.dart';
-import 'core/di/configure_dependencies.dart';
-import 'core/navigation/app_router.dart';
+import 'shared/setup.dart';
+import 'shared/service_locator/service_locator.dart';
+import 'shared/presentation/router/app_router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

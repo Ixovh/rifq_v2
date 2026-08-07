@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:rifq_v2/core/errors/custome_exception.dart';
+import 'package:rifq_v2/shared/errors/custome_exception.dart';
 import 'package:rifq_v2/features/auth/domain/use_cases/auth_use_case.dart';
 
 

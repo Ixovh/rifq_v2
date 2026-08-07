@@ -1,6 +1,6 @@
 // import 'package:flutter/material.dart';
 // import 'package:sizer/sizer.dart';
-// import 'package:rifq_v2/core/widgets/loading_widget.dart';
+// import 'package:rifq_v2/shared/presentation/widgets/loading_widget.dart';
 
 // extension ContextExtensions on BuildContext {
 //   // Snackbar

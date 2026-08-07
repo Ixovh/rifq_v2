@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:rifq_v2/core/theme/app_theme.dart';
+import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 class AuthTabBar extends StatelessWidget {
   /// this holds the tabs that are in auth_screen.dart
   const AuthTabBar({super.key});

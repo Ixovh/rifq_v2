@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
-import 'package:rifq_v2/core/navigation/app_router.dart';
+import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/features/auth/domain/use_cases/auth_use_case.dart';
 import 'package:rifq_v2/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:rifq_v2/features/auth/presentation/widgets/container_button.dart';
-import '../../../../../core/theme/app_theme.dart';
+import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 @RoutePage()

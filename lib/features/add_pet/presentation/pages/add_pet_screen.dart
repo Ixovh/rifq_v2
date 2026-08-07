@@ -3,14 +3,14 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rifq_v2/core/theme/app_theme.dart';
-import 'package:rifq_v2/core/widgets/custome_button_widgets.dart';
+import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
+import 'package:rifq_v2/shared/presentation/widgets/custome_button_widgets.dart';
 import 'package:rifq_v2/features/add_pet/presentation/cubit/add_pet_cubit.dart';
 import 'package:rifq_v2/features/add_pet/presentation/widgets/add_pet_stepper.dart';
 import 'package:rifq_v2/features/add_pet/presentation/widgets/step1_add_pet.dart';
 import 'package:rifq_v2/features/add_pet/presentation/widgets/step2_add_pet.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:rifq_v2/core/di/configure_dependencies.dart';
+import 'package:rifq_v2/shared/service_locator/service_locator.dart';
 
 class AddPetFormState {
   final String gender;
