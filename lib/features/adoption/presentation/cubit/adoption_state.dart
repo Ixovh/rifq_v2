@@ -1,19 +1,59 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:equatable/equatable.dart';
 import '../../domain/entities/adoption_entity.dart';
 
-part 'adoption_state.freezed.dart';
+abstract class AdoptionState extends Equatable {
+  const AdoptionState();
 
-@freezed
-class AdoptionState with _$AdoptionState {
-  const factory AdoptionState.initial() = _Initial;
-  const factory AdoptionState.loading() = _Loading;
-
+  const factory AdoptionState.initial() = AdoptionInitial;
+  const factory AdoptionState.loading() = AdoptionLoading;
   const factory AdoptionState.feedLoaded(List<AdoptionPostEntity> posts) =
-      _FeedLoaded;
-  const factory AdoptionState.myListingsLoaded(List<AdoptionPostEntity> posts) =
-      _MyListingsLoaded;
+      AdoptionFeedLoaded;
+  const factory AdoptionState.myListingsLoaded(
+    List<AdoptionPostEntity> posts,
+  ) = AdoptionMyListingsLoaded;
+  const factory AdoptionState.actionSuccess() = AdoptionActionSuccess;
+  const factory AdoptionState.error(String message) = AdoptionError;
 
-  const factory AdoptionState.actionSuccess() =
-      _ActionSuccess; // Used after successful creation
-  const factory AdoptionState.error(String message) = _Error;
+  @override
+  List<Object?> get props => [];
+}
+
+class AdoptionInitial extends AdoptionState {
+  const AdoptionInitial();
+}
+
+class AdoptionLoading extends AdoptionState {
+  const AdoptionLoading();
+}
+
+class AdoptionFeedLoaded extends AdoptionState {
+  final List<AdoptionPostEntity> posts;
+
+  const AdoptionFeedLoaded(this.posts);
+
+  @override
+  List<Object?> get props => [posts];
+}
+
+class AdoptionMyListingsLoaded extends AdoptionState {
+  final List<AdoptionPostEntity> posts;
+
+  const AdoptionMyListingsLoaded(this.posts);
+
+  @override
+  List<Object?> get props => [posts];
+}
+
+// Used after successful creation
+class AdoptionActionSuccess extends AdoptionState {
+  const AdoptionActionSuccess();
+}
+
+class AdoptionError extends AdoptionState {
+  final String message;
+
+  const AdoptionError(this.message);
+
+  @override
+  List<Object?> get props => [message];
 }
