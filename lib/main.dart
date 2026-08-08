@@ -25,16 +25,17 @@ Future<void> main() async {
 }
 
 final _appRouter = AppRouter();
+
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-       designSize: const Size(402, 874),
-         builder: (_, _) {
+      designSize: const Size(402, 874),
+      builder: (_, _) {
         return MaterialApp.router(
-       routerConfig: _appRouter.config(),
+          routerConfig: _appRouter.config(),
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
           locale: context.locale,
@@ -47,4 +48,3 @@ class MainApp extends StatelessWidget {
     );
   }
 }
-
