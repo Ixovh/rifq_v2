@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:rifq_v2/features/add_pet/presentation/pages/add_pet_screen.dart';
+import 'package:rifq_v2/features/add_pet/presentation/screens/add_pet_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/auth_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/otp_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/reset_password_screen.dart';
@@ -14,7 +14,7 @@ import 'package:go_router/go_router.dart';
 import 'routers.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rifq_v2/features/home/presentation/pages/home_feature_screen.dart';
+import 'package:rifq_v2/features/home/presentation/screens/home_feature_screen.dart';
 import 'package:rifq_v2/features/home/presentation/cubit/home_cubit.dart';
 
 
