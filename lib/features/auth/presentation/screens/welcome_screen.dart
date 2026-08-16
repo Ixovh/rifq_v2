@@ -8,6 +8,7 @@ import 'package:rifq_v2/features/auth/domain/use_cases/auth_use_case.dart';
 import 'package:rifq_v2/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:rifq_v2/features/auth/presentation/widgets/container_button.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
+import 'package:rifq_v2/shared/storage_service/auth_helper.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 @RoutePage()
@@ -99,7 +100,19 @@ class WelcomeScreen extends StatelessWidget {
                             ),
                             SizedBox(height: 18.h),
                             ContainerButton(
-                              onTap: ()  {
+                              onTap: () async {
+                                // Explicitly persist guest state — without
+                                // this, "Continue as Guest" only happened
+                                // to look like it worked when local storage
+                                // was already empty. Any stale non-guest
+                                // login data left over from a previous
+                                // session (e.g. Splash's unconfirmed-email
+                                // sign-out path, which clears the Supabase
+                                // session but not this local flag) would
+                                // otherwise still read as a real signed-in
+                                // user.
+                                await AuthHelper.saveGuestLogin();
+                                if (!context.mounted) return;
                                 context.replaceRoute(const NavWrapperRoute());
                                   // context.go(Routes.navbar);
                               },
