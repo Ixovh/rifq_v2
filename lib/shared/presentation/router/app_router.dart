@@ -10,7 +10,6 @@ import 'package:rifq_v2/features/nav/presentation/screens/nav_screen.dart';
 import 'package:rifq_v2/features/onboarding/presentation/screens/onboarding_feature_screen.dart';
 import 'package:rifq_v2/features/splash/presentation/screens/choose_path.dart';
 import 'package:rifq_v2/features/splash/presentation/screens/splash_screen.dart';
-import 'package:go_router/go_router.dart';
 import 'routers.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
