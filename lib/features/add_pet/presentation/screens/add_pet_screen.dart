@@ -57,19 +57,8 @@ class AddPetScreen extends StatelessWidget {
     final _ = Supabase.instance.client;
 
     Future<String?> getOwnerId() async {
-      final supabase = Supabase.instance.client;
-
-      final authId = supabase.auth.currentUser?.id;
-
-      if (authId == null) return null;
-
-      final res = await supabase
-          .from('users')
-          .select('id')
-          .eq('auth_id', authId)
-          .maybeSingle();
-
-      return res?['id'];
+      // profiles.id matches auth.users.id
+      return Supabase.instance.client.auth.currentUser?.id;
     }
 
     return BlocProvider(

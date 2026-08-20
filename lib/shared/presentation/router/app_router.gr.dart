@@ -11,6 +11,22 @@
 part of 'app_router.dart';
 
 /// generated route for
+/// [AccountScreen]
+class AccountRoute extends PageRouteInfo<void> {
+  const AccountRoute({List<PageRouteInfo>? children})
+    : super(AccountRoute.name, initialChildren: children);
+
+  static const String name = 'AccountRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AccountScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [AddPetScreen]
 class AddPetRoute extends PageRouteInfo<AddPetRouteArgs> {
   AddPetRoute({Key? key, List<PageRouteInfo>? children})
@@ -110,6 +126,22 @@ class ChoosePathRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const ChoosePathScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [EditAccountScreen]
+class EditAccountRoute extends PageRouteInfo<void> {
+  const EditAccountRoute({List<PageRouteInfo>? children})
+    : super(EditAccountRoute.name, initialChildren: children);
+
+  static const String name = 'EditAccountRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const EditAccountScreen();
     },
   );
 }

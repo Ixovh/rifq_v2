@@ -14,6 +14,14 @@ import 'package:get_storage/get_storage.dart' as _i792;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:supabase_flutter/supabase_flutter.dart' as _i454;
 
+import '../../features/account/data/datasources/account_data_source.dart'
+    as _i1012;
+import '../../features/account/data/repositories/account_repo_data.dart'
+    as _i1013;
+import '../../features/account/domain/repositories/account_repository_domain.dart'
+    as _i533;
+import '../../features/account/domain/use_cases/account_use_case.dart' as _i803;
+import '../../features/account/presentation/cubit/account_cubit.dart' as _i439;
 import '../../features/add_pet/data/datasources/add_pet_data_source.dart'
     as _i734;
 import '../../features/add_pet/data/repositories/add_pet_repo_data.dart'
@@ -49,7 +57,7 @@ import '../../features/home/domain/use_cases/home_use_case.dart' as _i933;
 import '../../features/home/presentation/cubit/home_cubit.dart' as _i9;
 import '../networking/dio_client.dart' as _i201;
 import '../storage_service/local_keys_service.dart' as _i261;
-import 'shared/main_dependencies.dart' as _i1013;
+import 'shared/main_dependencies.dart' as _i1014;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -80,6 +88,9 @@ extension GetItInjectableX on _i174.GetIt {
         box: gh<_i792.GetStorage>(),
       ),
     );
+    gh.lazySingleton<_i1012.BaseAccountDataSource>(
+      () => _i1012.AccountDataSource(supabase: gh<_i454.SupabaseClient>()),
+    );
     gh.factory<_i824.CreateAdoptionPostUseCase>(
       () =>
           _i824.CreateAdoptionPostUseCase(gh<_i785.AdoptionRepositoryDomain>()),
@@ -103,14 +114,26 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i283.AuthUseCase>(
       () => _i283.AuthUseCase(authRepoData: gh<_i998.AuthRepoDomain>()),
     );
+    gh.lazySingleton<_i533.AccountRepoDomain>(
+      () => _i1013.AccountRepoData(
+        accountDataSource: gh<_i1012.BaseAccountDataSource>(),
+      ),
+    );
     gh.factory<_i430.AdoptionCubit>(
       () => _i430.AdoptionCubit(
         gh<_i425.FetchAdoptionPostsUseCase>(),
         gh<_i824.CreateAdoptionPostUseCase>(),
       ),
     );
+    gh.lazySingleton<_i803.AccountUseCase>(
+      () =>
+          _i803.AccountUseCase(accountRepoData: gh<_i533.AccountRepoDomain>()),
+    );
     gh.factory<_i667.AddPetUseCase>(
       () => _i667.AddPetUseCase(gh<_i52.AddPetRepoDomain>()),
+    );
+    gh.factory<_i439.AccountCubit>(
+      () => _i439.AccountCubit(gh<_i803.AccountUseCase>()),
     );
     gh.factory<_i493.AddPetCubit>(
       () => _i493.AddPetCubit(gh<_i667.AddPetUseCase>()),
@@ -123,4 +146,4 @@ extension GetItInjectableX on _i174.GetIt {
   }
 }
 
-class _$ThirdPartyModule extends _i1013.ThirdPartyModule {}
+class _$ThirdPartyModule extends _i1014.ThirdPartyModule {}

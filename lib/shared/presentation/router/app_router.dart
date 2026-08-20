@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:rifq_v2/features/account/presentation/screens/account_screen.dart';
+import 'package:rifq_v2/features/account/presentation/screens/edit_account_screen.dart';
 import 'package:rifq_v2/features/add_pet/presentation/screens/add_pet_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/auth_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/otp_screen.dart';
@@ -35,6 +37,8 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: NavWrapperRoute.page, path: '/navbar'),
     AutoRoute(page: HomeRoute.page, path: '/home'),
     AutoRoute(page: AddPetRoute.page, path: '/addpet'),
+    AutoRoute(page: AccountRoute.page, path: '/account'),
+    AutoRoute(page: EditAccountRoute.page, path: '/edit-account'),
 
         // AutoRoute(page: AdoptionRoute.page, path: '/adoption'),
 

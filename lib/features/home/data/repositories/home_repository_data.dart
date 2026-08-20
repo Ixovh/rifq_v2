@@ -28,8 +28,10 @@ class HomeRepoImpl implements HomeRepoDomain {
         return Error("User not found");
       }
 
-      final username = profile['name'] ?? "User";
-      final ownerId = profile['id'];
+      final fullName = profile['full_name'] as String?;
+      final username =
+          (fullName != null && fullName.trim().isNotEmpty) ? fullName.trim() : 'User';
+      final ownerId = profile['id'] as String;
 
       //!!-----------pets-----------
       final pets = await dataSource.fetchUserPets(ownerId);

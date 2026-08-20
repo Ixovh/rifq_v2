@@ -1,5 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -26,11 +28,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             leftIcon ??
                 IconButton(
                   icon: Icon(Icons.person, color: Colors.teal, size: 28.sp),
-                  onPressed: () async {
-                    final userId = await getUserId();
-                    // if (userId != null) {
-                    //   context.push(Routes.profile, extra: userId);
-                    // }
+                  onPressed: () {
+                    context.pushRoute(const AccountRoute());
                   },
                 ),
 
@@ -66,17 +65,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 Future<String?> getUserId() async {
-  final supabase = Supabase.instance.client;
-
-  final authId = supabase.auth.currentUser?.id;
-
-  if (authId == null) return null;
-
-  final data = await supabase
-      .from('users')
-      .select('id')
-      .eq('auth_id', authId)
-      .maybeSingle();
-
-  return data?['id'];
+  // profiles.id matches auth.users.id
+  return Supabase.instance.client.auth.currentUser?.id;
 }
