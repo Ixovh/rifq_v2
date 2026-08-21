@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:rifq_v2/core/theme/app_theme.dart';
+import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
 
 class AddPetStepOne extends StatelessWidget {

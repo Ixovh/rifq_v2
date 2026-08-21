@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
-import 'package:rifq_v2/features/add_pet/domain/usecases/add_pet_use_case.dart';
+import 'package:rifq_v2/features/add_pet/domain/use_cases/add_pet_use_case.dart';
 
 part 'add_pet_state.dart';
 

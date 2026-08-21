@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:rifq_v2/core/theme/app_color.dart';
+import 'package:rifq_v2/shared/presentation/theme/app_color.dart';
 
 class CustomeContainerWidgets extends StatelessWidget{
   final String title;
