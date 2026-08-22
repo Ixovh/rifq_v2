@@ -230,16 +230,12 @@ class OnbordingRouteArgs {
 class OtpRoute extends PageRouteInfo<OtpRouteArgs> {
   OtpRoute({
     Key? key,
-    bool? isResetPassword = false,
     required String email,
+    OtpPurpose purpose = OtpPurpose.signUp,
     List<PageRouteInfo>? children,
   }) : super(
          OtpRoute.name,
-         args: OtpRouteArgs(
-           key: key,
-           isResetPassword: isResetPassword,
-           email: email,
-         ),
+         args: OtpRouteArgs(key: key, email: email, purpose: purpose),
          initialChildren: children,
        );
 
@@ -249,11 +245,7 @@ class OtpRoute extends PageRouteInfo<OtpRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<OtpRouteArgs>();
-      return OtpScreen(
-        key: args.key,
-        isResetPassword: args.isResetPassword,
-        email: args.email,
-      );
+      return OtpScreen(key: args.key, email: args.email, purpose: args.purpose);
     },
   );
 }
@@ -261,32 +253,30 @@ class OtpRoute extends PageRouteInfo<OtpRouteArgs> {
 class OtpRouteArgs {
   const OtpRouteArgs({
     this.key,
-    this.isResetPassword = false,
     required this.email,
+    this.purpose = OtpPurpose.signUp,
   });
 
   final Key? key;
 
-  final bool? isResetPassword;
-
   final String email;
+
+  final OtpPurpose purpose;
 
   @override
   String toString() {
-    return 'OtpRouteArgs{key: $key, isResetPassword: $isResetPassword, email: $email}';
+    return 'OtpRouteArgs{key: $key, email: $email, purpose: $purpose}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! OtpRouteArgs) return false;
-    return key == other.key &&
-        isResetPassword == other.isResetPassword &&
-        email == other.email;
+    return key == other.key && email == other.email && purpose == other.purpose;
   }
 
   @override
-  int get hashCode => key.hashCode ^ isResetPassword.hashCode ^ email.hashCode;
+  int get hashCode => key.hashCode ^ email.hashCode ^ purpose.hashCode;
 }
 
 /// generated route for

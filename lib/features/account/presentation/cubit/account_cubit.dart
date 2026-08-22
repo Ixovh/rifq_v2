@@ -63,6 +63,7 @@ class AccountCubit extends Cubit<AccountState> {
     final firstName = firstNameController.text.trim();
     final lastName = lastNameController.text.trim();
     final phone = phoneController.text.trim();
+    final email = emailController.text.trim();
     final fullName = [firstName, lastName]
         .where((part) => part.isNotEmpty)
         .join(' ');
@@ -73,21 +74,41 @@ class AccountCubit extends Cubit<AccountState> {
       return;
     }
 
+    if (email.isEmpty) {
+      emit(const AccountErrorState(msg: 'Email is required'));
+      emit(current);
+      return;
+    }
+
+    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+    if (!emailRegex.hasMatch(email)) {
+      emit(const AccountErrorState(msg: 'Enter a valid email address'));
+      emit(current);
+      return;
+    }
+
     emit(AccountUpdatingState(data: current.data));
 
     (await _accountUseCase.updateProfile(
       fullName: fullName,
       phoneNumber: phone.isEmpty ? null : phone,
       avatarUrl: current.data.profile.avatarUrl,
+      email: email,
     )).when(
-      (profile) {
+      (result) {
         final updated = AccountDataEntity(
-          profile: profile,
-          email: current.data.email,
+          profile: result.profile,
+          email: result.email,
           pets: current.data.pets,
         );
         _populateEditControllers(updated);
-        emit(AccountUpdateSuccessState(data: updated));
+        emit(
+          AccountUpdateSuccessState(
+            data: updated,
+            emailConfirmationPending: result.emailConfirmationPending,
+            pendingEmail: result.pendingEmail,
+          ),
+        );
         emit(AccountLoadedState(data: updated));
       },
       (error) {

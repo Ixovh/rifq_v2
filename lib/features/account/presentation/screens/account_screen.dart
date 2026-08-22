@@ -45,9 +45,12 @@ class _AccountView extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        if (state is AccountLoading || state is AccountInitial) {
-          return const Scaffold(body: LottieLoding());
-        }
+          if (state is AccountLoading || state is AccountInitial) {
+            return const Scaffold(
+              backgroundColor: Colors.white,
+              body: LottieLoding(),
+            );
+          }
 
         if (state is AccountGuestState) {
           return const _GuestAccountBody();

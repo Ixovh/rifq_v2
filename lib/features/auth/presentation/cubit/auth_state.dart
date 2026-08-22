@@ -29,6 +29,8 @@ class AuthPasswordResetEmailSentState extends AuthState {
 
 class AuthPasswordResetSuccessState extends AuthState {}
 
+class AuthOtpResentState extends AuthState {}
+
 class AuthErrorState extends AuthState {
   final String msg;
 

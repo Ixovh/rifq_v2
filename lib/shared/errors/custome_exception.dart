@@ -36,8 +36,14 @@ class CatchErrorMessage {
       case AuthApiException error:
         errorMessage = error.message;
         break;
+      case AuthException error:
+        errorMessage = error.message;
+        break;
       case StorageException error:
         errorMessage = error.message;
+        break;
+      case String error:
+        errorMessage = error;
         break;
       case CustomException error:
         errorMessage = error.message;

@@ -118,3 +118,30 @@ class AccountDataEntity extends Equatable {
   @override
   List<Object?> get props => [profile, email, pets];
 }
+
+/// Result of updating profile fields and optionally email.
+class AccountUpdateResult extends Equatable {
+  final AccountEntity profile;
+  final String email;
+
+  /// New email awaiting OTP confirmation (when different from [email]).
+  final String? pendingEmail;
+
+  /// True when Supabase requires confirming the new email address.
+  final bool emailConfirmationPending;
+
+  const AccountUpdateResult({
+    required this.profile,
+    required this.email,
+    this.pendingEmail,
+    this.emailConfirmationPending = false,
+  });
+
+  @override
+  List<Object?> get props => [
+        profile,
+        email,
+        pendingEmail,
+        emailConfirmationPending,
+      ];
+}

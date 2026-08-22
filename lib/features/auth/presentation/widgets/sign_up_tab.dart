@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:rifq_v2/features/auth/presentation/widgets/container_button.dart';
+import 'package:rifq_v2/shared/presentation/widgets/container_button.dart';
 import 'package:rifq_v2/features/auth/presentation/widgets/custom_form_builder_text_field.dart';
 
 class SignUpTab extends StatelessWidget {
@@ -85,9 +85,13 @@ class SignUpTab extends StatelessWidget {
                 name: cubit.nameController.text,
                 email: cubit.sinUpEmailController.text,
                 password: cubit.sinUpPasswordController.text,
-                 role: role,
-              
+                role: role,
               );
+              // await cubit.signUpWithOtp(
+              //   name: cubit.nameController.text,
+              //   email: cubit.sinUpEmailController.text,
+              //   role: role,
+              // );
             }
           },
         ),

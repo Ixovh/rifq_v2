@@ -15,15 +15,17 @@ class AccountRepoData implements AccountRepoDomain {
       await accountDataSource.getAccountData();
 
   @override
-  Future<Result<AccountEntity, Object>> updateProfile({
+  Future<Result<AccountUpdateResult, Object>> updateProfile({
     required String fullName,
     required String? phoneNumber,
     String? avatarUrl,
+    required String email,
   }) async =>
       await accountDataSource.updateProfile(
         fullName: fullName,
         phoneNumber: phoneNumber,
         avatarUrl: avatarUrl,
+        email: email,
       );
 
   @override

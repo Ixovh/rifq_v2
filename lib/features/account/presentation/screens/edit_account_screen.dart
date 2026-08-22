@@ -6,8 +6,10 @@ import 'package:get_it/get_it.dart';
 import 'package:rifq_v2/features/account/presentation/cubit/account_cubit.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/account_avatar.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/account_outlined_field.dart';
-import 'package:rifq_v2/features/auth/presentation/widgets/container_button.dart';
+import 'package:rifq_v2/shared/constants/otp_purpose.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
+import 'package:rifq_v2/shared/presentation/router/app_router.dart';
+import 'package:rifq_v2/shared/presentation/widgets/container_button.dart';
 import 'package:rifq_v2/shared/presentation/widgets/lottie_loding.dart';
 
 @RoutePage()
@@ -31,8 +33,27 @@ class _EditAccountView extends StatelessWidget {
     final cubit = context.read<AccountCubit>();
 
     return BlocConsumer<AccountCubit, AccountState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is AccountUpdateSuccessState) {
+          if (state.emailConfirmationPending &&
+              (state.pendingEmail?.isNotEmpty ?? false)) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('We sent an OTP to your new email'),
+              ),
+            );
+            await context.pushRoute(
+              OtpRoute(
+                email: state.pendingEmail!,
+                purpose: OtpPurpose.emailChange,
+              ),
+            );
+            if (context.mounted) {
+              context.router.maybePop(true);
+            }
+            return;
+          }
+
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Profile updated')),
           );
@@ -46,7 +67,10 @@ class _EditAccountView extends StatelessWidget {
       },
       builder: (context, state) {
         if (state is AccountLoading || state is AccountInitial) {
-          return const Scaffold(body: LottieLoding());
+          return const Scaffold(
+            backgroundColor: Colors.white,
+            body: LottieLoding(),
+          );
         }
 
         if (state is AccountGuestState) {
@@ -155,7 +179,17 @@ class _EditAccountView extends StatelessWidget {
                           AccountOutlinedField(
                             label: 'Email',
                             controller: cubit.emailController,
-                            readOnly: true,
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (value) {
+                              final email = value?.trim() ?? '';
+                              if (email.isEmpty) return 'Email is required';
+                              final emailRegex =
+                                  RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+                              if (!emailRegex.hasMatch(email)) {
+                                return 'Enter a valid email address';
+                              }
+                              return null;
+                            },
                           ),
                           SizedBox(height: 42.h),
                           AccountOutlinedField(

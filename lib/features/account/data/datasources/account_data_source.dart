@@ -9,10 +9,11 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 abstract class BaseAccountDataSource {
   Future<Result<AccountDataEntity, Object>> getAccountData();
 
-  Future<Result<AccountEntity, Object>> updateProfile({
+  Future<Result<AccountUpdateResult, Object>> updateProfile({
     required String fullName,
     required String? phoneNumber,
     String? avatarUrl,
+    required String email,
   });
 
   Future<Result<Null, Object>> logOut();
@@ -113,10 +114,11 @@ class AccountDataSource implements BaseAccountDataSource {
   }
 
   @override
-  Future<Result<AccountEntity, Object>> updateProfile({
+  Future<Result<AccountUpdateResult, Object>> updateProfile({
     required String fullName,
     required String? phoneNumber,
     String? avatarUrl,
+    required String email,
   }) async {
     try {
       final userId = AuthHelper.getUserId() ?? _supabase.auth.currentUser?.id;
@@ -141,7 +143,29 @@ class AccountDataSource implements BaseAccountDataSource {
           .select(_profileSelect)
           .single();
 
-      return Success(AccountModel.fromJson(updated));
+      final currentEmail = _supabase.auth.currentUser?.email?.trim() ?? '';
+      final nextEmail = email.trim();
+      var emailConfirmationPending = false;
+      var resolvedEmail = currentEmail;
+
+      if (nextEmail.isNotEmpty &&
+          nextEmail.toLowerCase() != currentEmail.toLowerCase()) {
+        await _supabase.auth.updateUser(UserAttributes(email: nextEmail));
+        // Until the user confirms, Auth often still exposes the old email.
+        final afterUpdate = _supabase.auth.currentUser?.email?.trim() ?? '';
+        emailConfirmationPending =
+            afterUpdate.toLowerCase() != nextEmail.toLowerCase();
+        resolvedEmail = emailConfirmationPending ? currentEmail : nextEmail;
+      }
+
+      return Success(
+        AccountUpdateResult(
+          profile: AccountModel.fromJson(updated),
+          email: resolvedEmail,
+          pendingEmail: emailConfirmationPending ? nextEmail : null,
+          emailConfirmationPending: emailConfirmationPending,
+        ),
+      );
     } catch (e) {
       return Result.error(CatchErrorMessage(error: e).getWriteMessage());
     }

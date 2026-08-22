@@ -12,15 +12,17 @@ class AccountUseCase {
   Future<Result<AccountDataEntity, Object>> getAccountData() async =>
       await accountRepoData.getAccountData();
 
-  Future<Result<AccountEntity, Object>> updateProfile({
+  Future<Result<AccountUpdateResult, Object>> updateProfile({
     required String fullName,
     required String? phoneNumber,
     String? avatarUrl,
+    required String email,
   }) async =>
       await accountRepoData.updateProfile(
         fullName: fullName,
         phoneNumber: phoneNumber,
         avatarUrl: avatarUrl,
+        email: email,
       );
 
   Future<Result<Null, Object>> logOut() async => await accountRepoData.logOut();

@@ -6,12 +6,15 @@ class LottieLoding extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Lottie.asset(
-        'assets/lottie/Lovely cats.json',
-        width: 190,
-        height: 190,
-        fit: BoxFit.contain,
+    return ColoredBox(
+      color: Colors.white,
+      child: Center(
+        child: Lottie.asset(
+          'assets/lottie/Lovely cats.json',
+          width: 190,
+          height: 190,
+          fit: BoxFit.contain,
+        ),
       ),
     );
   }
