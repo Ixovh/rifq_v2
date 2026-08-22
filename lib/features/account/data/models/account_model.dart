@@ -14,7 +14,7 @@ class AccountModel extends AccountEntity with AccountModelMappable {
   @override
   final String? phoneNumber;
 
-  @MappableField(key: 'avatar_url')
+  @MappableField(key: 'image_url')
   @override
   final String? avatarUrl;
 
@@ -35,12 +35,12 @@ class AccountModel extends AccountEntity with AccountModelMappable {
     required this.createdAt,
     required this.updatedAt,
   }) : super(
-          fullName: fullName,
-          phoneNumber: phoneNumber,
-          avatarUrl: avatarUrl,
-          createdAt: createdAt,
-          updatedAt: updatedAt,
-        );
+         fullName: fullName,
+         phoneNumber: phoneNumber,
+         avatarUrl: avatarUrl,
+         createdAt: createdAt,
+         updatedAt: updatedAt,
+       );
 
   factory AccountModel.fromJson(Map<String, dynamic> json) =>
       AccountModelMapper.fromMap(json);
@@ -64,10 +64,7 @@ class AccountPetModel extends AccountPetEntity with AccountPetModelMappable {
     super.age,
     this.photoUrl,
     this.listedForAdoption = false,
-  }) : super(
-          photoUrl: photoUrl,
-          listedForAdoption: listedForAdoption,
-        );
+  }) : super(photoUrl: photoUrl, listedForAdoption: listedForAdoption);
 
   factory AccountPetModel.fromJson(Map<String, dynamic> json) =>
       AccountPetModelMapper.fromMap(json);

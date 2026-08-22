@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 /// Matches `public.profiles` in Supabase (Ixovh's Project).
 ///
-/// Columns: id, role, full_name, phone_number, avatar_url, created_at, updated_at.
+/// Columns: id, role, full_name, phone_number, image_url, created_at, updated_at.
 /// Email lives on `auth.users`, not on this table — see [AccountDataEntity.email].
 class AccountEntity extends Equatable {
   final String id;
@@ -54,14 +54,14 @@ class AccountEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        fullName,
-        phoneNumber,
-        avatarUrl,
-        role,
-        createdAt,
-        updatedAt,
-      ];
+    id,
+    fullName,
+    phoneNumber,
+    avatarUrl,
+    role,
+    createdAt,
+    updatedAt,
+  ];
 }
 
 class AccountPetEntity extends Equatable {
@@ -91,14 +91,14 @@ class AccountPetEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        name,
-        gender,
-        breed,
-        age,
-        photoUrl,
-        listedForAdoption,
-      ];
+    id,
+    name,
+    gender,
+    breed,
+    age,
+    photoUrl,
+    listedForAdoption,
+  ];
 }
 
 /// Screen-level aggregate: profile row + auth email + pets.
@@ -139,9 +139,9 @@ class AccountUpdateResult extends Equatable {
 
   @override
   List<Object?> get props => [
-        profile,
-        email,
-        pendingEmail,
-        emailConfirmationPending,
-      ];
+    profile,
+    email,
+    pendingEmail,
+    emailConfirmationPending,
+  ];
 }

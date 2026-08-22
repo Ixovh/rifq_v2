@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
+import 'package:rifq_v2/shared/constants/storage_buckets.dart';
 import '../../domain/entities/adoption_entity.dart';
 import '../../domain/repositories/adoption_repository_domain.dart';
 import '../models/adoption_model.dart';
@@ -79,12 +80,14 @@ class AdoptionRepositoryData implements AdoptionRepositoryDomain {
     for (int i = 0; i < imageFiles.length; i++) {
       final file = imageFiles[i];
       final photoId = _uuid.v4();
-      final fileExt = file.path.split('.').last;
-      final storagePath = 'pets/$petId/$photoId.$fileExt';
+      final fileExt = file.path.split('.').last.toLowerCase();
+      final storagePath = '$currentUserId/$petId/$photoId.$fileExt';
 
-      await _supabase.storage.from('rifq_media').upload(storagePath, file);
+      await _supabase.storage
+          .from(StorageBuckets.petPhotos)
+          .upload(storagePath, file);
       final publicUrl = _supabase.storage
-          .from('rifq_media')
+          .from(StorageBuckets.petPhotos)
           .getPublicUrl(storagePath);
 
       await _supabase.from('pet_photos').insert({

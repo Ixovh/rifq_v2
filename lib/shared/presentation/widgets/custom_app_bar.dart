@@ -2,18 +2,23 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
+import 'package:rifq_v2/shared/presentation/widgets/profile_photo.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final Widget? leftIcon;
   final Widget? rightIcon;
+  final String? imageUrl;
+  final VoidCallback? onProfileTap;
 
   const CustomAppBar({
     super.key,
     required this.title,
     this.leftIcon,
     this.rightIcon,
+    this.imageUrl,
+    this.onProfileTap,
   });
 
   @override
@@ -24,20 +29,24 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Left Icon
             leftIcon ??
                 IconButton(
-                  icon: Icon(Icons.person, color: Colors.teal, size: 28.sp),
-                  onPressed: () {
-                    context.pushRoute(const AccountRoute());
-                  },
+                  onPressed:
+                      onProfileTap ??
+                      () {
+                        context.pushRoute(const AccountRoute());
+                      },
+                  icon: ProfilePhoto(
+                    diameter: 36.r,
+                    imageUrl: imageUrl,
+                    backgroundColor: Colors.white,
+                    fallback: Icon(
+                      Icons.person,
+                      color: Colors.teal,
+                      size: 28.sp,
+                    ),
+                  ),
                 ),
-
-            // CircleAvatar(
-            //   radius: 24.r,
-            //   backgroundColor: Colors.white,
-            //   child: Icon(Icons.settings, color: Colors.teal),
-            // ),
             Text(
               title,
               style: TextStyle(
@@ -46,8 +55,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 color: Colors.teal,
               ),
             ),
-
-            // Right Icon
             rightIcon ??
                 CircleAvatar(
                   radius: 24.r,

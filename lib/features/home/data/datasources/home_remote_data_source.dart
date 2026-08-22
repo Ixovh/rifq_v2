@@ -25,7 +25,7 @@ class HomeDataSource implements BaseHomeDataSource {
       if (userId == null) return null;
       final profile = await supabase
           .from('profiles')
-          .select('id, full_name')
+          .select('id, full_name, image_url')
           .eq('id', userId)
           .maybeSingle();
       return profile;
@@ -53,15 +53,17 @@ class HomeDataSource implements BaseHomeDataSource {
         final photos = (row['pet_photos'] as List<dynamic>?) ?? [];
         String photoUrl = '';
         if (photos.isNotEmpty) {
-          final sorted = [...photos]..sort((a, b) {
-            final aMap = Map<String, dynamic>.from(a as Map);
-            final bMap = Map<String, dynamic>.from(b as Map);
-            final aPrimary = aMap['is_primary'] == true ? 0 : 1;
-            final bPrimary = bMap['is_primary'] == true ? 0 : 1;
-            if (aPrimary != bPrimary) return aPrimary.compareTo(bPrimary);
-            return ((aMap['display_order'] as int?) ?? 0)
-                .compareTo((bMap['display_order'] as int?) ?? 0);
-          });
+          final sorted = [...photos]
+            ..sort((a, b) {
+              final aMap = Map<String, dynamic>.from(a as Map);
+              final bMap = Map<String, dynamic>.from(b as Map);
+              final aPrimary = aMap['is_primary'] == true ? 0 : 1;
+              final bPrimary = bMap['is_primary'] == true ? 0 : 1;
+              if (aPrimary != bPrimary) return aPrimary.compareTo(bPrimary);
+              return ((aMap['display_order'] as int?) ?? 0).compareTo(
+                (bMap['display_order'] as int?) ?? 0,
+              );
+            });
           photoUrl =
               (Map<String, dynamic>.from(sorted.first as Map))['public_url']
                   as String? ??
@@ -95,5 +97,4 @@ class HomeDataSource implements BaseHomeDataSource {
       );
     }
   }
-
 }

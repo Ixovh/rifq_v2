@@ -13,7 +13,7 @@ class ProfileModel with ProfileModelMappable {
   @MappableField(key: 'phone_number')
   final String? phoneNumber;
 
-  @MappableField(key: 'avatar_url')
+  @MappableField(key: 'image_url')
   final String? avatarUrl;
 
   const ProfileModel({

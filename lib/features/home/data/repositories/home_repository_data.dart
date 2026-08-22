@@ -5,8 +5,6 @@ import 'package:rifq_v2/features/home/data/datasources/home_remote_data_source.d
 import 'package:rifq_v2/features/home/domain/entities/home_entity.dart';
 import 'package:rifq_v2/features/home/domain/repositories/home_repository_domain.dart';
 
-
-
 @LazySingleton(as: HomeRepoDomain)
 class HomeRepoImpl implements HomeRepoDomain {
   final BaseHomeDataSource dataSource;
@@ -29,14 +27,18 @@ class HomeRepoImpl implements HomeRepoDomain {
       }
 
       final fullName = profile['full_name'] as String?;
-      final username =
-          (fullName != null && fullName.trim().isNotEmpty) ? fullName.trim() : 'User';
+      final username = (fullName != null && fullName.trim().isNotEmpty)
+          ? fullName.trim()
+          : 'User';
+      final imageUrl = profile['image_url'] as String?;
       final ownerId = profile['id'] as String;
 
       //!!-----------pets-----------
       final pets = await dataSource.fetchUserPets(ownerId);
 
-      return Success(HomeDataEntity(username: username, pets: pets));
+      return Success(
+        HomeDataEntity(username: username, imageUrl: imageUrl, pets: pets),
+      );
     } catch (e) {
       return Error(e.toString());
     }
