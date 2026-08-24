@@ -5,8 +5,6 @@ import 'package:rifq_v2/features/home/data/datasources/home_remote_data_source.d
 import 'package:rifq_v2/features/home/domain/entities/home_entity.dart';
 import 'package:rifq_v2/features/home/domain/repositories/home_repository_domain.dart';
 
-
-
 @LazySingleton(as: HomeRepoDomain)
 class HomeRepoImpl implements HomeRepoDomain {
   final BaseHomeDataSource dataSource;

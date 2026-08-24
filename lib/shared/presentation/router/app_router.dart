@@ -4,6 +4,7 @@ import 'package:rifq_v2/features/account/presentation/screens/account_screen.dar
 import 'package:rifq_v2/features/account/presentation/screens/edit_account_screen.dart';
 import 'package:rifq_v2/features/add_pet/presentation/screens/add_pet_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/auth_screen.dart';
+import 'package:rifq_v2/features/auth/presentation/screens/check_email_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/otp_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/sends_to_email_screen.dart';
@@ -18,7 +19,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rifq_v2/features/home/presentation/screens/home_feature_screen.dart';
 import 'package:rifq_v2/features/home/presentation/cubit/home_cubit.dart';
 
-import 'package:rifq_v2/features/auth/presentation/pages/check_email_screen.dart';
 part 'app_router.gr.dart'; 
 
 @AutoRouterConfig(replaceInRouteName: 'Screen,Route')

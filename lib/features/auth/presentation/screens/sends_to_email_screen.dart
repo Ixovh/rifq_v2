@@ -6,6 +6,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:get_it/get_it.dart';
+import 'package:rifq_v2/features/auth/domain/use_cases/auth_use_case.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/features/auth/presentation/cubit/auth_cubit.dart';
@@ -19,9 +21,14 @@ class SendsToEmailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
+     return BlocProvider(
+    create: (_) => AuthCubit(GetIt.I.get<AuthUseCase>()),
+    child: Builder(
       builder: (context) {
         final cubit = context.read<AuthCubit>();
+    // return Builder(
+    //   builder: (context) {
+    //     final cubit = context.read<AuthCubit>();
         return BlocListener<AuthCubit, AuthState>(
           listener: (context, state) {
             switch (state) {
@@ -136,6 +143,8 @@ class SendsToEmailScreen extends StatelessWidget {
           ),
         );
       },
-    );
+      
+)  );
+    
   }
 }
