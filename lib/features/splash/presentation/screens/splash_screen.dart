@@ -115,6 +115,7 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
+
   Future<void> _handleNavigation() async {
     if (_navigated || !mounted) return;
     _navigated = true;

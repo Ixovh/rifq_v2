@@ -17,25 +17,28 @@ class HomeGuestState extends HomeState {}
 ///!!----------------NO PETS-------------------
 class HomeEmptyState extends HomeState {
   final String username;
+  final String? imageUrl;
 
-  const HomeEmptyState(this.username);
+  const HomeEmptyState(this.username, {this.imageUrl});
 
   @override
-  List<Object?> get props => [username];
+  List<Object?> get props => [username, imageUrl];
 }
 
 ///!!----------------HAS PETS-------------------
 class HomeLoadedState extends HomeState {
   final String username;
+  final String? imageUrl;
   final List<PetModel> pets;
 
   const HomeLoadedState({
     required this.username,
+    this.imageUrl,
     required this.pets,
   });
 
   @override
-  List<Object?> get props => [username, pets];
+  List<Object?> get props => [username, imageUrl, pets];
 }
 
 class HomeError extends HomeState {

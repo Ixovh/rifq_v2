@@ -36,9 +36,9 @@ class _AccountView extends StatelessWidget {
     return BlocConsumer<AccountCubit, AccountState>(
       listener: (context, state) {
         if (state is AccountErrorState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.msg)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.msg)));
         }
         if (state is AccountLogoutSuccessState) {
           context.router.replaceAll([const ChoosePathRoute()]);
@@ -46,7 +46,10 @@ class _AccountView extends StatelessWidget {
       },
       builder: (context, state) {
         if (state is AccountLoading || state is AccountInitial) {
-          return const Scaffold(body: LottieLoding());
+          return const Scaffold(
+            backgroundColor: Colors.white,
+            body: LottieLoding(),
+          );
         }
 
         if (state is AccountGuestState) {

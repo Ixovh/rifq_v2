@@ -42,7 +42,7 @@ class AccountModelMapper extends ClassMapperBase<AccountModel> {
   static const Field<AccountModel, String> _f$avatarUrl = Field(
     'avatarUrl',
     _$avatarUrl,
-    key: r'avatar_url',
+    key: r'image_url',
     opt: true,
   );
   static String _$role(AccountModel v) => v.role;

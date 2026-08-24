@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
-import 'package:rifq_v2/shared/presentation/router/routers.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/widgets/custom_app_bar.dart';
 import 'package:rifq_v2/shared/presentation/widgets/guest_card_widget.dart';
@@ -26,7 +25,10 @@ class HomeScreen extends StatelessWidget {
       child: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
           if (state is HomeLoading || state is HomeInitial) {
-            return LottieLoding();
+            return const Scaffold(
+              backgroundColor: Colors.white,
+              body: LottieLoding(),
+            );
           }
 
           //!!==========guest=============
@@ -38,18 +40,20 @@ class HomeScreen extends StatelessWidget {
           if (state is HomeLoadedState) {
             return HomeContent(
               username: state.username,
+              imageUrl: state.imageUrl,
               isGuest: false,
               pets: state.pets,
             );
           }
 
           if (state is HomeEmptyState) {
-              return HomeContent(
-                username: state.username,
-                isGuest: false,
-                  pets: const [],
-                  );
-                  }
+            return HomeContent(
+              username: state.username,
+              imageUrl: state.imageUrl,
+              isGuest: false,
+              pets: const [],
+            );
+          }
 
           if (state is HomeError) {
             return Center(child: Text(state.message));
@@ -64,12 +68,14 @@ class HomeScreen extends StatelessWidget {
 
 class HomeContent extends StatelessWidget {
   final String username;
+  final String? imageUrl;
   final bool isGuest;
   final List<PetModel> pets;
 
   const HomeContent({
     super.key,
     required this.username,
+    this.imageUrl,
     required this.isGuest,
     required this.pets,
   });
@@ -77,7 +83,16 @@ class HomeContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "Home"),
+      appBar: CustomAppBar(
+        title: "Home",
+        imageUrl: imageUrl,
+        onProfileTap: () async {
+          await context.pushRoute(const AccountRoute());
+          if (context.mounted) {
+            await context.read<HomeCubit>().loadHomeData(silent: true);
+          }
+        },
+      ),
       backgroundColor: context.neutral100,
 
       body: RefreshIndicator(

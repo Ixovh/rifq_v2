@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:rifq_v2/shared/constants/otp_purpose.dart';
 import 'package:rifq_v2/shared/errors/custome_exception.dart';
 import 'package:rifq_v2/features/auth/domain/use_cases/auth_use_case.dart';
 
@@ -32,7 +33,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String name,
     required String email,
     required String password,
-     required String role
+    required String role,
   }) async {
     emit(AuthLoadingState());
 
@@ -40,7 +41,7 @@ class AuthCubit extends Cubit<AuthState> {
       name: name,
       email: email,
       password: password,
-      role: role
+      role: role,
     )).when(
       (whenSuccess) {
         this.email = email;
@@ -55,6 +56,32 @@ class AuthCubit extends Cubit<AuthState> {
       },
     );
   }
+
+  // Future signUpWithOtp({
+  //   required String name,
+  //   required String email,
+  //   required String role,
+  // }) async {
+  //   emit(AuthLoadingState());
+  //
+  //   (await _authUseCase.signUpWithOtp(
+  //     name: name,
+  //     email: email,
+  //     role: role,
+  //   )).when(
+  //     (whenSuccess) {
+  //       this.email = email;
+  //       emit(AuthSignUPSuccessState());
+  //     },
+  //     (whenError) {
+  //       emit(
+  //         AuthErrorState(
+  //           msg: CatchErrorMessage(error: whenError).getWriteMessage(),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   //
   //
@@ -83,13 +110,50 @@ class AuthCubit extends Cubit<AuthState> {
   //
 
   Future verifyAccount({required String email, required String otp}) async {
+    return verifyOtp(
+      email: email,
+      otp: otp,
+      purpose: OtpPurpose.signUp,
+    );
+  }
+
+  Future verifyOtp({
+    required String email,
+    required String otp,
+    required OtpPurpose purpose,
+  }) async {
     emit(AuthLoadingState());
 
-    (await _authUseCase.verifyAccount(email: email, otp: otp)).when(
+    (await _authUseCase.verifyOtp(
+      email: email,
+      otp: otp,
+      purpose: purpose,
+    )).when(
       (whenSuccess) {
         this.email = email;
         emit(AuthSuccessState());
       },
+      (whenError) {
+        emit(
+          AuthErrorState(
+            msg: CatchErrorMessage(error: whenError).getWriteMessage(),
+          ),
+        );
+      },
+    );
+  }
+
+  Future resendOtp({
+    required String email,
+    required OtpPurpose purpose,
+  }) async {
+    emit(AuthLoadingState());
+
+    (await _authUseCase.resendOtp(
+      email: email,
+      purpose: purpose,
+    )).when(
+      (_) => emit(AuthOtpResentState()),
       (whenError) {
         emit(
           AuthErrorState(

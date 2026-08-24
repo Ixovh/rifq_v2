@@ -33,11 +33,17 @@ class AccountUpdatingState extends AccountState {
 
 class AccountUpdateSuccessState extends AccountState {
   final AccountDataEntity data;
+  final bool emailConfirmationPending;
+  final String? pendingEmail;
 
-  const AccountUpdateSuccessState({required this.data});
+  const AccountUpdateSuccessState({
+    required this.data,
+    this.emailConfirmationPending = false,
+    this.pendingEmail,
+  });
 
   @override
-  List<Object?> get props => [data];
+  List<Object?> get props => [data, emailConfirmationPending, pendingEmail];
 }
 
 class AccountLogoutSuccessState extends AccountState {}

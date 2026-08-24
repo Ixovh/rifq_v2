@@ -8,14 +8,29 @@ class RecommendationCarousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final adsImages = [
-      'assets/images/ad1.png',
-      'assets/images/ad2.png',
-      'assets/images/ad3.png',
+      // 'assets/images/ad1.png',
+      // 'assets/images/ad2.png',
+      // 'assets/images/ad3.png',
+
+        Colors.red,
+      Colors.blue,
+      Colors.green,
     ];
 
-    return CarouselSlider(
-      items: adsImages.map((image) {
-        return RecommendationCard(imagePath: image);
+    // return CarouselSlider(
+    //   items: adsImages.map((image) {
+    //     return RecommendationCard(imagePath: image);
+    //   }).toList(),
+      return CarouselSlider(
+      items: adsImages.map((color) {
+        return Container(
+          width: double.infinity,
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(16),
+          ),
+        );
       }).toList(),
 
       options: CarouselOptions(

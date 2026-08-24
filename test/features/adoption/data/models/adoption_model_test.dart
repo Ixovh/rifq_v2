@@ -12,7 +12,7 @@ void main() {
       'id': 'profile-1',
       'full_name': 'Jane Doe',
       'phone_number': '+966500000000',
-      'avatar_url': 'https://example.com/avatar.png',
+      'image_url': 'https://example.com/avatar.png',
     };
 
     test('fromJson maps snake_case Supabase keys to camelCase fields', () {
@@ -28,7 +28,7 @@ void main() {
         'id': 'profile-2',
         'full_name': 'No Contact Info',
         'phone_number': null,
-        'avatar_url': null,
+        'image_url': null,
       });
       expect(model.phoneNumber, isNull);
       expect(model.avatarUrl, isNull);
@@ -140,7 +140,7 @@ void main() {
         'id': 'profile-1',
         'full_name': 'Jane Doe',
         'phone_number': '+966500000000',
-        'avatar_url': 'https://example.com/avatar.png',
+        'image_url': 'https://example.com/avatar.png',
       },
       'pet_photos': [
         {

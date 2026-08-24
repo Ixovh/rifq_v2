@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -56,19 +58,34 @@ class AccountCubit extends Cubit<AccountState> {
     phoneController.text = data.profile.phoneNumber ?? '';
   }
 
-  Future<void> saveProfile() async {
+  Future<void> saveProfile({File? imageFile, bool removeImage = false}) async {
     final current = state;
     if (current is! AccountLoadedState) return;
 
     final firstName = firstNameController.text.trim();
     final lastName = lastNameController.text.trim();
     final phone = phoneController.text.trim();
-    final fullName = [firstName, lastName]
-        .where((part) => part.isNotEmpty)
-        .join(' ');
+    final email = emailController.text.trim();
+    final fullName = [
+      firstName,
+      lastName,
+    ].where((part) => part.isNotEmpty).join(' ');
 
     if (fullName.isEmpty) {
       emit(const AccountErrorState(msg: 'First name is required'));
+      emit(current);
+      return;
+    }
+
+    if (email.isEmpty) {
+      emit(const AccountErrorState(msg: 'Email is required'));
+      emit(current);
+      return;
+    }
+
+    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+    if (!emailRegex.hasMatch(email)) {
+      emit(const AccountErrorState(msg: 'Enter a valid email address'));
       emit(current);
       return;
     }
@@ -78,16 +95,24 @@ class AccountCubit extends Cubit<AccountState> {
     (await _accountUseCase.updateProfile(
       fullName: fullName,
       phoneNumber: phone.isEmpty ? null : phone,
-      avatarUrl: current.data.profile.avatarUrl,
+      imageFile: imageFile,
+      removeImage: removeImage,
+      email: email,
     )).when(
-      (profile) {
+      (result) {
         final updated = AccountDataEntity(
-          profile: profile,
-          email: current.data.email,
+          profile: result.profile,
+          email: result.email,
           pets: current.data.pets,
         );
         _populateEditControllers(updated);
-        emit(AccountUpdateSuccessState(data: updated));
+        emit(
+          AccountUpdateSuccessState(
+            data: updated,
+            emailConfirmationPending: result.emailConfirmationPending,
+            pendingEmail: result.pendingEmail,
+          ),
+        );
         emit(AccountLoadedState(data: updated));
       },
       (error) {

@@ -10,26 +10,26 @@ part 'home_state.dart';
 class HomeCubit extends Cubit<HomeState> {
   final GetHomeDataUseCase useCase;
 
-  HomeCubit(this.useCase,) : super(HomeInitial());
+  HomeCubit(this.useCase) : super(HomeInitial());
 
-  Future<void> loadHomeData() async {
-    emit(HomeLoading());
+  Future<void> loadHomeData({bool silent = false}) async {
+    if (!silent) emit(HomeLoading());
 
     final result = await useCase.getHomeData();
-      result.when(
-      (data) {
-        if (data.pets.isEmpty && data.username != "Guest") {
-          emit(HomeEmptyState(data.username));
-        } else if (data.username == "Guest") {
-          emit(HomeGuestState());
-        } else {
-          emit(HomeLoadedState(
+    result.when((data) {
+      if (data.pets.isEmpty && data.username != "Guest") {
+        emit(HomeEmptyState(data.username, imageUrl: data.imageUrl));
+      } else if (data.username == "Guest") {
+        emit(HomeGuestState());
+      } else {
+        emit(
+          HomeLoadedState(
             username: data.username,
+            imageUrl: data.imageUrl,
             pets: data.pets,
-          ));
-        }
-      },
-      (error) => emit(HomeError(error)),
-    );
+          ),
+        );
+      }
+    }, (error) => emit(HomeError(error)));
   }
 }

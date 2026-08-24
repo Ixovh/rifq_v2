@@ -100,8 +100,14 @@ class CatchErrorMessage {
       case AuthApiException error:
         errorMessage = _mapAuthError(error);
         break;
+      case AuthException error:
+        errorMessage = error.message;
+        break;
       case StorageException error:
         errorMessage = error.message;
+        break;
+      case String error:
+        errorMessage = error;
         break;
       case CustomException error:
         errorMessage = error.message;

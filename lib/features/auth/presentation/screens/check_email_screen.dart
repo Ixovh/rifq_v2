@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
-import 'package:rifq_v2/features/auth/presentation/widgets/container_button.dart';
+import 'package:rifq_v2/shared/presentation/widgets/container_button.dart';
 
 @RoutePage()
 class CheckEmailScreen extends StatelessWidget {

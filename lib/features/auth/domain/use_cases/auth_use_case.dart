@@ -2,7 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:rifq_v2/features/auth/domain/entities/auth_entity.dart';
 import 'package:rifq_v2/features/auth/domain/repositories/auth_repository_domain.dart';
-
+import 'package:rifq_v2/shared/constants/otp_purpose.dart';
 
 @lazySingleton
 class AuthUseCase {
@@ -14,17 +14,20 @@ class AuthUseCase {
     required String name,
     required String email,
     required String password,
-    required String role
+    required String role,
   }) async =>
-      await authRepoData.signUp(name: name, email: email, password: password, role: role,);
+      await authRepoData.signUp(
+        name: name,
+        email: email,
+        password: password,
+        role: role,
+      );
 
-  //---------
   Future<Result<Null, Object>> login({
     required String email,
     required String password,
   }) async => await authRepoData.login(email: email, password: password);
 
-  //---------
   Future<Result<AuthEntity, Object>> verifyAccount({
     required String email,
     required String otp,
@@ -32,22 +35,40 @@ class AuthUseCase {
     return await authRepoData.verifyAccount(email: email, otp: otp);
   }
 
-  //---------
+  Future<Result<AuthEntity, Object>> verifyOtp({
+    required String email,
+    required String otp,
+    required OtpPurpose purpose,
+  }) async {
+    return await authRepoData.verifyOtp(
+      email: email,
+      otp: otp,
+      purpose: purpose,
+    );
+  }
+
+  Future<Result<Null, Object>> resendOtp({
+    required String email,
+    required OtpPurpose purpose,
+  }) async {
+    return await authRepoData.resendOtp(
+      email: email,
+      purpose: purpose,
+    );
+  }
+
   Future<Result<Null, Object>> anonymousUser() async {
     return await authRepoData.anonymousUser();
   }
 
-  //---------
   Future<Result<Null, Object>> logOut() async {
     return await authRepoData.logOut();
   }
 
-  //---------
   Future<Result<Null, Object>> resetPassword({
     required String newPassword,
   }) async => await authRepoData.resetPassword(newPassword: newPassword);
 
-  //---------
   Future<Result<Null, Object>> sendPasswordResetEmail({
     required String email,
   }) async => await authRepoData.sendPasswordResetEmail(email: email);
