@@ -17,9 +17,7 @@ extension StringExtensions on String {
   }
 
   bool get isValidFullName {
-    return RegExp(
-      r'^[A-Za-z؀-ۿ]+(s+[A-Za-z؀-ۿ]+)+$',
-    ).hasMatch(trim());
+    return RegExp(r'^[A-Za-z؀-ۿ]+(s+[A-Za-z؀-ۿ]+)+$').hasMatch(trim());
   }
 
   String get capitalizeEachWord {
@@ -163,5 +161,3 @@ extension StringExtensions on String {
     }
   }
 }
-
-

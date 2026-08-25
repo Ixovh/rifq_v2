@@ -13,8 +13,10 @@ class AccountRepoData implements AccountRepoDomain {
   AccountRepoData({required this.accountDataSource});
 
   @override
-  Future<Result<AccountDataEntity, Object>> getAccountData() async =>
-      await accountDataSource.getAccountData();
+  Future<Result<AccountDataEntity, Object>> getAccountData({
+    bool forceRefresh = false,
+  }) async =>
+      await accountDataSource.getAccountData(forceRefresh: forceRefresh);
 
   @override
   Future<Result<AccountUpdateResult, Object>> updateProfile({

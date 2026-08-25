@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'package:rifq_v2/shared/presentation/theme/app_color.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
@@ -40,13 +41,10 @@ class ContainerButton extends StatelessWidget {
         ),
         child: Center(
           child: isLoading
-              ? SizedBox(
-                  width: 24.w,
-                  height: 24.h,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(textColor),
-                  ),
+              ? Lottie.asset(
+                  'assets/lottie/Lovely cats.json',
+                  height: (height - 12).h,
+                  fit: BoxFit.contain,
                 )
               : Text(
                   label,

@@ -9,6 +9,7 @@ import 'package:rifq_v2/features/account/presentation/widgets/account_avatar.dar
 import 'package:rifq_v2/features/account/presentation/widgets/account_info_row.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/account_menu_tile.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/account_pet_card.dart';
+import 'package:rifq_v2/features/account/presentation/widgets/account_section_header.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/theme/app_color.dart';
@@ -142,7 +143,8 @@ class _SignedAccountBody extends StatelessWidget {
       backgroundColor: context.background,
       body: SafeArea(
         child: RefreshIndicator(
-          onRefresh: () => context.read<AccountCubit>().loadAccount(),
+          onRefresh: () =>
+              context.read<AccountCubit>().loadAccount(forceRefresh: true),
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             padding: EdgeInsets.symmetric(horizontal: 18.w),
@@ -166,7 +168,12 @@ class _SignedAccountBody extends StatelessWidget {
                           const EditAccountRoute(),
                         );
                         if (updated == true && context.mounted) {
-                          context.read<AccountCubit>().loadAccount();
+                          // Force refresh: an email change confirmed via OTP
+                          // only exists server-side, the local snapshot
+                          // can't know about it.
+                          context.read<AccountCubit>().loadAccount(
+                            forceRefresh: true,
+                          );
                         }
                       },
                       icon: Icon(
@@ -203,15 +210,39 @@ class _SignedAccountBody extends StatelessWidget {
                       : '-',
                 ),
                 if (data.pets.isNotEmpty) ...[
-                  SizedBox(height: 24.h),
+                  SizedBox(height: 20.h),
+                  AccountSectionHeader(
+                    title: 'Your Pets',
+                    actionLabel: 'See all',
+                    onAction: () => context.pushRoute(AccountPetsRoute()),
+                  ),
+                  SizedBox(height: 12.h),
                   SizedBox(
-                    height: 185.h,
+                    height: 200.h,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: data.pets.length,
                       itemBuilder: (context, index) {
                         final pet = data.pets[index];
-                        return AccountPetCard(pet: pet);
+                        return AccountPetCard(
+                          pet: pet,
+                          onTap: () async {
+                            await context.pushRoute(
+                              PetProfileRoute(petId: pet.id),
+                            );
+                            if (context.mounted) {
+                              context.read<AccountCubit>().loadAccount();
+                            }
+                          },
+                          onEditTap: () async {
+                            await context.pushRoute(
+                              EditPetRoute(petId: pet.id),
+                            );
+                            if (context.mounted) {
+                              context.read<AccountCubit>().loadAccount();
+                            }
+                          },
+                        );
                       },
                     ),
                   ),

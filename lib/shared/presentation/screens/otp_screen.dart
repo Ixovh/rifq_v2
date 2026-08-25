@@ -27,10 +27,10 @@ class OtpScreen extends StatelessWidget {
   final OtpPurpose purpose;
 
   String get _title => switch (purpose) {
-        OtpPurpose.resetPassword => 'Reset Password',
-        OtpPurpose.emailChange => 'Confirm New Email',
-        OtpPurpose.signUp => 'Email Verification',
-      };
+    OtpPurpose.resetPassword => 'Reset Password',
+    OtpPurpose.emailChange => 'Confirm New Email',
+    OtpPurpose.signUp => 'Email Verification',
+  };
 
   bool get _canResend =>
       purpose == OtpPurpose.signUp || purpose == OtpPurpose.emailChange;
@@ -62,9 +62,9 @@ class OtpScreen extends StatelessWidget {
                   }
                   break;
                 case AuthErrorState _:
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.msg)),
-                  );
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(state.msg)));
                   break;
                 default:
                   break;
@@ -90,10 +90,8 @@ class OtpScreen extends StatelessWidget {
                       purpose: purpose,
                     );
                   },
-                  onResend: () => cubit.resendOtp(
-                    email: email,
-                    purpose: purpose,
-                  ),
+                  onResend: () =>
+                      cubit.resendOtp(email: email, purpose: purpose),
                 ),
               ),
               body: SafeArea(
@@ -191,9 +189,9 @@ class _OtpContentState extends State<_OtpContent> {
         if (state is AuthOtpResentState) {
           setState(() => _isResending = false);
           _startTimer();
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('OTP sent again')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('OTP sent again')));
         } else if (state is AuthErrorState && _isResending) {
           setState(() => _isResending = false);
         }

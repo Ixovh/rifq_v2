@@ -1,4 +1,3 @@
-
 part of 'add_pet_cubit.dart';
 
 sealed class AddPetState extends Equatable {

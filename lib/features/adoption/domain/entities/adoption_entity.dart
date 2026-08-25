@@ -39,7 +39,16 @@ class PetEntity extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, ownerId, name, species, breed, age, gender, healthStatusSummary];
+  List<Object?> get props => [
+    id,
+    ownerId,
+    name,
+    species,
+    breed,
+    age,
+    gender,
+    healthStatusSummary,
+  ];
 }
 
 class PetPhotoEntity extends Equatable {
@@ -80,5 +89,14 @@ class AdoptionPostEntity extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, description, status, location, createdAt, pet, poster, photos];
+  List<Object?> get props => [
+    id,
+    description,
+    status,
+    location,
+    createdAt,
+    pet,
+    poster,
+    photos,
+  ];
 }

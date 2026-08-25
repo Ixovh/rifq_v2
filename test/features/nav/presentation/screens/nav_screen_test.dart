@@ -17,8 +17,9 @@ import 'package:rifq_v2/features/nav/presentation/screens/nav_screen.dart';
 /// NavCubit.screens[0] is a hard-coded HomeScreen().
 class _StubHomeRepoDomain implements HomeRepoDomain {
   @override
-  Future<Result<HomeDataEntity, String>> getHomeData() async =>
-      Success(HomeDataEntity(username: 'Guest', pets: const []));
+  Future<Result<HomeDataEntity, Object>> getHomeData({
+    bool forceRefresh = false,
+  }) async => Error('guest');
 }
 
 Widget _wrap(Widget child) {
@@ -40,7 +41,7 @@ Finder _tabByIconAsset(String assetPath) => find.ancestor(
 void main() {
   setUp(() {
     GetIt.instance.registerFactory<HomeCubit>(
-      () => HomeCubit(GetHomeDataUseCase(_StubHomeRepoDomain())),
+      () => HomeCubit(HomeUseCase(homeRepoData: _StubHomeRepoDomain())),
     );
   });
 
@@ -90,10 +91,7 @@ void main() {
         (tester) async {
           await tester.pumpWidget(
             _wrap(
-              BlocProvider(
-                create: (_) => NavCubit(),
-                child: const NavScreen(),
-              ),
+              BlocProvider(create: (_) => NavCubit(), child: const NavScreen()),
             ),
           );
           await tester.pump();

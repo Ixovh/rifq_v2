@@ -31,7 +31,7 @@ class WelcomeScreen extends StatelessWidget {
                   break;
 
                 case AuthSuccessState _: //!!!!
-              context.replaceRoute(const NavWrapperRoute());
+                  context.replaceRoute(const NavWrapperRoute());
                   break;
 
                 case AuthErrorState _:
@@ -94,7 +94,7 @@ class WelcomeScreen extends StatelessWidget {
                               textColor: context.neutral100,
                               fontSize: 20,
                               onTap: () {
-                                context.pushRoute( AuthRoute(role: 'pet_owner'));
+                                context.pushRoute(AuthRoute(role: 'pet_owner'));
                                 // context.go(Routes.auth);
                               },
                             ),
@@ -114,7 +114,7 @@ class WelcomeScreen extends StatelessWidget {
                                 await AuthHelper.saveGuestLogin();
                                 if (!context.mounted) return;
                                 context.replaceRoute(const NavWrapperRoute());
-                                  // context.go(Routes.navbar);
+                                // context.go(Routes.navbar);
                               },
                               label: 'Continue as Guest',
                               containerColor: context.neutral100,

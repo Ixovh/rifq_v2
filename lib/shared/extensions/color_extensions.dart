@@ -17,4 +17,3 @@ extension ColorExtensions on Color {
     return hslLight.toColor();
   }
 }
-

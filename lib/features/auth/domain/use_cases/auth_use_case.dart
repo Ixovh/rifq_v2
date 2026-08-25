@@ -15,13 +15,12 @@ class AuthUseCase {
     required String email,
     required String password,
     required String role,
-  }) async =>
-      await authRepoData.signUp(
-        name: name,
-        email: email,
-        password: password,
-        role: role,
-      );
+  }) async => await authRepoData.signUp(
+    name: name,
+    email: email,
+    password: password,
+    role: role,
+  );
 
   Future<Result<Null, Object>> login({
     required String email,
@@ -51,10 +50,7 @@ class AuthUseCase {
     required String email,
     required OtpPurpose purpose,
   }) async {
-    return await authRepoData.resendOtp(
-      email: email,
-      purpose: purpose,
-    );
+    return await authRepoData.resendOtp(email: email, purpose: purpose);
   }
 
   Future<Result<Null, Object>> anonymousUser() async {

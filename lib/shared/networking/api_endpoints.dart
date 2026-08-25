@@ -16,4 +16,3 @@ class ApiEndpoints {
   // Common
   static String userById(String id) => '/users/$id';
 }
-

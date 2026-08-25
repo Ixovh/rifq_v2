@@ -19,9 +19,10 @@ class NavScreen extends StatelessWidget {
             return Scaffold(
               resizeToAvoidBottomInset: false,
               backgroundColor: context.background,
-              
+
               // 1. Move the button here
-              floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerDocked,
               floatingActionButton: GestureDetector(
                 onTap: () {
                   // context.push(Routes.aiScreen);
@@ -30,7 +31,7 @@ class NavScreen extends StatelessWidget {
                 child: Container(
                   // Add margin to lift it up if needed to match your previous 'bottom: 45.h'
                   // You might need to tweak this margin-bottom to get the exact position you had
-                  margin: EdgeInsets.only(bottom: 10.h), 
+                  margin: EdgeInsets.only(bottom: 10.h),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -160,10 +161,10 @@ class NavScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        
+
                         // Spacer for FAB
                         SizedBox(width: 50.w),
-                        
+
                         // Hotel
                         Flexible(
                           child: GestureDetector(
@@ -247,18 +248,13 @@ class NavScreen extends StatelessWidget {
   }
 }
 
-
-
 @RoutePage()
 class NavWrapperScreen extends StatelessWidget {
   const NavWrapperScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => NavCubit(),
-      child: const NavScreen(),
-    );
+    return BlocProvider(create: (_) => NavCubit(), child: const NavScreen());
   }
 }
 // import 'package:flutter/material.dart';

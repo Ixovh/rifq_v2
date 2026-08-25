@@ -33,7 +33,6 @@ class PathButton extends StatelessWidget {
             Text(
               title,
               style: context.body2.copyWith(color: context.primary500),
-
             ),
             SizedBox(width: 10.w),
             Icon(icon, color: AppColors.primary500),

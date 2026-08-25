@@ -3,11 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
 class AccountInfoRow extends StatelessWidget {
-  const AccountInfoRow({
-    super.key,
-    required this.label,
-    required this.value,
-  });
+  const AccountInfoRow({super.key, required this.label, required this.value});
 
   final String label;
   final String value;

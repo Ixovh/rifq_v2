@@ -50,9 +50,8 @@ class AdoptionCubit extends Cubit<AdoptionState> {
         imageFiles: imageFiles,
       );
       emit(const AdoptionState.actionSuccess());
-      
-  
-      await loadAdoptionFeed(); 
+
+      await loadAdoptionFeed();
     } catch (e) {
       emit(AdoptionState.error(e.toString()));
     }

@@ -35,9 +35,7 @@ class AuthHelper {
 
   //!! -------SAVE GUEST LOGIN-------
   static Future<void> saveGuestLogin() async {
-    await _box.write(_key, {
-      'isGuest': true,
-    });
+    await _box.write(_key, {'isGuest': true});
   }
 
   //!! -------LOGOUT-------

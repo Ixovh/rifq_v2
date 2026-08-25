@@ -27,7 +27,7 @@ class ResetPasswordScreen extends StatelessWidget {
           listener: (context, state) {
             switch (state) {
               case AuthPasswordResetSuccessState _:
-                context.replaceRoute( AuthRoute(role: 'pet_owner'));
+                context.replaceRoute(AuthRoute(role: 'pet_owner'));
                 // context.push(Routes.auth);
                 break;
               case AuthLoadingState _:

@@ -39,6 +39,7 @@ class AddPetFormState {
     );
   }
 }
+
 @RoutePage()
 class AddPetScreen extends StatelessWidget {
   AddPetScreen({super.key});
@@ -168,55 +169,62 @@ class AddPetScreen extends StatelessWidget {
                 child: ValueListenableBuilder<int>(
                   valueListenable: currentStep,
                   builder: (context, step, _) {
-                    return CustomeButtonWidgets(
-                      titel: step == 1 ? "Save" : "Next",
-                      onPressed: () async {
-                        final form = formState.value;
+                    return BlocBuilder<AddPetCubit, AddPetState>(
+                      builder: (context, state) {
+                        return CustomeButtonWidgets(
+                          titel: step == 1 ? "Save" : "Next",
+                          isLoading: state is AddPetLoading,
+                          onPressed: () async {
+                            final form = formState.value;
 
-                        if (step == 0) {
-                          currentStep.value = 1;
-                          controller.nextPage(
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.ease,
-                          );
-                          return;
-                        }
+                            if (step == 0) {
+                              currentStep.value = 1;
+                              controller.nextPage(
+                                duration: Duration(milliseconds: 300),
+                                curve: Curves.ease,
+                              );
+                              return;
+                            }
 
-                        if (form.photoFile == null ||
-                            nameCtrl.text.isEmpty ||
-                            breedCtrl.text.isEmpty ||
-                            form.gender.isEmpty ||
-                            form.species.isEmpty ||
-                            form.birthdate == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("Please complete all fields"),
-                            ),
-                          );
-                          return;
-                        }
+                            if (form.photoFile == null ||
+                                nameCtrl.text.isEmpty ||
+                                breedCtrl.text.isEmpty ||
+                                form.gender.isEmpty ||
+                                form.species.isEmpty ||
+                                form.birthdate == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Please complete all fields"),
+                                ),
+                              );
+                              return;
+                            }
 
-                        final ownerId = await getOwnerId();
+                            final ownerId = await getOwnerId();
 
-                        if (ownerId == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("User profile not found")),
-                          );
-                          return;
-                        }
+                            if (ownerId == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("User profile not found"),
+                                ),
+                              );
+                              return;
+                            }
 
-                        context.read<AddPetCubit>().addPet(
-                          ownerId: ownerId,
-                          name: nameCtrl.text,
-                          species: form.species,
-                          gender: form.gender,
-                          breed: breedCtrl.text,
-                          birthdate: form.birthdate!,
-                          photoFile: form.photoFile!,
+                            context.read<AddPetCubit>().addPet(
+                              ownerId: ownerId,
+                              name: nameCtrl.text,
+                              species: form.species,
+                              gender: form.gender,
+                              breed: breedCtrl.text,
+                              birthdate: form.birthdate!,
+                              photoFile: form.photoFile!,
+                            );
+                          },
+                          buttonWidth: 366,
+                          buttonhight: 58,
                         );
                       },
-                      buttonWidth: 366,
-                      buttonhight: 58,
                     );
                   },
                 ),

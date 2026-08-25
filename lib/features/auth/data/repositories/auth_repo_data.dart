@@ -15,7 +15,6 @@ class AuthRepoData implements AuthRepoDomain {
   Future<Result<Null, Object>> login({
     required String email,
     required String password,
-    
   }) async => await authDataSource.login(email: email, password: password);
 
   //
@@ -28,13 +27,12 @@ class AuthRepoData implements AuthRepoDomain {
     required String email,
     required String password,
     required String role,
-  }) async =>
-      await authDataSource.signUp(
-        name: name,
-        email: email,
-        password: password,
-        role: role,
-      );
+  }) async => await authDataSource.signUp(
+    name: name,
+    email: email,
+    password: password,
+    role: role,
+  );
 
   // @override
   // Future<Result<Null, Object>> signUpWithOtp({
@@ -64,21 +62,13 @@ class AuthRepoData implements AuthRepoDomain {
     required String otp,
     required OtpPurpose purpose,
   }) async =>
-      await authDataSource.verifyOtp(
-        email: email,
-        otp: otp,
-        purpose: purpose,
-      );
+      await authDataSource.verifyOtp(email: email, otp: otp, purpose: purpose);
 
   @override
   Future<Result<Null, Object>> resendOtp({
     required String email,
     required OtpPurpose purpose,
-  }) async =>
-      await authDataSource.resendOtp(
-        email: email,
-        purpose: purpose,
-      );
+  }) async => await authDataSource.resendOtp(email: email, purpose: purpose);
   //
   //
   //

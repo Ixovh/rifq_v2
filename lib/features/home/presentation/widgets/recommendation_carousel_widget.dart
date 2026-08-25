@@ -1,30 +1,26 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rifq_v2/shared/constants/app_images.dart';
 import 'package:rifq_v2/features/home/presentation/widgets/recommendation_card_widget.dart';
 
 class RecommendationCarousel extends StatelessWidget {
   const RecommendationCarousel({super.key});
 
+  static const _adsImages = [
+    AppImages.recommendationClinic,
+    AppImages.recommendationTips,
+  ];
+
   @override
   Widget build(BuildContext context) {
-    final adsImages = [
-      'assets/images/ad1.png',
-      'assets/images/ad2.png',
-      'assets/images/ad3.png',
-    ];
-
-    return CarouselSlider(
-      items: adsImages.map((image) {
-        return RecommendationCard(imagePath: image);
-      }).toList(),
-
-      options: CarouselOptions(
-        height: 155,
-        autoPlay: true,
-        autoPlayInterval: const Duration(seconds: 4),
-        autoPlayAnimationDuration: const Duration(milliseconds: 800),
-        enlargeCenterPage: true,
-        viewportFraction: 0.75,
+    return SizedBox(
+      height: 154.h,
+      child: PageView.builder(
+        controller: PageController(viewportFraction: 0.92),
+        itemCount: _adsImages.length,
+        itemBuilder: (context, index) {
+          return RecommendationCard(imagePath: _adsImages[index]);
+        },
       ),
     );
   }

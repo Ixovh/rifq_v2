@@ -51,8 +51,8 @@ class SubaBaseDataSource implements BaseAuthDataSource {
   SubaBaseDataSource({
     required SupabaseClient supabase,
     required GetStorage box,
-  })  : _supabase = supabase,
-        _box = box;
+  }) : _supabase = supabase,
+       _box = box;
 
   /// Sign up with email + password, then user confirms via OTP email.
   @override
@@ -66,10 +66,7 @@ class SubaBaseDataSource implements BaseAuthDataSource {
       await _supabase.auth.signUp(
         email: email,
         password: password,
-        data: {
-          'full_name': name,
-          'role': role,
-        },
+        data: {'full_name': name, 'role': role},
       );
       this.email = email;
       return Success(null);
@@ -133,8 +130,7 @@ class SubaBaseDataSource implements BaseAuthDataSource {
   Future<Result<AuthModel, Object>> verifyAccount({
     required String email,
     required String otp,
-  }) async =>
-      verifyOtp(email: email, otp: otp, purpose: OtpPurpose.signUp);
+  }) async => verifyOtp(email: email, otp: otp, purpose: OtpPurpose.signUp);
 
   @override
   Future<Result<AuthModel, Object>> verifyOtp({
@@ -200,10 +196,7 @@ class SubaBaseDataSource implements BaseAuthDataSource {
       if (purpose == OtpPurpose.resetPassword) {
         await _supabase.auth.resetPasswordForEmail(email.trim());
       } else {
-        await _supabase.auth.resend(
-          type: otpType,
-          email: email.trim(),
-        );
+        await _supabase.auth.resend(type: otpType, email: email.trim());
       }
 
       return Success(null);
@@ -265,31 +258,6 @@ class SubaBaseDataSource implements BaseAuthDataSource {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // import 'package:get_storage/get_storage.dart';
 // import 'package:injectable/injectable.dart';
 // import 'package:multiple_result/multiple_result.dart';
@@ -298,7 +266,6 @@ class SubaBaseDataSource implements BaseAuthDataSource {
 // import 'package:rifq_v2/features/auth/data/models/auth_model.dart';
 
 // import 'package:supabase_flutter/supabase_flutter.dart';
-
 
 // abstract class BaseAuthDataSource {
 //   Future<Result<Null, Object>> signUp({

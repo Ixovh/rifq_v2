@@ -6,14 +6,11 @@ class AdoptionFeatureScreen extends StatelessWidget {
   const AdoptionFeatureScreen({super.key});
   @override
   Widget build(BuildContext context) {
-      final _ = context.read<AdoptionCubit>();
+    final _ = context.read<AdoptionCubit>();
 
     return Scaffold(
       appBar: AppBar(title: const Text('Adoption Feature Screen')),
-      body: Column(children: [
-          
-        ],
-      ),
+      body: Column(children: []),
     );
   }
 }

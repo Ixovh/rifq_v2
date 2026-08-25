@@ -11,6 +11,22 @@
 part of 'app_router.dart';
 
 /// generated route for
+/// [AccountPetsScreen]
+class AccountPetsRoute extends PageRouteInfo<void> {
+  const AccountPetsRoute({List<PageRouteInfo>? children})
+    : super(AccountPetsRoute.name, initialChildren: children);
+
+  static const String name = 'AccountPetsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AccountPetsScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [AccountScreen]
 class AccountRoute extends PageRouteInfo<void> {
   const AccountRoute({List<PageRouteInfo>? children})
@@ -147,6 +163,50 @@ class EditAccountRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [EditPetScreen]
+class EditPetRoute extends PageRouteInfo<EditPetRouteArgs> {
+  EditPetRoute({Key? key, required String petId, List<PageRouteInfo>? children})
+    : super(
+        EditPetRoute.name,
+        args: EditPetRouteArgs(key: key, petId: petId),
+        initialChildren: children,
+      );
+
+  static const String name = 'EditPetRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<EditPetRouteArgs>();
+      return EditPetScreen(key: args.key, petId: args.petId);
+    },
+  );
+}
+
+class EditPetRouteArgs {
+  const EditPetRouteArgs({this.key, required this.petId});
+
+  final Key? key;
+
+  final String petId;
+
+  @override
+  String toString() {
+    return 'EditPetRouteArgs{key: $key, petId: $petId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! EditPetRouteArgs) return false;
+    return key == other.key && petId == other.petId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ petId.hashCode;
+}
+
+/// generated route for
 /// [HomeScreen]
 class HomeRoute extends PageRouteInfo<void> {
   const HomeRoute({List<PageRouteInfo>? children})
@@ -277,6 +337,53 @@ class OtpRouteArgs {
 
   @override
   int get hashCode => key.hashCode ^ email.hashCode ^ purpose.hashCode;
+}
+
+/// generated route for
+/// [PetProfileScreen]
+class PetProfileRoute extends PageRouteInfo<PetProfileRouteArgs> {
+  PetProfileRoute({
+    Key? key,
+    required String petId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         PetProfileRoute.name,
+         args: PetProfileRouteArgs(key: key, petId: petId),
+         initialChildren: children,
+       );
+
+  static const String name = 'PetProfileRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<PetProfileRouteArgs>();
+      return PetProfileScreen(key: args.key, petId: args.petId);
+    },
+  );
+}
+
+class PetProfileRouteArgs {
+  const PetProfileRouteArgs({this.key, required this.petId});
+
+  final Key? key;
+
+  final String petId;
+
+  @override
+  String toString() {
+    return 'PetProfileRouteArgs{key: $key, petId: $petId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PetProfileRouteArgs) return false;
+    return key == other.key && petId == other.petId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ petId.hashCode;
 }
 
 /// generated route for

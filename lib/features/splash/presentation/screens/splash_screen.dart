@@ -6,6 +6,7 @@ import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.d
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
+
 @RoutePage()
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -20,72 +21,69 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-      debugPrint("Splash init");
+    debugPrint("Splash init");
     Future.delayed(minDuration, _checkAuth);
   }
 
-
-
   Future<void> _checkAuth() async {
-  final session = Supabase.instance.client.auth.currentUser;
-  PageRouteInfo route = const ChoosePathRoute();
-
+    final session = Supabase.instance.client.auth.currentUser;
+    PageRouteInfo route = const ChoosePathRoute();
 
     if (session != null) {
-    // ✅ هذا هو الإصلاح - تحقق أولاً
-    if (session.emailConfirmedAt == null) {
-      await Supabase.instance.client.auth.signOut();
-      if (!mounted) return;
-      context.router.replace(const ChoosePathRoute());
-      return;
-    }
+      // ✅ هذا هو الإصلاح - تحقق أولاً
+      if (session.emailConfirmedAt == null) {
+        await Supabase.instance.client.auth.signOut();
+        if (!mounted) return;
+        context.router.replace(const ChoosePathRoute());
+        return;
+      }
 
-    final profile = await Supabase.instance.client
-        .from('profiles')
-        .select('id, role')
-        .eq('id', session.id)
-        .maybeSingle();
+      final profile = await Supabase.instance.client
+          .from('profiles')
+          .select('id, role')
+          .eq('id', session.id)
+          .maybeSingle();
 
-    if (profile != null) {
-      final role = profile['role'] as String?;
-      if (role == 'pet_owner') {
-        route = const NavWrapperRoute();
-      } else if (role == 'service_provider') {
-        route = const NavWrapperRoute(); // غيّره لاحقاً لشاشة مقدم الخدمة
+      if (profile != null) {
+        final role = profile['role'] as String?;
+        if (role == 'pet_owner') {
+          route = const NavWrapperRoute();
+        } else if (role == 'service_provider') {
+          route = const NavWrapperRoute(); // غيّره لاحقاً لشاشة مقدم الخدمة
+        }
       }
     }
+
+    if (!mounted) return;
+    context.router.replace(route);
   }
+  //حق حاتم القديم
+  //   Future<void> _checkAuth() async {
+  //     final session = Supabase.instance.client.auth.currentUser;
+  //     PageRouteInfo route = const ChoosePathRoute();
 
-  if (!mounted) return;
-  context.router.replace(route);
-}
-//حق حاتم القديم
-//   Future<void> _checkAuth() async {
-//     final session = Supabase.instance.client.auth.currentUser;
-//     PageRouteInfo route = const ChoosePathRoute();
+  //     if (session != null) {
+  //       final provider = await Supabase.instance.client
+  //           .from('profiles')
+  //           .select('id')
+  //           .eq('id', session.id)
+  //           .maybeSingle();
 
-//     if (session != null) {
-//       final provider = await Supabase.instance.client
-//           .from('profiles')
-//           .select('id')
-//           .eq('id', session.id)
-//           .maybeSingle();
+  //       final user = await Supabase.instance.client
+  //           .from('users')
+  //           .select('id')
+  //           .eq('id', session.id)
+  //           .maybeSingle();
 
-//       final user = await Supabase.instance.client
-//           .from('users')
-//           .select('id')
-//           .eq('id', session.id)
-//           .maybeSingle();
-
-//       // if (user != null) {
-//       //   route = Routes.navbar;
-//       // } else if (provider != null) {
-//       //   route = Routes.providerNavbar;
-//       // }
-//     }
-//     if (!mounted) return;
-// context.router.replace(route); 
-//  }
+  //       // if (user != null) {
+  //       //   route = Routes.navbar;
+  //       // } else if (provider != null) {
+  //       //   route = Routes.providerNavbar;
+  //       // }
+  //     }
+  //     if (!mounted) return;
+  // context.router.replace(route);
+  //  }
 
   @override
   Widget build(BuildContext context) {
@@ -264,6 +262,7 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
+
 /// Custom clipper for trapezoidal door shape
 class _TrapezoidalClipper extends CustomClipper<Path> {
   final double leftOffset;

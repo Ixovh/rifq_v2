@@ -69,12 +69,11 @@ extension AppThemeX on BuildContext {
   TextStyle get body2 => AppTextStyles.body2;
   TextStyle get body3 => AppTextStyles.body3;
 
-
-   // عشان بسرعه نوصل اللى  بالغالب اللئ راح نستخذمها بكثره 
+  // عشان بسرعه نوصل اللى  بالغالب اللئ راح نستخذمها بكثره
   TextStyle get headingLarge => h1;
   TextStyle get headingMedium => h3;
   TextStyle get headingSmall => h5;
   TextStyle get bodyLarge => body1;
   TextStyle get bodyMedium => body2;
-  TextStyle get bodySmall => body3;  
+  TextStyle get bodySmall => body3;
 }

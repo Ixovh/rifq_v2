@@ -1,4 +1,3 @@
-
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:get_storage/get_storage.dart';
@@ -33,4 +32,3 @@ abstract class ThirdPartyModule {
 //       FlutterSecureStorage(aOptions: _getAndroidOptions());
 //   //----------------------------------------------------------------------------
 // }
-

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
-
 class AddPetStepOne extends StatelessWidget {
   final TextEditingController nameCtrl;
   final Function(String) onGenderSelected;
@@ -232,10 +231,7 @@ class _GenderOption extends StatelessWidget {
           children: [
             Icon(icon, color: iconColor, size: 25),
             SizedBox(width: 8),
-            Text(
-              title,
-              style: context.body2.copyWith(color: iconColor),
-            ),
+            Text(title, style: context.body2.copyWith(color: iconColor)),
           ],
         ),
       ),

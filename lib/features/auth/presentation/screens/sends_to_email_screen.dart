@@ -27,12 +27,12 @@ class SendsToEmailScreen extends StatelessWidget {
           listener: (context, state) {
             switch (state) {
               case AuthPasswordResetEmailSentState _:
-              context.pushRoute(
-                OtpRoute(
-                  email: cubit.resetEmailController.text,
-                  purpose: OtpPurpose.resetPassword,
-                ),
-              );
+                context.pushRoute(
+                  OtpRoute(
+                    email: cubit.resetEmailController.text,
+                    purpose: OtpPurpose.resetPassword,
+                  ),
+                );
                 // context.push(
                 //   Routes.otpScreen,
                 //   extra: {"cubit": cubit, "isPassword": true},

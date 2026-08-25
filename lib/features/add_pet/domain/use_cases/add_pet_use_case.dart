@@ -4,7 +4,6 @@ import 'package:injectable/injectable.dart';
 import 'package:rifq_v2/features/add_pet/domain/entities/add_pet_entity.dart';
 import 'package:rifq_v2/features/add_pet/domain/repositories/add_pet_repo_domain.dart';
 
-
 @injectable
 class AddPetUseCase {
   final AddPetRepoDomain repository;

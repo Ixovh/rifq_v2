@@ -405,5 +405,3 @@ class FailureExceptions {
     return const NetworkFailure();
   }
 }
-
-

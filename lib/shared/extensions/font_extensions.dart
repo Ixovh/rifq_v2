@@ -51,5 +51,3 @@ extension ResponsiveFontSizer on num {
     return scaled;
   }
 }
-
-

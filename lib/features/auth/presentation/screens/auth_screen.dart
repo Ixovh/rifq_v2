@@ -15,8 +15,8 @@ import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.d
 
 @RoutePage()
 class AuthScreen extends StatelessWidget {
-  const AuthScreen({super.key,required  this.role});
-    final String role;
+  const AuthScreen({super.key, required this.role});
+  final String role;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,12 @@ class AuthScreen extends StatelessWidget {
                     children: [
                       const AuthTabBar(),
                       Expanded(
-                        child: TabBarView(children: [LoginTab(), SignUpTab(role: role)]),
+                        child: TabBarView(
+                          children: [
+                            LoginTab(),
+                            SignUpTab(role: role),
+                          ],
+                        ),
                       ),
                     ],
                   ),

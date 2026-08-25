@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-
 class CustomException implements Exception {
   /// A message describing the format error.
   final String message;
@@ -15,15 +14,12 @@ class CustomException implements Exception {
   }
 }
 
-
-
 class CatchErrorMessage {
   final Object error;
 
   CatchErrorMessage({required this.error});
 
   String getWriteMessage() {
-
     String? errorMessage;
 
     switch (error) {
@@ -69,5 +65,6 @@ class CatchErrorMessage {
     //   default:
     //     errorMessage = error.toString();
     // }
-    return errorMessage ?? "An unexpected error occurred";  }
+    return errorMessage ?? "An unexpected error occurred";
+  }
 }

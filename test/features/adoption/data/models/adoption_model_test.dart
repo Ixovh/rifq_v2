@@ -183,16 +183,13 @@ void main() {
       },
     );
 
-    test(
-      'fromJson decodes the "pet_photos" list (renamed to `photos`)',
-      () {
-        final model = AdoptionPostModel.fromJson(json);
-        expect(model.photos, hasLength(2));
-        expect(model.photos[0].id, 'photo-1');
-        expect(model.photos[0].isPrimary, isTrue);
-        expect(model.photos[1].isPrimary, isFalse);
-      },
-    );
+    test('fromJson decodes the "pet_photos" list (renamed to `photos`)', () {
+      final model = AdoptionPostModel.fromJson(json);
+      expect(model.photos, hasLength(2));
+      expect(model.photos[0].id, 'photo-1');
+      expect(model.photos[0].isPrimary, isTrue);
+      expect(model.photos[1].isPrimary, isFalse);
+    });
 
     test('missing "pet_photos" key defaults to an empty list', () {
       final withoutPhotos = Map<String, dynamic>.from(json)

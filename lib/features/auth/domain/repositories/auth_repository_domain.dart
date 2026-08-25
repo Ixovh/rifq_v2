@@ -2,7 +2,6 @@ import 'package:multiple_result/multiple_result.dart';
 import 'package:rifq_v2/features/auth/domain/entities/auth_entity.dart';
 import 'package:rifq_v2/shared/constants/otp_purpose.dart';
 
-
 abstract class AuthRepoDomain {
   Future<Result<Null, Object>> signUp({
     required String name,
@@ -44,18 +43,13 @@ abstract class AuthRepoDomain {
 
   //---------
   Future<Result<Null, Object>> anonymousUser();
-  
+
   //---------
   Future<Result<Null, Object>> logOut();
-  
-  //---------
-  Future<Result<Null, Object>> resetPassword({
-    required String newPassword,
-  });
-  
-  //---------
-  Future<Result<Null, Object>> sendPasswordResetEmail({
-    required String email,
-  });
 
+  //---------
+  Future<Result<Null, Object>> resetPassword({required String newPassword});
+
+  //---------
+  Future<Result<Null, Object>> sendPasswordResetEmail({required String email});
 }

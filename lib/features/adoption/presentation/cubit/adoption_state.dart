@@ -8,9 +8,8 @@ abstract class AdoptionState extends Equatable {
   const factory AdoptionState.loading() = AdoptionLoading;
   const factory AdoptionState.feedLoaded(List<AdoptionPostEntity> posts) =
       AdoptionFeedLoaded;
-  const factory AdoptionState.myListingsLoaded(
-    List<AdoptionPostEntity> posts,
-  ) = AdoptionMyListingsLoaded;
+  const factory AdoptionState.myListingsLoaded(List<AdoptionPostEntity> posts) =
+      AdoptionMyListingsLoaded;
   const factory AdoptionState.actionSuccess() = AdoptionActionSuccess;
   const factory AdoptionState.error(String message) = AdoptionError;
 

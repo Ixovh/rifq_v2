@@ -67,35 +67,78 @@ class AccountEntity extends Equatable {
 class AccountPetEntity extends Equatable {
   final String id;
   final String name;
+  final String species;
   final String gender;
   final String breed;
   final int? age;
+  final DateTime? birthdate;
+  final double? weight;
   final String? photoUrl;
   final bool listedForAdoption;
 
   const AccountPetEntity({
     required this.id,
     required this.name,
+    this.species = '',
     required this.gender,
     required this.breed,
     this.age,
+    this.birthdate,
+    this.weight,
     this.photoUrl,
     this.listedForAdoption = false,
   });
 
+  String get weightLabel {
+    if (weight == null) return '-';
+    final value = weight!;
+    if (value == value.roundToDouble()) {
+      return '${value.toInt()} kg';
+    }
+    return '${value.toStringAsFixed(1)} kg';
+  }
+
+  String get speciesLabel {
+    if (species.isEmpty) return '-';
+    return species[0].toUpperCase() + species.substring(1);
+  }
+
   String get ageLabel {
+    final months = _ageInMonths;
+    if (months != null) {
+      if (months < 12) {
+        final display = months < 1 ? 1 : months;
+        return display == 1 ? '1 month' : '$display month';
+      }
+      final years = months ~/ 12;
+      return years == 1 ? '1 Year' : '$years Years';
+    }
+
     if (age == null) return '-';
+    if (age! < 1) return '1 month';
     if (age == 1) return '1 Year';
     return '$age Years';
+  }
+
+  int? get _ageInMonths {
+    final dob = birthdate;
+    if (dob == null) return null;
+    final now = DateTime.now();
+    var months = (now.year - dob.year) * 12 + now.month - dob.month;
+    if (now.day < dob.day) months--;
+    return months < 0 ? 0 : months;
   }
 
   @override
   List<Object?> get props => [
     id,
     name,
+    species,
     gender,
     breed,
     age,
+    birthdate,
+    weight,
     photoUrl,
     listedForAdoption,
   ];

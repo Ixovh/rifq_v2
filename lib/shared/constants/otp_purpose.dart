@@ -1,5 +1,1 @@
-enum OtpPurpose {
-  signUp,
-  resetPassword,
-  emailChange,
-}
+enum OtpPurpose { signUp, resetPassword, emailChange }

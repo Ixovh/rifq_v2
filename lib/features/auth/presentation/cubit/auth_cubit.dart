@@ -6,7 +6,6 @@ import 'package:rifq_v2/shared/constants/otp_purpose.dart';
 import 'package:rifq_v2/shared/errors/custome_exception.dart';
 import 'package:rifq_v2/features/auth/domain/use_cases/auth_use_case.dart';
 
-
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
@@ -110,11 +109,7 @@ class AuthCubit extends Cubit<AuthState> {
   //
 
   Future verifyAccount({required String email, required String otp}) async {
-    return verifyOtp(
-      email: email,
-      otp: otp,
-      purpose: OtpPurpose.signUp,
-    );
+    return verifyOtp(email: email, otp: otp, purpose: OtpPurpose.signUp);
   }
 
   Future verifyOtp({
@@ -143,16 +138,10 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  Future resendOtp({
-    required String email,
-    required OtpPurpose purpose,
-  }) async {
+  Future resendOtp({required String email, required OtpPurpose purpose}) async {
     emit(AuthLoadingState());
 
-    (await _authUseCase.resendOtp(
-      email: email,
-      purpose: purpose,
-    )).when(
+    (await _authUseCase.resendOtp(email: email, purpose: purpose)).when(
       (_) => emit(AuthOtpResentState()),
       (whenError) {
         emit(
