@@ -38,8 +38,6 @@ import '../../features/adoption/domain/repositories/adoption_repository_domain.d
     as _i785;
 import '../../features/adoption/domain/use_cases/create_adoption_post_use_case.dart'
     as _i824;
-import '../../features/adoption/domain/use_cases/fetch_adoption_posts_use_case.dart'
-    as _i425;
 import '../../features/adoption/presentation/cubit/adoption_cubit.dart'
     as _i430;
 import '../../features/auth/data/datasources/auth_data_source.dart' as _i970;
@@ -73,9 +71,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i956.AdoptionRemoteDataSource>(
       () => _i956.AdoptionRemoteDataSourceImpl(gh<_i454.SupabaseClient>()),
     );
-    gh.lazySingleton<_i785.AdoptionRepositoryDomain>(
-      () => _i321.AdoptionRepositoryData(gh<_i454.SupabaseClient>()),
-    );
     gh.lazySingleton<_i734.BaseAddPetDataSource>(
       () => _i734.AddPetDataSource(gh<_i454.SupabaseClient>()),
     );
@@ -91,14 +86,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i1012.BaseAccountDataSource>(
       () => _i1012.AccountDataSource(supabase: gh<_i454.SupabaseClient>()),
     );
-    gh.factory<_i824.CreateAdoptionPostUseCase>(
-      () =>
-          _i824.CreateAdoptionPostUseCase(gh<_i785.AdoptionRepositoryDomain>()),
-    );
-    gh.factory<_i425.FetchAdoptionPostsUseCase>(
-      () =>
-          _i425.FetchAdoptionPostsUseCase(gh<_i785.AdoptionRepositoryDomain>()),
-    );
     gh.lazySingleton<_i998.AuthRepoDomain>(
       () => _i400.AuthRepoData(authDataSource: gh<_i970.BaseAuthDataSource>()),
     );
@@ -107,6 +94,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i257.HomeRepoDomain>(
       () => _i145.HomeRepoImpl(gh<_i362.BaseHomeDataSource>()),
+    );
+    gh.lazySingleton<_i785.AdoptionRepositoryDomain>(
+      () => _i321.AdoptionRepositoryData(gh<_i956.AdoptionRemoteDataSource>()),
     );
     gh.factory<_i933.GetHomeDataUseCase>(
       () => _i933.GetHomeDataUseCase(gh<_i257.HomeRepoDomain>()),
@@ -119,11 +109,9 @@ extension GetItInjectableX on _i174.GetIt {
         accountDataSource: gh<_i1012.BaseAccountDataSource>(),
       ),
     );
-    gh.factory<_i430.AdoptionCubit>(
-      () => _i430.AdoptionCubit(
-        gh<_i425.FetchAdoptionPostsUseCase>(),
-        gh<_i824.CreateAdoptionPostUseCase>(),
-      ),
+    gh.factory<_i824.CreateAdoptionPostUseCase>(
+      () =>
+          _i824.CreateAdoptionPostUseCase(gh<_i785.AdoptionRepositoryDomain>()),
     );
     gh.lazySingleton<_i803.AccountUseCase>(
       () =>
@@ -140,6 +128,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i9.HomeCubit>(
       () => _i9.HomeCubit(gh<_i933.GetHomeDataUseCase>()),
+    );
+    gh.factory<_i430.AdoptionCubit>(
+      () => _i430.AdoptionCubit(gh<_i824.CreateAdoptionPostUseCase>()),
     );
     gh.singleton<_i261.LocalKeysService>(() => _i261.LocalKeysService());
     return this;

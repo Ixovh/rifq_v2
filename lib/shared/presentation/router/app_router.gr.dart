@@ -71,6 +71,22 @@ class AddPetRouteArgs {
 }
 
 /// generated route for
+/// [AdoptionFeatureScreen]
+class AdoptionFeatureRoute extends PageRouteInfo<void> {
+  const AdoptionFeatureRoute({List<PageRouteInfo>? children})
+    : super(AdoptionFeatureRoute.name, initialChildren: children);
+
+  static const String name = 'AdoptionFeatureRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AdoptionFeatureScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [AuthScreen]
 class AuthRoute extends PageRouteInfo<AuthRouteArgs> {
   AuthRoute({Key? key, required String role, List<PageRouteInfo>? children})

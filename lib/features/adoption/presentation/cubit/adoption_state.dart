@@ -1,59 +1,49 @@
-import 'package:equatable/equatable.dart';
-import '../../domain/entities/adoption_entity.dart';
+part of 'adoption_cubit.dart';
 
-abstract class AdoptionState extends Equatable {
-  const AdoptionState();
+class AdoptionState extends Equatable {
+  final int selectedTabIndex;
+  final String selectedCategory;
 
-  const factory AdoptionState.initial() = AdoptionInitial;
-  const factory AdoptionState.loading() = AdoptionLoading;
-  const factory AdoptionState.feedLoaded(List<AdoptionPostEntity> posts) =
-      AdoptionFeedLoaded;
-  const factory AdoptionState.myListingsLoaded(
-    List<AdoptionPostEntity> posts,
-  ) = AdoptionMyListingsLoaded;
-  const factory AdoptionState.actionSuccess() = AdoptionActionSuccess;
-  const factory AdoptionState.error(String message) = AdoptionError;
+  // Create adoption post
+  final bool isCreatingPost;
+  final bool isPostCreated;
+  final AdoptionPostEntity? createdPost;
+  final String? errorMessage;
 
-  @override
-  List<Object?> get props => [];
-}
+  const AdoptionState({
+    this.selectedTabIndex = 0,
+    this.selectedCategory = 'Cat',
+    this.isCreatingPost = false,
+    this.isPostCreated = false,
+    this.createdPost,
+    this.errorMessage,
+  });
 
-class AdoptionInitial extends AdoptionState {
-  const AdoptionInitial();
-}
-
-class AdoptionLoading extends AdoptionState {
-  const AdoptionLoading();
-}
-
-class AdoptionFeedLoaded extends AdoptionState {
-  final List<AdoptionPostEntity> posts;
-
-  const AdoptionFeedLoaded(this.posts);
-
-  @override
-  List<Object?> get props => [posts];
-}
-
-class AdoptionMyListingsLoaded extends AdoptionState {
-  final List<AdoptionPostEntity> posts;
-
-  const AdoptionMyListingsLoaded(this.posts);
+  AdoptionState copyWith({
+    int? selectedTabIndex,
+    String? selectedCategory,
+    bool? isCreatingPost,
+    bool? isPostCreated,
+    AdoptionPostEntity? createdPost,
+    String? errorMessage,
+  }) {
+    return AdoptionState(
+      selectedTabIndex: selectedTabIndex ?? this.selectedTabIndex,
+      selectedCategory: selectedCategory ?? this.selectedCategory,
+      isCreatingPost: isCreatingPost ?? this.isCreatingPost,
+      isPostCreated: isPostCreated ?? this.isPostCreated,
+      createdPost: createdPost ?? this.createdPost,
+      errorMessage: errorMessage,
+    );
+  }
 
   @override
-  List<Object?> get props => [posts];
-}
-
-// Used after successful creation
-class AdoptionActionSuccess extends AdoptionState {
-  const AdoptionActionSuccess();
-}
-
-class AdoptionError extends AdoptionState {
-  final String message;
-
-  const AdoptionError(this.message);
-
-  @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [
+        selectedTabIndex,
+        selectedCategory,
+        isCreatingPost,
+        isPostCreated,
+        createdPost,
+        errorMessage,
+      ];
 }

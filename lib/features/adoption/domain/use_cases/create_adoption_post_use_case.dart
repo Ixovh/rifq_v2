@@ -1,6 +1,7 @@
-import 'dart:io';
 import 'package:injectable/injectable.dart';
-import '../repositories/adoption_repository_domain.dart';
+import 'package:multiple_result/multiple_result.dart';
+import 'package:rifq_v2/features/adoption/domain/entities/adoption_entity.dart';
+import 'package:rifq_v2/features/adoption/domain/repositories/adoption_repository_domain.dart';
 
 @injectable
 class CreateAdoptionPostUseCase {
@@ -8,27 +9,11 @@ class CreateAdoptionPostUseCase {
 
   CreateAdoptionPostUseCase(this.repository);
 
-  Future<void> call({
-    required String petName,
-    required String species,
-    required String breed,
-    required int age,
-    required String gender,
-    String? healthStatusSummary,
-    required String description,
-    required String location,
-    required List<File> imageFiles,
-  }) async {
-    return await repository.createAdoptionListing(
-      petName: petName,
-      species: species,
-      breed: breed,
-      age: age,
-      gender: gender,
-      healthStatusSummary: healthStatusSummary,
-      description: description,
-      location: location,
-      imageFiles: imageFiles,
+  Future<Result<AdoptionPostEntity, Object>> call({
+    required AdoptionPostEntity adoptionPost,
+  }) {
+    return repository.createAdoptionPost(
+      adoptionPost: adoptionPost,
     );
   }
 }

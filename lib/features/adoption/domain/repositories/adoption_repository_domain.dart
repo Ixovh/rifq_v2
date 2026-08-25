@@ -1,20 +1,8 @@
-import 'dart:io';
-import '../entities/adoption_entity.dart';
+import 'package:multiple_result/multiple_result.dart';
+import 'package:rifq_v2/features/adoption/domain/entities/adoption_entity.dart';
 
 abstract class AdoptionRepositoryDomain {
-  Future<List<AdoptionPostEntity>> fetchAvailableAdoptionPosts();
-
-  Future<List<AdoptionPostEntity>> fetchMyListings(String userId);
-
-  Future<void> createAdoptionListing({
-    required String petName,
-    required String species,
-    required String breed,
-    required int age,
-    required String gender,
-    String? healthStatusSummary,
-    required String description,
-    required String location,
-    required List<File> imageFiles,
+  Future<Result<AdoptionPostEntity, Object>> createAdoptionPost({
+    required AdoptionPostEntity adoptionPost,
   });
 }

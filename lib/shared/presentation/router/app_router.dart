@@ -15,7 +15,7 @@ import 'package:rifq_v2/features/splash/presentation/screens/choose_path.dart';
 import 'package:rifq_v2/features/splash/presentation/screens/splash_screen.dart';
 import 'package:rifq_v2/shared/constants/otp_purpose.dart';
 import 'package:rifq_v2/shared/presentation/screens/otp_screen.dart';
-
+import 'package:rifq_v2/features/adoption/presentation/screens/adoption_feature_screen.dart';
 part 'app_router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen,Route')
@@ -35,5 +35,6 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: AddPetRoute.page, path: '/addpet'),
         AutoRoute(page: AccountRoute.page, path: '/account'),
         AutoRoute(page: EditAccountRoute.page, path: '/edit-account'),
-      ];
+        AutoRoute(  page: AdoptionFeatureRoute.page,  path: '/adoption',
+),      ];
 }
