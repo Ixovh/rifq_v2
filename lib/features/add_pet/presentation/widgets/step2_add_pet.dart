@@ -80,7 +80,7 @@ class AddPetStepTwo extends StatelessWidget {
             if (selectedBirthdate != null) ...[
               const SizedBox(height: 8),
               Text(
-                'Age: ${_calculateAge(selectedBirthdate!)} years',
+                'Age: ${_ageLabel(selectedBirthdate!)}',
                 style: context.body2.copyWith(color: context.neutral600),
               ),
             ],
@@ -182,14 +182,21 @@ class AddPetStepTwo extends StatelessWidget {
     );
   }
 
-  int _calculateAge(DateTime birthdate) {
+  /// Matches pet profile age formatting (months when under 1 year).
+  String _ageLabel(DateTime birthdate) {
     final now = DateTime.now();
-    int years = now.year - birthdate.year;
-    if (now.month < birthdate.month ||
-        (now.month == birthdate.month && now.day < birthdate.day)) {
-      years--;
+    var months =
+        (now.year - birthdate.year) * 12 + now.month - birthdate.month;
+    if (now.day < birthdate.day) months--;
+    if (months < 0) months = 0;
+
+    if (months < 12) {
+      final display = months < 1 ? 1 : months;
+      return display == 1 ? '1 month' : '$display month';
     }
-    return years;
+
+    final years = months ~/ 12;
+    return years == 1 ? '1 Year' : '$years Years';
   }
 }
 

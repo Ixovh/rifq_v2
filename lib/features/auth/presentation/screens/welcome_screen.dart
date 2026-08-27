@@ -8,6 +8,7 @@ import 'package:rifq_v2/features/auth/domain/use_cases/auth_use_case.dart';
 import 'package:rifq_v2/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:rifq_v2/shared/presentation/widgets/container_button.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/storage_service/auth_helper.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -35,9 +36,7 @@ class WelcomeScreen extends StatelessWidget {
                   break;
 
                 case AuthErrorState _:
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(state.msg)));
+                  context.showErrorToast(state.msg);
                   break;
 
                 case AuthLoadingState _:

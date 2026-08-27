@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
@@ -12,6 +13,7 @@ import 'package:rifq_v2/features/account/presentation/widgets/account_outlined_f
 import 'package:rifq_v2/shared/presentation/widgets/app_pickers.dart';
 import 'package:rifq_v2/features/edit_pet/presentation/cubit/edit_pet_cubit.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/presentation/widgets/container_button.dart';
 import 'package:rifq_v2/shared/presentation/widgets/lottie_loding.dart';
 import 'package:rifq_v2/shared/storage_service/profile_image_cache.dart';
@@ -57,9 +59,7 @@ class _EditPetViewState extends State<_EditPetView> {
       setState(() => _pickedImage = compressed);
     } catch (_) {
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Could not pick image')));
+      context.showErrorToast('Could not pick image');
     }
   }
 
@@ -113,15 +113,11 @@ class _EditPetViewState extends State<_EditPetView> {
     return BlocConsumer<EditPetCubit, EditPetState>(
       listener: (context, state) {
         if (state is EditPetUpdateSuccess) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(const SnackBar(content: Text('Pet updated')));
+          context.showSuccessToast('Pet updated');
           context.router.maybePop(true);
         }
         if (state is EditPetError) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.message)));
+          context.showErrorToast(state.message);
         }
       },
       builder: (context, state) {
@@ -301,6 +297,11 @@ class _EditPetViewState extends State<_EditPetView> {
                             keyboardType: const TextInputType.numberWithOptions(
                               decimal: true,
                             ),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                RegExp(r'[0-9.,]'),
+                              ),
+                            ],
                           ),
                           SizedBox(height: 40.h),
                         ],

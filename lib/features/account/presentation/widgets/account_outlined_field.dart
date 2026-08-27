@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
@@ -9,6 +10,7 @@ class AccountOutlinedField extends StatelessWidget {
     required this.controller,
     this.readOnly = false,
     this.keyboardType,
+    this.inputFormatters,
     this.validator,
   });
 
@@ -16,6 +18,7 @@ class AccountOutlinedField extends StatelessWidget {
   final TextEditingController controller;
   final bool readOnly;
   final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
   final String? Function(String?)? validator;
 
   @override
@@ -48,6 +51,7 @@ class AccountOutlinedField extends StatelessWidget {
                     controller: controller,
                     readOnly: readOnly,
                     keyboardType: keyboardType,
+                    inputFormatters: inputFormatters,
                     onChanged: field.didChange,
                     style: context.body2.copyWith(
                       color: readOnly

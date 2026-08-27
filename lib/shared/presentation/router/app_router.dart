@@ -15,7 +15,7 @@ import 'package:rifq_v2/features/nav/presentation/screens/nav_screen.dart';
 import 'package:rifq_v2/features/onboarding/presentation/screens/onboarding_feature_screen.dart';
 import 'package:rifq_v2/features/splash/presentation/screens/choose_path.dart';
 import 'package:rifq_v2/features/splash/presentation/screens/splash_screen.dart';
-import 'package:rifq_v2/shared/constants/otp_purpose.dart';
+import 'package:rifq_v2/shared/constants/app_enums.dart';
 import 'package:rifq_v2/shared/presentation/screens/otp_screen.dart';
 
 part 'app_router.gr.dart';

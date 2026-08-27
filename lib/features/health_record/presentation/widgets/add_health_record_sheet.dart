@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:rifq_v2/shared/presentation/widgets/app_pickers.dart';
 import 'package:rifq_v2/features/health_record/presentation/cubit/health_record_cubit.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/presentation/widgets/container_button.dart';
 
 Future<void> showAddHealthRecordSheet({
@@ -64,9 +65,7 @@ class _AddHealthRecordSheetState extends State<_AddHealthRecordSheet> {
   Future<void> _save() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     if (_visitDate == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please choose a visit date')),
-      );
+      context.showWarningToast('Please choose a visit date');
       return;
     }
 
@@ -85,10 +84,8 @@ class _AddHealthRecordSheetState extends State<_AddHealthRecordSheet> {
     setState(() => _isSaving = false);
 
     if (success) {
+      context.showSuccessToast('Health record saved');
       Navigator.pop(context);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Health record saved')));
     }
   }
 

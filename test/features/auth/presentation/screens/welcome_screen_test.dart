@@ -12,7 +12,7 @@ import 'package:rifq_v2/features/auth/domain/entities/auth_entity.dart';
 import 'package:rifq_v2/features/auth/domain/repositories/auth_repository_domain.dart';
 import 'package:rifq_v2/features/auth/domain/use_cases/auth_use_case.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/welcome_screen.dart';
-import 'package:rifq_v2/shared/constants/otp_purpose.dart';
+import 'package:rifq_v2/shared/constants/app_enums.dart';
 import 'package:rifq_v2/shared/storage_service/auth_helper.dart';
 
 /// None of WelcomeScreen's "Continue as Guest" path calls into the auth

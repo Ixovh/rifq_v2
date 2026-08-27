@@ -195,13 +195,13 @@ class _PetHero extends StatelessWidget {
               width: 18.w,
               height: 18.w,
               decoration: BoxDecoration(
-                color: context.primary100,
+                color: isFemale ? context.secondary10 : context.primary100,
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 isFemale ? Icons.female : Icons.male,
                 size: 12.sp,
-                color: context.primary300,
+                color: isFemale ? context.secondary200 : context.primary300,
               ),
             ),
           ],

@@ -12,7 +12,8 @@ import 'package:rifq_v2/features/account/presentation/widgets/account_pet_card.d
 import 'package:rifq_v2/features/account/presentation/widgets/account_section_header.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
-import 'package:rifq_v2/shared/presentation/theme/app_color.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_confirm_sheet.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/presentation/widgets/guest_card_widget.dart';
 import 'package:rifq_v2/shared/presentation/widgets/lottie_loding.dart';
 
@@ -37,9 +38,7 @@ class _AccountView extends StatelessWidget {
     return BlocConsumer<AccountCubit, AccountState>(
       listener: (context, state) {
         if (state is AccountErrorState) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.msg)));
+          context.showErrorToast(state.msg);
         }
         if (state is AccountLogoutSuccessState) {
           context.router.replaceAll([const ChoosePathRoute()]);
@@ -119,8 +118,8 @@ class _GuestAccountBody extends StatelessWidget {
               AccountMenuTile(
                 icon: Icons.logout,
                 label: 'Log out',
-                labelColor: const Color(0xFFFF383C),
-                onTap: () => context.read<AccountCubit>().logOut(),
+                labelColor: context.red10,
+                onTap: () => _confirmLogout(context),
               ),
             ],
           ),
@@ -261,7 +260,7 @@ class _SignedAccountBody extends StatelessWidget {
                 AccountMenuTile(
                   icon: Icons.logout,
                   label: 'Log out',
-                  labelColor: const Color(0xFFFF383C),
+                  labelColor: context.red10,
                   onTap: () => _confirmLogout(context),
                 ),
                 SizedBox(height: 24.h),
@@ -272,34 +271,19 @@ class _SignedAccountBody extends StatelessWidget {
       ),
     );
   }
+}
 
-  Future<void> _confirmLogout(BuildContext context) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('Log out'),
-        content: const Text('Are you sure you want to log out?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext, false),
-            child: Text(
-              'Cancel',
-              style: TextStyle(color: AppColors.neutral700),
-            ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext, true),
-            child: const Text(
-              'Log out',
-              style: TextStyle(color: Color(0xFFFF383C)),
-            ),
-          ),
-        ],
-      ),
-    );
+Future<void> _confirmLogout(BuildContext context) async {
+  final confirmed = await showAppConfirmSheet(
+    context: context,
+    title: 'Log out',
+    message: 'Are you sure you want to log out?',
+    confirmLabel: 'Log out',
+    icon: Icons.logout_rounded,
+    isDestructive: true,
+  );
 
-    if (confirmed == true && context.mounted) {
-      await context.read<AccountCubit>().logOut();
-    }
+  if (confirmed && context.mounted) {
+    await context.read<AccountCubit>().logOut();
   }
 }

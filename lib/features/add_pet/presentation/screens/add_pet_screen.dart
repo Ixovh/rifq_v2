@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/presentation/widgets/custome_button_widgets.dart';
 import 'package:rifq_v2/features/add_pet/presentation/cubit/add_pet_cubit.dart';
 import 'package:rifq_v2/features/add_pet/presentation/widgets/add_pet_stepper.dart';
@@ -68,22 +69,10 @@ class AddPetScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is AddPetLoading) {
           } else if (state is AddPetSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                behavior: SnackBarBehavior.floating,
-                backgroundColor: context.green10,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                margin: EdgeInsets.only(bottom: 10, left: 16, right: 16),
-                content: Text("Pet added successfully"),
-              ),
-            );
+            context.showSuccessToast('Pet added successfully');
             Navigator.pop(context, true);
           } else if (state is AddPetFailure) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.error)));
+            context.showErrorToast(state.error);
           }
         },
         child: Scaffold(
@@ -192,10 +181,8 @@ class AddPetScreen extends StatelessWidget {
                                 form.gender.isEmpty ||
                                 form.species.isEmpty ||
                                 form.birthdate == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text("Please complete all fields"),
-                                ),
+                              context.showWarningToast(
+                                'Please complete all fields',
                               );
                               return;
                             }
@@ -203,11 +190,8 @@ class AddPetScreen extends StatelessWidget {
                             final ownerId = await getOwnerId();
 
                             if (ownerId == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text("User profile not found"),
-                                ),
-                              );
+                              if (!context.mounted) return;
+                              context.showErrorToast('User profile not found');
                               return;
                             }
 

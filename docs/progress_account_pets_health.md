@@ -21,6 +21,7 @@ This document summarizes the work completed on the Account / Pets / Health Recor
 | **See all → Your Pets** | Home “Your Pets → See all” opens `AccountPetsScreen`, not the user profile. |
 | Avatar / pet circles | Still open the account / pet flows as appropriate. |
 | Pull-to-refresh | Home and Account can force a server refresh and rewrite the local snapshot. |
+| **Quick Service cards** | Clinic Visit / Pet Hotel / Adopt use bordered, shadowed 110×110 cards (Figma layout) with **PNG** icons under `assets/images/home/`. |
 
 ---
 
@@ -64,7 +65,7 @@ Pet photos use the pet photos bucket; profile uses the profile bucket — no ove
 - Profile shows a **horizontal** scroll of pet cards.
 - **Your Pets** screen lists all pets (full-width cards).
 - Title **“Your Pets”** is centered with a `Stack` so it stays centered relative to the screen (not shifted by the back button).
-- Pet age under 1 year shows as **months** (e.g. `6 months`).
+- Pet age under 1 year shows as **months** (same rules as Pet Profile / Add Pet preview).
 
 ### Pet card actions
 
@@ -83,6 +84,7 @@ Screens aligned with Figma Account frames:
 
 - **Edit Pet** — name, birthdate, breed, weight, photo; Save with loading state.
 - Local-first update via `UserDataStore.updatePet`, then Supabase update.
+- **Weight field:** numeric-only — letters are stripped as the user types (`FilteringTextInputFormatter` allowing `0-9`, `.`, `,`); decimal keyboard via `AccountOutlinedField.inputFormatters`.
 
 **DB:** `pets.weight` (`numeric`, kg)  
 Migration: `supabase/migrations/20260826020000_add_pets_weight.sql`
@@ -94,6 +96,7 @@ Migration: `supabase/migrations/20260826020000_add_pets_weight.sql`
 **Screen:** Pet Profile (from Account Figma)
 
 - Hero: photo, name, gender icon, breed, age + weight chips.
+- **Female gender badge:** light purple circle + darker purple ♀ (`secondary10` / `secondary200`), matching Figma. Male stays teal (`primary100` / `primary300`).
 - Tabs: **Health Record** | **Appointment**.
 - Edit icon in the app bar → Edit Pet; refresh on return.
 
@@ -130,6 +133,11 @@ Clean architecture: data source → repository → use case → cubit → widget
   - `showAppDatePicker(...)`
   - `showAppSpeciesSheet(...)`
 
+### Branded sheets (design system)
+
+- Date and species pickers use **teal-themed bottom sheets** (not default Material purple overlays).
+- Species sheet lists common KSA pets under **Other** (Bird, Falcon, Rabbit, Fish, Turtle, Hamster, Pigeon, Horse, Other), with icons and selected-state styling.
+
 ### Faster month jump
 
 - Tapping the calendar **month/year** title opens a month + year wheel.
@@ -140,14 +148,28 @@ Date picker accepts a custom **title** (e.g. “Choose date of birth” vs “Ch
 
 ---
 
-## 10. Supabase schema touchpoints
+## 10. Add Pet UX
+
+**Feature folder:** `lib/features/add_pet/`
+
+| Change | Detail |
+|--------|--------|
+| **Age preview** | After choosing DOB, label uses the same rules as pet profile: under 1 year → months (e.g. `Age: 2 month`); 1+ years → `1 Year` / `N Years`. No more `Age: 0 years`. |
+| **Species Other** | Opens shared species sheet (KSA list) instead of a bare `"other"` toggle. |
+| **Save payload** | Writes `birthdate` + derived `age`; photo goes to **`pet_photos`** (not a non-existent `pets.photo` column). |
+
+---
+
+## 11. Supabase schema touchpoints
 
 | Change | Purpose |
 |--------|---------|
-| `pets.birthdate` | Age from DOB / edit pet |
+| `pets.birthdate` | Age from DOB / edit pet / add pet (`PGRST204` fixed by adding column + schema reload) |
 | `pets.weight` | Shown on profile & editable |
 | Health records table | Persist Add Health Record form |
 | RLS on health records | Owner-only read/write |
+
+Migration: `supabase/migrations/20260825170400_add_pets_birthdate.sql`
 
 ---
 
@@ -167,12 +189,13 @@ Date picker accepts a custom **title** (e.g. “Choose date of birth” vs “Ch
 lib/shared/storage_service/user_data_store.dart
 lib/shared/storage_service/profile_image_cache.dart
 lib/shared/presentation/widgets/app_pickers.dart
+lib/features/account/presentation/widgets/account_outlined_field.dart  # inputFormatters for weight
 
 lib/features/account/...          # Account, Your Pets, Pet Profile UI
-lib/features/edit_pet/...         # Edit owned pet
+lib/features/edit_pet/...         # Edit owned pet (numeric weight)
 lib/features/health_record/...    # Health records + bottom sheet
-lib/features/home/...             # Cache-first home + See all → Your Pets
-lib/features/add_pet/...          # Add pet (writes local store after create)
+lib/features/home/...             # Cache-first home + See all → Your Pets + Quick Service PNGs
+lib/features/add_pet/...          # Add pet (age months preview; local store after create)
 
 supabase/migrations/
   20260825170400_add_pets_birthdate.sql
@@ -191,4 +214,4 @@ supabase/migrations/
 
 ---
 
-*Last updated: August 2026*
+*Last updated: 27 August 2026*

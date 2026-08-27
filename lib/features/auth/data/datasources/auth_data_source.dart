@@ -1,7 +1,7 @@
 import 'package:get_storage/get_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:multiple_result/multiple_result.dart';
-import 'package:rifq_v2/shared/constants/otp_purpose.dart';
+import 'package:rifq_v2/shared/constants/app_enums.dart';
 import 'package:rifq_v2/shared/errors/custome_exception.dart';
 import 'package:rifq_v2/shared/storage_service/auth_helper.dart';
 import 'package:rifq_v2/features/auth/data/models/auth_model.dart';

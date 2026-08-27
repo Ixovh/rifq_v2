@@ -6,6 +6,8 @@ enum StateLoadUser { local, remote }
 
 enum AuthStatus { authenticated, unauthenticated, unknown }
 
+enum OtpPurpose { signUp, resetPassword, emailChange }
+
 enum LanguagesEnum {
   ar,
   en;

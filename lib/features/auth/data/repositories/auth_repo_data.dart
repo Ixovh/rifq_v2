@@ -2,7 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:rifq_v2/features/auth/data/models/auth_model.dart';
 import 'package:rifq_v2/features/auth/domain/repositories/auth_repository_domain.dart';
-import 'package:rifq_v2/shared/constants/otp_purpose.dart';
+import 'package:rifq_v2/shared/constants/app_enums.dart';
 import '../datasources/auth_data_source.dart';
 
 @LazySingleton(as: AuthRepoDomain)

@@ -1,6 +1,6 @@
 import 'package:multiple_result/multiple_result.dart';
 import 'package:rifq_v2/features/auth/domain/entities/auth_entity.dart';
-import 'package:rifq_v2/shared/constants/otp_purpose.dart';
+import 'package:rifq_v2/shared/constants/app_enums.dart';
 
 abstract class AuthRepoDomain {
   Future<Result<Null, Object>> signUp({

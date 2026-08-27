@@ -10,6 +10,7 @@ import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/router/routers.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/presentation/widgets/container_button.dart';
 import 'package:rifq_v2/shared/presentation/widgets/custom_bottom_sheet.dart';
 import 'package:rifq_v2/features/auth/presentation/widgets/custom_form_builder_text_field.dart';
@@ -34,9 +35,7 @@ class ResetPasswordScreen extends StatelessWidget {
                 Center(child: CircularProgressIndicator());
                 break;
               case AuthErrorState _:
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text(state.msg)));
+                context.showErrorToast(state.msg);
                 break;
               default:
                 Center(child: CircularProgressIndicator());

@@ -111,6 +111,12 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
   late DateTime _selectedDay;
   var _pickingMonthYear = false;
 
+  late int _pickerYear;
+  late int _pickerMonth;
+  late FixedExtentScrollController _yearController;
+  late FixedExtentScrollController _monthController;
+  late final List<int> _years;
+
   @override
   void initState() {
     super.initState();
@@ -120,242 +126,14 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
         : today;
     _selectedDay = _clampDay(initial);
     _focusedDay = _selectedDay;
-  }
 
-  DateTime _clampDay(DateTime day) {
-    final first = DateUtils.dateOnly(widget.firstDay);
-    final last = DateUtils.dateOnly(widget.lastDay);
-    if (day.isBefore(first)) return first;
-    if (day.isAfter(last)) return last;
-    return day;
-  }
-
-  Future<void> _openMonthYearPicker() async {
-    setState(() => _pickingMonthYear = true);
-
-    final picked = await showModalBottomSheet<DateTime>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      barrierColor: Colors.black.withValues(alpha: 0.35),
-      builder: (_) => _MonthYearPickerSheet(
-        initialDate: _focusedDay,
-        firstDay: widget.firstDay,
-        lastDay: widget.lastDay,
-      ),
-    );
-
-    if (!mounted) return;
-    setState(() {
-      _pickingMonthYear = false;
-      if (picked != null) {
-        _focusedDay = DateTime(picked.year, picked.month);
-        // Keep day if still valid in the new month, else clamp.
-        final dayInMonth = DateTime(
-          picked.year,
-          picked.month,
-          _selectedDay.day.clamp(
-            1,
-            DateUtils.getDaysInMonth(picked.year, picked.month),
-          ),
-        );
-        if (!dayInMonth.isAfter(widget.lastDay) &&
-            !dayInMonth.isBefore(widget.firstDay)) {
-          _selectedDay = dayInMonth;
-        }
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _SheetChrome(
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 24.h),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(widget.title, style: context.body1),
-            SizedBox(height: 4.h),
-            Text(
-              DateFormat('EEEE, d MMMM yyyy').format(_selectedDay),
-              style: context.body3.copyWith(color: context.primary300),
-            ),
-            SizedBox(height: 8.h),
-            TableCalendar(
-              firstDay: widget.firstDay,
-              lastDay: widget.lastDay,
-              focusedDay: _focusedDay,
-              selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-              enabledDayPredicate: (day) {
-                final d = DateUtils.dateOnly(day);
-                return !d.isBefore(DateUtils.dateOnly(widget.firstDay)) &&
-                    !d.isAfter(DateUtils.dateOnly(widget.lastDay));
-              },
-              calendarFormat: CalendarFormat.month,
-              availableGestures: AvailableGestures.horizontalSwipe,
-              headerStyle: HeaderStyle(
-                titleCentered: true,
-                formatButtonVisible: false,
-                headerPadding: EdgeInsets.symmetric(vertical: 8.h),
-                titleTextStyle: context.body1.copyWith(
-                  color: context.neutral1000,
-                ),
-                leftChevronIcon: Icon(
-                  CupertinoIcons.chevron_left,
-                  size: 18.sp,
-                  color: context.primary300,
-                ),
-                rightChevronIcon: Icon(
-                  CupertinoIcons.chevron_right,
-                  size: 18.sp,
-                  color: context.primary300,
-                ),
-              ),
-              calendarBuilders: CalendarBuilders(
-                headerTitleBuilder: (context, day) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        DateFormat('MMMM yyyy').format(day),
-                        style: context.body1.copyWith(
-                          color: context.neutral1000,
-                        ),
-                      ),
-                      SizedBox(width: 4.w),
-                      Icon(
-                        CupertinoIcons.chevron_down,
-                        size: 14.sp,
-                        color: context.primary300,
-                      ),
-                    ],
-                  );
-                },
-              ),
-              onHeaderTapped: (_) {
-                if (!_pickingMonthYear) _openMonthYearPicker();
-              },
-              daysOfWeekStyle: DaysOfWeekStyle(
-                weekdayStyle: context.body3.copyWith(color: context.neutral600),
-                weekendStyle: context.body3.copyWith(color: context.neutral600),
-              ),
-              calendarStyle: CalendarStyle(
-                outsideDaysVisible: false,
-                defaultTextStyle: context.body2.copyWith(
-                  color: context.neutral1000,
-                ),
-                weekendTextStyle: context.body2.copyWith(
-                  color: context.neutral1000,
-                ),
-                disabledTextStyle: context.body2.copyWith(
-                  color: context.neutral400,
-                ),
-                todayDecoration: BoxDecoration(
-                  color: context.primary100,
-                  shape: BoxShape.circle,
-                ),
-                todayTextStyle: context.body2.copyWith(
-                  color: context.primary500,
-                  fontWeight: FontWeight.w600,
-                ),
-                selectedDecoration: BoxDecoration(
-                  color: context.primary300,
-                  shape: BoxShape.circle,
-                ),
-                selectedTextStyle: context.body2.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              onDaySelected: (selected, focused) {
-                setState(() {
-                  _selectedDay = selected;
-                  _focusedDay = focused;
-                });
-              },
-              onPageChanged: (focused) => setState(() => _focusedDay = focused),
-            ),
-            SizedBox(height: 16.h),
-            SizedBox(
-              width: double.infinity,
-              height: 52.h,
-              child: ElevatedButton(
-                onPressed: () => Navigator.pop(context, _selectedDay),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: context.primary300,
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.r),
-                  ),
-                ),
-                child: Text(
-                  'Confirm',
-                  style: context.body1.copyWith(color: Colors.white),
-                ),
-              ),
-            ),
-            SizedBox(height: MediaQuery.paddingOf(context).bottom),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _MonthYearPickerSheet extends StatefulWidget {
-  const _MonthYearPickerSheet({
-    required this.initialDate,
-    required this.firstDay,
-    required this.lastDay,
-  });
-
-  final DateTime initialDate;
-  final DateTime firstDay;
-  final DateTime lastDay;
-
-  @override
-  State<_MonthYearPickerSheet> createState() => _MonthYearPickerSheetState();
-}
-
-class _MonthYearPickerSheetState extends State<_MonthYearPickerSheet> {
-  late int _year;
-  late int _month;
-  late FixedExtentScrollController _yearController;
-  late FixedExtentScrollController _monthController;
-
-  late final List<int> _years;
-
-  @override
-  void initState() {
-    super.initState();
-    _year = widget.initialDate.year;
-    _month = widget.initialDate.month;
     _years = [
       for (var y = widget.firstDay.year; y <= widget.lastDay.year; y++) y,
     ];
-    _yearController = FixedExtentScrollController(
-      initialItem: (_years.indexOf(_year)).clamp(0, _years.length - 1),
-    );
-    _monthController = FixedExtentScrollController(
-      initialItem: (_availableMonths.indexOf(
-        _month,
-      )).clamp(0, _availableMonths.length - 1),
-    );
-  }
-
-  List<int> get _availableMonths {
-    final months = <int>[];
-    for (var m = 1; m <= 12; m++) {
-      final start = DateTime(_year, m);
-      final end = DateTime(_year, m + 1, 0);
-      if (end.isBefore(DateUtils.dateOnly(widget.firstDay))) continue;
-      if (start.isAfter(DateUtils.dateOnly(widget.lastDay))) continue;
-      months.add(m);
-    }
-    return months.isEmpty ? [widget.initialDate.month] : months;
+    _pickerYear = _focusedDay.year;
+    _pickerMonth = _focusedDay.month;
+    _yearController = FixedExtentScrollController();
+    _monthController = FixedExtentScrollController();
   }
 
   @override
@@ -365,83 +143,117 @@ class _MonthYearPickerSheetState extends State<_MonthYearPickerSheet> {
     super.dispose();
   }
 
+  DateTime get _firstDay => DateUtils.dateOnly(widget.firstDay);
+  DateTime get _lastDay => DateUtils.dateOnly(widget.lastDay);
+
+  DateTime _clampDay(DateTime day) {
+    final first = _firstDay;
+    final last = _lastDay;
+    if (day.isBefore(first)) return first;
+    if (day.isAfter(last)) return last;
+    return day;
+  }
+
+  List<int> _monthsForYear(int year) {
+    final months = <int>[];
+    for (var m = 1; m <= 12; m++) {
+      final start = DateTime(year, m);
+      final end = DateTime(year, m + 1, 0);
+      if (end.isBefore(_firstDay)) continue;
+      if (start.isAfter(_lastDay)) continue;
+      months.add(m);
+    }
+    return months.isEmpty ? [_focusedDay.month] : months;
+  }
+
+  void _openMonthYearPicker() {
+    final months = _monthsForYear(_focusedDay.year);
+    _pickerYear = _focusedDay.year;
+    _pickerMonth = months.contains(_focusedDay.month)
+        ? _focusedDay.month
+        : months.last;
+
+    _yearController.dispose();
+    _monthController.dispose();
+    _yearController = FixedExtentScrollController(
+      initialItem: _years.indexOf(_pickerYear).clamp(0, _years.length - 1),
+    );
+    _monthController = FixedExtentScrollController(
+      initialItem: months.indexOf(_pickerMonth).clamp(0, months.length - 1),
+    );
+
+    setState(() => _pickingMonthYear = true);
+  }
+
+  void _applyMonthYear() {
+    final months = _monthsForYear(_pickerYear);
+    final month = months.contains(_pickerMonth) ? _pickerMonth : months.last;
+    final maxDay = DateUtils.getDaysInMonth(_pickerYear, month);
+    final day = _selectedDay.day.clamp(1, maxDay);
+    final jumped = _clampDay(DateTime(_pickerYear, month, day));
+
+    setState(() {
+      _focusedDay = DateTime(jumped.year, jumped.month, jumped.day);
+      _selectedDay = jumped;
+      _pickingMonthYear = false;
+    });
+  }
+
   void _onYearChanged(int index) {
     final nextYear = _years[index];
+    final months = _monthsForYear(nextYear);
+    final nextMonth = months.contains(_pickerMonth)
+        ? _pickerMonth
+        : months.last;
+    final monthIndex = months.indexOf(nextMonth).clamp(0, months.length - 1);
+
+    _monthController.dispose();
+    _monthController = FixedExtentScrollController(initialItem: monthIndex);
+
     setState(() {
-      _year = nextYear;
-      final months = _availableMonths;
-      if (!months.contains(_month)) {
-        _month = months.last;
-      }
-      final monthIndex = months.indexOf(_month).clamp(0, months.length - 1);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (_monthController.hasClients) {
-          _monthController.jumpToItem(monthIndex);
-        }
-      });
+      _pickerYear = nextYear;
+      _pickerMonth = nextMonth;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final months = _availableMonths;
-
     return _SheetChrome(
       child: Padding(
         padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 24.h),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Choose month', style: context.body1),
+            Text(
+              _pickingMonthYear ? 'Choose month' : widget.title,
+              style: context.body1,
+            ),
             SizedBox(height: 4.h),
             Text(
-              DateFormat('MMMM yyyy').format(DateTime(_year, _month)),
+              _pickingMonthYear
+                  ? DateFormat(
+                      'MMMM yyyy',
+                    ).format(DateTime(_pickerYear, _pickerMonth))
+                  : DateFormat('EEEE, d MMMM yyyy').format(_selectedDay),
               style: context.body3.copyWith(color: context.primary300),
             ),
-            SizedBox(height: 12.h),
-            SizedBox(
-              height: 180.h,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: CupertinoPicker(
-                      scrollController: _monthController,
-                      itemExtent: 40.h,
-                      onSelectedItemChanged: (index) {
-                        setState(() => _month = months[index]);
-                      },
-                      children: [
-                        for (final m in months)
-                          Center(
-                            child: Text(
-                              DateFormat('MMMM').format(DateTime(2000, m)),
-                              style: context.body2,
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: CupertinoPicker(
-                      scrollController: _yearController,
-                      itemExtent: 40.h,
-                      onSelectedItemChanged: _onYearChanged,
-                      children: [
-                        for (final y in _years)
-                          Center(child: Text('$y', style: context.body2)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            SizedBox(height: 8.h),
+            if (_pickingMonthYear)
+              _buildMonthYearPicker(context)
+            else
+              _buildCalendar(context),
             SizedBox(height: 16.h),
             SizedBox(
               width: double.infinity,
               height: 52.h,
               child: ElevatedButton(
-                onPressed: () =>
-                    Navigator.pop(context, DateTime(_year, _month)),
+                onPressed: () {
+                  if (_pickingMonthYear) {
+                    _applyMonthYear();
+                    return;
+                  }
+                  Navigator.pop(context, _selectedDay);
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: context.primary300,
                   foregroundColor: Colors.white,
@@ -451,14 +263,166 @@ class _MonthYearPickerSheetState extends State<_MonthYearPickerSheet> {
                   ),
                 ),
                 child: Text(
-                  'Confirm',
+                  _pickingMonthYear ? 'Done' : 'Confirm',
                   style: context.body1.copyWith(color: Colors.white),
                 ),
               ),
             ),
+            if (_pickingMonthYear) ...[
+              SizedBox(height: 8.h),
+              TextButton(
+                onPressed: () => setState(() => _pickingMonthYear = false),
+                child: Text(
+                  'Back to calendar',
+                  style: context.body2.copyWith(color: context.neutral600),
+                ),
+              ),
+            ],
             SizedBox(height: MediaQuery.paddingOf(context).bottom),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildCalendar(BuildContext context) {
+    return TableCalendar(
+      key: ValueKey('cal_${_focusedDay.year}_${_focusedDay.month}'),
+      firstDay: widget.firstDay,
+      lastDay: widget.lastDay,
+      focusedDay: _focusedDay,
+      selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+      enabledDayPredicate: (day) {
+        final d = DateUtils.dateOnly(day);
+        return !d.isBefore(_firstDay) && !d.isAfter(_lastDay);
+      },
+      calendarFormat: CalendarFormat.month,
+      availableGestures: AvailableGestures.horizontalSwipe,
+      headerStyle: HeaderStyle(
+        titleCentered: true,
+        formatButtonVisible: false,
+        headerPadding: EdgeInsets.symmetric(vertical: 8.h),
+        titleTextStyle: context.body1.copyWith(color: context.neutral1000),
+        leftChevronIcon: Icon(
+          CupertinoIcons.chevron_left,
+          size: 18.sp,
+          color: context.primary300,
+        ),
+        rightChevronIcon: Icon(
+          CupertinoIcons.chevron_right,
+          size: 18.sp,
+          color: context.primary300,
+        ),
+      ),
+      calendarBuilders: CalendarBuilders(
+        headerTitleBuilder: (context, day) {
+          // Custom titles replace TableCalendar's default GestureDetector,
+          // so the tap target must be wired here.
+          return GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: _openMonthYearPicker,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    DateFormat('MMMM yyyy').format(day),
+                    style: context.body1.copyWith(color: context.neutral1000),
+                  ),
+                  SizedBox(width: 4.w),
+                  Icon(
+                    CupertinoIcons.chevron_down,
+                    size: 14.sp,
+                    color: context.primary300,
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+      onHeaderTapped: (_) => _openMonthYearPicker(),
+      daysOfWeekStyle: DaysOfWeekStyle(
+        weekdayStyle: context.body3.copyWith(color: context.neutral600),
+        weekendStyle: context.body3.copyWith(color: context.neutral600),
+      ),
+      calendarStyle: CalendarStyle(
+        outsideDaysVisible: false,
+        defaultTextStyle: context.body2.copyWith(color: context.neutral1000),
+        weekendTextStyle: context.body2.copyWith(color: context.neutral1000),
+        disabledTextStyle: context.body2.copyWith(color: context.neutral400),
+        todayDecoration: BoxDecoration(
+          color: context.primary100,
+          shape: BoxShape.circle,
+        ),
+        todayTextStyle: context.body2.copyWith(
+          color: context.primary500,
+          fontWeight: FontWeight.w600,
+        ),
+        selectedDecoration: BoxDecoration(
+          color: context.primary300,
+          shape: BoxShape.circle,
+        ),
+        selectedTextStyle: context.body2.copyWith(
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      onDaySelected: (selected, focused) {
+        setState(() {
+          _selectedDay = selected;
+          _focusedDay = focused;
+        });
+      },
+      onPageChanged: (focused) => setState(() => _focusedDay = focused),
+    );
+  }
+
+  Widget _buildMonthYearPicker(BuildContext context) {
+    final months = _monthsForYear(_pickerYear);
+
+    return SizedBox(
+      height: 220.h,
+      child: Row(
+        children: [
+          Expanded(
+            child: CupertinoPicker(
+              key: ValueKey('month_picker_$_pickerYear'),
+              scrollController: _monthController,
+              itemExtent: 40,
+              magnification: 1.08,
+              useMagnifier: true,
+              onSelectedItemChanged: (index) {
+                if (index < 0 || index >= months.length) return;
+                setState(() => _pickerMonth = months[index]);
+              },
+              children: [
+                for (final m in months)
+                  Center(
+                    child: Text(
+                      DateFormat('MMMM').format(DateTime(2000, m)),
+                      style: context.body2,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: CupertinoPicker(
+              scrollController: _yearController,
+              itemExtent: 40,
+              magnification: 1.08,
+              useMagnifier: true,
+              onSelectedItemChanged: _onYearChanged,
+              children: [
+                for (final y in _years)
+                  Center(child: Text('$y', style: context.body2)),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
