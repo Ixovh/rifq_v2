@@ -11,6 +11,7 @@ import 'package:rifq_v2/features/auth/presentation/screens/reset_password_screen
 import 'package:rifq_v2/features/auth/presentation/screens/sends_to_email_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/welcome_screen.dart';
 import 'package:rifq_v2/features/home/presentation/screens/home_feature_screen.dart';
+import 'package:rifq_v2/features/hotel/presentation/screens/hotel_detail_screen.dart';
 import 'package:rifq_v2/features/hotel/presentation/screens/hotel_list_screen.dart';
 import 'package:rifq_v2/features/nav/presentation/screens/nav_screen.dart';
 import 'package:rifq_v2/features/onboarding/presentation/screens/onboarding_feature_screen.dart';
@@ -42,5 +43,6 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: EditPetRoute.page, path: '/edit-pet/:petId'),
     AutoRoute(page: EditAccountRoute.page, path: '/edit-account'),
     AutoRoute(page: HotelListRoute.page, path: '/hotel'),
+    AutoRoute(page: HotelDetailRoute.page, path: '/hotel-detail/:hotelId'),
   ];
 }

@@ -223,6 +223,53 @@ class HomeRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [HotelDetailScreen]
+class HotelDetailRoute extends PageRouteInfo<HotelDetailRouteArgs> {
+  HotelDetailRoute({
+    Key? key,
+    required String hotelId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         HotelDetailRoute.name,
+         args: HotelDetailRouteArgs(key: key, hotelId: hotelId),
+         initialChildren: children,
+       );
+
+  static const String name = 'HotelDetailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<HotelDetailRouteArgs>();
+      return HotelDetailScreen(key: args.key, hotelId: args.hotelId);
+    },
+  );
+}
+
+class HotelDetailRouteArgs {
+  const HotelDetailRouteArgs({this.key, required this.hotelId});
+
+  final Key? key;
+
+  final String hotelId;
+
+  @override
+  String toString() {
+    return 'HotelDetailRouteArgs{key: $key, hotelId: $hotelId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! HotelDetailRouteArgs) return false;
+    return key == other.key && hotelId == other.hotelId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ hotelId.hashCode;
+}
+
+/// generated route for
 /// [HotelListScreen]
 class HotelListRoute extends PageRouteInfo<void> {
   const HotelListRoute({List<PageRouteInfo>? children})

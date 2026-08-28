@@ -78,6 +78,8 @@ import '../../features/hotel/data/repositories/hotel_repo_data.dart' as _i327;
 import '../../features/hotel/domain/repositories/hotel_repository_domain.dart'
     as _i603;
 import '../../features/hotel/domain/use_cases/hotel_use_case.dart' as _i783;
+import '../../features/hotel/presentation/cubit/hotel_detail_cubit.dart'
+    as _i419;
 import '../../features/hotel/presentation/cubit/hotel_list_cubit.dart' as _i302;
 import '../networking/dio_client.dart' as _i201;
 import '../storage_service/local_keys_service.dart' as _i261;
@@ -203,6 +205,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i578.EditPetCubit>(
       () => _i578.EditPetCubit(gh<_i431.EditPetUseCase>()),
+    );
+    gh.factory<_i419.HotelDetailCubit>(
+      () => _i419.HotelDetailCubit(gh<_i783.HotelUseCase>()),
     );
     gh.factory<_i302.HotelListCubit>(
       () => _i302.HotelListCubit(gh<_i783.HotelUseCase>()),

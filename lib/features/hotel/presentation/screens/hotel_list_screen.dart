@@ -8,6 +8,7 @@ import 'package:rifq_v2/features/hotel/presentation/widgets/hotel_card_widget.da
 import 'package:rifq_v2/features/hotel/presentation/widgets/hotel_list_toolbar_widget.dart';
 import 'package:rifq_v2/shared/constants/app_images.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
+import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/widgets/custom_app_bar.dart';
 import 'package:rifq_v2/shared/presentation/widgets/lottie_loding.dart';
 
@@ -28,7 +29,7 @@ class _HotelListView extends StatelessWidget {
   const _HotelListView();
 
   void _openDetail(BuildContext context, String hotelId) {
-    // Wired up once the Hotel Detail screen lands (next commit).
+    context.pushRoute(HotelDetailRoute(hotelId: hotelId));
   }
 
   @override
