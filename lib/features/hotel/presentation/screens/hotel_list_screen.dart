@@ -62,13 +62,14 @@ class _HotelListView extends StatelessWidget {
                       );
                     }
 
-                    if (state is HotelListLoaded) {
-                      if (state.hotels.isEmpty) {
-                        return const _MessageView(
-                          message: 'No pet hotels found yet.',
-                        );
-                      }
+                    if (state is HotelListEmpty) {
+                      return const _MessageView(
+                        message:
+                            'No hotels available right now — check back soon.',
+                      );
+                    }
 
+                    if (state is HotelListLoaded) {
                       return RefreshIndicator(
                         onRefresh: () =>
                             context.read<HotelListCubit>().loadHotels(),

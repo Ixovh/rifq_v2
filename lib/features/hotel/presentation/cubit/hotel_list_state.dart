@@ -20,6 +20,10 @@ final class HotelListLoaded extends HotelListState {
   List<Object?> get props => [hotels];
 }
 
+final class HotelListEmpty extends HotelListState {
+  const HotelListEmpty();
+}
+
 final class HotelListError extends HotelListState {
   final String msg;
 
