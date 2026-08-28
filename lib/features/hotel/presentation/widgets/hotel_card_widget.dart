@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/features/hotel/domain/entities/hotel_entity.dart';
-import 'package:rifq_v2/shared/constants/app_images.dart';
+import 'package:rifq_v2/features/hotel/presentation/widgets/hotel_image_placeholder_widget.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
 class HotelCard extends StatelessWidget {
@@ -38,25 +38,18 @@ class HotelCard extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(14.r),
-                child: hotel.imageUrl == null
-                    ? Image.asset(
-                        AppImages.placeholder,
-                        width: 84.w,
-                        height: 84.w,
-                        fit: BoxFit.cover,
-                      )
-                    : Image.network(
-                        hotel.imageUrl!,
-                        width: 84.w,
-                        height: 84.w,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, _, _) => Image.asset(
-                          AppImages.placeholder,
-                          width: 84.w,
-                          height: 84.w,
+                child: SizedBox(
+                  width: 84.w,
+                  height: 84.w,
+                  child: hotel.imageUrl == null
+                      ? HotelImagePlaceholder(iconSize: 28.sp)
+                      : Image.network(
+                          hotel.imageUrl!,
                           fit: BoxFit.cover,
+                          errorBuilder: (_, _, _) =>
+                              HotelImagePlaceholder(iconSize: 28.sp),
                         ),
-                      ),
+                ),
               ),
               SizedBox(width: 12.w),
               Expanded(

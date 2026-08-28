@@ -6,7 +6,6 @@ import 'package:get_it/get_it.dart';
 import 'package:rifq_v2/features/hotel/presentation/cubit/hotel_list_cubit.dart';
 import 'package:rifq_v2/features/hotel/presentation/widgets/hotel_card_widget.dart';
 import 'package:rifq_v2/features/hotel/presentation/widgets/hotel_list_toolbar_widget.dart';
-import 'package:rifq_v2/shared/constants/app_images.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/widgets/custom_app_bar.dart';
@@ -113,7 +112,7 @@ class _MessageView extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset(AppImages.emptyState, width: 140.w, height: 140.w),
+          Icon(Icons.hotel_outlined, size: 64.sp, color: context.neutral400),
           SizedBox(height: 12.h),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.w),

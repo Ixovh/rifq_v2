@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/features/hotel/domain/entities/hotel_entity.dart';
-import 'package:rifq_v2/shared/constants/app_images.dart';
+import 'package:rifq_v2/features/hotel/presentation/widgets/hotel_image_placeholder_widget.dart';
 
 class HotelImageCarousel extends StatefulWidget {
   const HotelImageCarousel({
@@ -33,7 +33,7 @@ class _HotelImageCarouselState extends State<HotelImageCarousel> {
         fit: StackFit.expand,
         children: [
           if (images.isEmpty)
-            Image.asset(AppImages.placeholder, fit: BoxFit.cover)
+            const HotelImagePlaceholder(iconSize: 48)
           else
             CarouselSlider.builder(
               itemCount: images.length,
@@ -43,7 +43,7 @@ class _HotelImageCarouselState extends State<HotelImageCarousel> {
                   fit: BoxFit.cover,
                   width: double.infinity,
                   errorBuilder: (context, error, stackTrace) =>
-                      Image.asset(AppImages.placeholder, fit: BoxFit.cover),
+                      const HotelImagePlaceholder(iconSize: 48),
                 );
               },
               options: CarouselOptions(
