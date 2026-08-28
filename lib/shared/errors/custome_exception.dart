@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -20,14 +19,18 @@ class CatchErrorMessage {
   CatchErrorMessage({required this.error});
 
   String getWriteMessage() {
-    String? errorMessage;
+    String errorMessage;
 
     switch (error) {
       case SocketException _:
         errorMessage = "No internet connection";
         break;
       case PostgrestException error:
-        errorMessage = jsonDecode(error.message)['message'];
+        // error.message is already the plain extracted message (postgrest-dart
+        // parses the JSON error body itself) — it's almost never valid JSON on
+        // its own, so decoding it here threw a FormatException on ordinary
+        // errors like a missing table/column instead of returning one.
+        errorMessage = error.message;
         break;
       case AuthApiException error:
         errorMessage = error.message;
@@ -58,13 +61,6 @@ class CatchErrorMessage {
         break;
     }
 
-    // switch (errorMessage) {
-    //   case "Cannot coerce the result to a single JSON object":
-    //     errorMessage = "Empty data update";
-    //     break;
-    //   default:
-    //     errorMessage = error.toString();
-    // }
-    return errorMessage ?? "An unexpected error occurred";
+    return errorMessage;
   }
 }

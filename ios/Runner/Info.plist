@@ -30,6 +30,13 @@
 	<string>Rifq needs camera access so you can take a profile photo.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Rifq needs photo library access so you can choose a profile picture.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Rifq uses your location to show how far pet hotels are from you.</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>comgooglemaps</string>
+		<string>maps</string>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

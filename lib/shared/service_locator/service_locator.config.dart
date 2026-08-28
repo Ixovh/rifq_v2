@@ -73,6 +73,12 @@ import '../../features/home/domain/repositories/home_repository_domain.dart'
     as _i257;
 import '../../features/home/domain/use_cases/home_use_case.dart' as _i933;
 import '../../features/home/presentation/cubit/home_cubit.dart' as _i9;
+import '../../features/hotel/data/datasources/hotel_data_source.dart' as _i292;
+import '../../features/hotel/data/repositories/hotel_repo_data.dart' as _i327;
+import '../../features/hotel/domain/repositories/hotel_repository_domain.dart'
+    as _i603;
+import '../../features/hotel/domain/use_cases/hotel_use_case.dart' as _i783;
+import '../../features/hotel/presentation/cubit/hotel_list_cubit.dart' as _i302;
 import '../networking/dio_client.dart' as _i201;
 import '../storage_service/local_keys_service.dart' as _i261;
 import 'shared/main_dependencies.dart' as _i1014;
@@ -115,6 +121,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i1012.BaseAccountDataSource>(
       () => _i1012.AccountDataSource(supabase: gh<_i454.SupabaseClient>()),
     );
+    gh.lazySingleton<_i292.BaseHotelDataSource>(
+      () => _i292.HotelDataSource(supabase: gh<_i454.SupabaseClient>()),
+    );
     gh.factory<_i824.CreateAdoptionPostUseCase>(
       () =>
           _i824.CreateAdoptionPostUseCase(gh<_i785.AdoptionRepositoryDomain>()),
@@ -134,6 +143,10 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i933.HomeUseCase>(
       () => _i933.HomeUseCase(homeRepoData: gh<_i257.HomeRepoDomain>()),
+    );
+    gh.lazySingleton<_i603.HotelRepoDomain>(
+      () =>
+          _i327.HotelRepoData(hotelDataSource: gh<_i292.BaseHotelDataSource>()),
     );
     gh.lazySingleton<_i283.AuthUseCase>(
       () => _i283.AuthUseCase(authRepoData: gh<_i998.AuthRepoDomain>()),
@@ -182,11 +195,17 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i493.AddPetCubit>(
       () => _i493.AddPetCubit(gh<_i667.AddPetUseCase>()),
     );
+    gh.lazySingleton<_i783.HotelUseCase>(
+      () => _i783.HotelUseCase(hotelRepoData: gh<_i603.HotelRepoDomain>()),
+    );
     gh.factory<_i1036.HealthRecordCubit>(
       () => _i1036.HealthRecordCubit(gh<_i653.HealthRecordUseCase>()),
     );
     gh.factory<_i578.EditPetCubit>(
       () => _i578.EditPetCubit(gh<_i431.EditPetUseCase>()),
+    );
+    gh.factory<_i302.HotelListCubit>(
+      () => _i302.HotelListCubit(gh<_i783.HotelUseCase>()),
     );
     gh.singleton<_i261.LocalKeysService>(() => _i261.LocalKeysService());
     return this;

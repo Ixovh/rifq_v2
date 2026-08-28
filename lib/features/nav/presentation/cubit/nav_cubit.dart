@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rifq_v2/features/home/presentation/screens/home_feature_screen.dart';
+import 'package:rifq_v2/features/hotel/presentation/screens/hotel_list_screen.dart';
+import 'package:rifq_v2/shared/presentation/widgets/coming_soon_placeholder.dart';
 
 import 'nav_state.dart';
 
 class NavCubit extends Cubit<NavState> {
   List<Widget> screens = [
     HomeScreen(),
-    // ClinicScreen(),
-    // HotelHomeScreen(),
+    // ClinicScreen() — Health tab, not built yet; placeholder keeps index 2 = Hotel
+    const ComingSoonPlaceholder(),
+    HotelListScreen(),
     // AdoptionScreen(),
   ];
   int currentIndex = 0;

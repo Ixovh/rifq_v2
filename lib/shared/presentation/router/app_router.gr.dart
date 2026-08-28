@@ -223,6 +223,22 @@ class HomeRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [HotelListScreen]
+class HotelListRoute extends PageRouteInfo<void> {
+  const HotelListRoute({List<PageRouteInfo>? children})
+    : super(HotelListRoute.name, initialChildren: children);
+
+  static const String name = 'HotelListRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const HotelListScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [NavWrapperScreen]
 class NavWrapperRoute extends PageRouteInfo<void> {
   const NavWrapperRoute({List<PageRouteInfo>? children})
