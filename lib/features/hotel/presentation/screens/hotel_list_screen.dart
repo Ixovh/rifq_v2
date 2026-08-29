@@ -8,6 +8,7 @@ import 'package:rifq_v2/features/home_boarding/presentation/widgets/sitter_card_
 import 'package:rifq_v2/features/hotel/presentation/cubit/hotel_list_cubit.dart';
 import 'package:rifq_v2/features/hotel/presentation/widgets/boarding_list_toolbar_widget.dart';
 import 'package:rifq_v2/features/hotel/presentation/widgets/hotel_card_widget.dart';
+import 'package:rifq_v2/features/hotel/presentation/widgets/sort_filter_sheet_widget.dart';
 import 'package:rifq_v2/shared/constants/app_enums.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
@@ -41,6 +42,7 @@ class _HotelListView extends StatefulWidget {
 
 class _HotelListViewState extends State<_HotelListView> {
   BoardingTab _activeTab = BoardingTab.hotels;
+  SortOption _sortOption = SortOption.recommended;
 
   void _onTabChanged(BoardingTab tab) => setState(() => _activeTab = tab);
 
@@ -56,8 +58,17 @@ class _HotelListViewState extends State<_HotelListView> {
     context.pushRoute(SearchRoute(initialTab: _activeTab));
   }
 
-  void _openFilter() {
-    // Wired up once the Sort/Filter modal lands.
+  Future<void> _openFilter() async {
+    final picked = await showSortFilterSheet(
+      context: context,
+      current: _sortOption,
+      isHomeBoarding: _activeTab == BoardingTab.homeBoarding,
+    );
+    if (picked == null || picked == _sortOption || !mounted) return;
+
+    setState(() => _sortOption = picked);
+    context.read<HotelListCubit>().loadHotels(sortOption: picked);
+    context.read<HomeBoardingListCubit>().loadSitters(sortOption: picked);
   }
 
   @override
