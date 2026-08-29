@@ -131,6 +131,53 @@ class AuthRouteArgs {
 }
 
 /// generated route for
+/// [BookingDetailsScreen]
+class BookingDetailsRoute extends PageRouteInfo<BookingDetailsRouteArgs> {
+  BookingDetailsRoute({
+    Key? key,
+    required HotelDetailEntity hotel,
+    List<PageRouteInfo>? children,
+  }) : super(
+         BookingDetailsRoute.name,
+         args: BookingDetailsRouteArgs(key: key, hotel: hotel),
+         initialChildren: children,
+       );
+
+  static const String name = 'BookingDetailsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<BookingDetailsRouteArgs>();
+      return BookingDetailsScreen(key: args.key, hotel: args.hotel);
+    },
+  );
+}
+
+class BookingDetailsRouteArgs {
+  const BookingDetailsRouteArgs({this.key, required this.hotel});
+
+  final Key? key;
+
+  final HotelDetailEntity hotel;
+
+  @override
+  String toString() {
+    return 'BookingDetailsRouteArgs{key: $key, hotel: $hotel}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! BookingDetailsRouteArgs) return false;
+    return key == other.key && hotel == other.hotel;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ hotel.hashCode;
+}
+
+/// generated route for
 /// [ChoosePathScreen]
 class ChoosePathRoute extends PageRouteInfo<void> {
   const ChoosePathRoute({List<PageRouteInfo>? children})
@@ -144,6 +191,53 @@ class ChoosePathRoute extends PageRouteInfo<void> {
       return const ChoosePathScreen();
     },
   );
+}
+
+/// generated route for
+/// [ConfirmAndPayScreen]
+class ConfirmAndPayRoute extends PageRouteInfo<ConfirmAndPayRouteArgs> {
+  ConfirmAndPayRoute({
+    Key? key,
+    required BookingDraftEntity draft,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ConfirmAndPayRoute.name,
+         args: ConfirmAndPayRouteArgs(key: key, draft: draft),
+         initialChildren: children,
+       );
+
+  static const String name = 'ConfirmAndPayRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ConfirmAndPayRouteArgs>();
+      return ConfirmAndPayScreen(key: args.key, draft: args.draft);
+    },
+  );
+}
+
+class ConfirmAndPayRouteArgs {
+  const ConfirmAndPayRouteArgs({this.key, required this.draft});
+
+  final Key? key;
+
+  final BookingDraftEntity draft;
+
+  @override
+  String toString() {
+    return 'ConfirmAndPayRouteArgs{key: $key, draft: $draft}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ConfirmAndPayRouteArgs) return false;
+    return key == other.key && draft == other.draft;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ draft.hashCode;
 }
 
 /// generated route for

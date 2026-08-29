@@ -12,6 +12,7 @@ import 'package:rifq_v2/features/hotel/presentation/widgets/hotel_room_card_widg
 import 'package:rifq_v2/features/hotel/presentation/widgets/hotel_rule_item_widget.dart';
 import 'package:rifq_v2/features/hotel/presentation/widgets/hotel_service_row_widget.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
+import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/widgets/lottie_loding.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -144,7 +145,13 @@ class _HotelDetailViewState extends State<_HotelDetailView>
                   top: false,
                   child: Padding(
                     padding: EdgeInsets.all(18.w),
-                    child: const BookNowButton(),
+                    child: BookNowButton(
+                      onPressed: detail.rooms.isEmpty
+                          ? null
+                          : () => context.router.push(
+                              BookingDetailsRoute(hotel: detail),
+                            ),
+                    ),
                   ),
                 ),
               ],

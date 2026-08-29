@@ -5,6 +5,10 @@ import 'package:rifq_v2/features/account/presentation/screens/account_screen.dar
 import 'package:rifq_v2/features/account/presentation/screens/edit_account_screen.dart';
 import 'package:rifq_v2/features/account/presentation/screens/pet_profile_screen.dart';
 import 'package:rifq_v2/features/add_pet/presentation/screens/add_pet_screen.dart';
+import 'package:rifq_v2/features/booking/domain/entities/booking_draft_entity.dart';
+import 'package:rifq_v2/features/booking/presentation/screens/booking_details_screen.dart';
+import 'package:rifq_v2/features/booking/presentation/screens/confirm_and_pay_screen.dart';
+import 'package:rifq_v2/features/hotel/domain/entities/hotel_detail_entity.dart';
 import 'package:rifq_v2/features/edit_pet/presentation/screens/edit_pet_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/auth_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/reset_password_screen.dart';
@@ -48,5 +52,7 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: HotelDetailRoute.page, path: '/hotel-detail/:hotelId'),
     AutoRoute(page: SitterDetailRoute.page, path: '/sitter-detail/:sitterId'),
     AutoRoute(page: SearchRoute.page, path: '/search'),
+    AutoRoute(page: BookingDetailsRoute.page, path: '/booking-details'),
+    AutoRoute(page: ConfirmAndPayRoute.page, path: '/confirm-and-pay'),
   ];
 }

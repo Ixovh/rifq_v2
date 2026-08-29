@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
-/// Visually matches the Figma "Book Now"/"Send Request" CTAs but stays
-/// disabled — booking and boarding-request flows (form, payment,
-/// availability hold, request creation) are explicitly out of scope for
-/// this pass.
+/// Shared full-width pill CTA for the Hotel booking and Home Boarding
+/// request flows. Passing no [onPressed] keeps it permanently disabled.
 class BookNowButton extends StatelessWidget {
-  const BookNowButton({super.key, this.label = 'Book Now'});
+  const BookNowButton({
+    super.key,
+    this.label = 'Book Now',
+    this.onPressed,
+    this.isLoading = false,
+  });
 
   final String label;
+  final VoidCallback? onPressed;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +23,7 @@ class BookNowButton extends StatelessWidget {
       width: double.infinity,
       height: 52.h,
       child: ElevatedButton(
-        onPressed: null,
+        onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: context.primary300,
           disabledBackgroundColor: context.primary200,
@@ -25,13 +31,20 @@ class BookNowButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(30.r),
           ),
         ),
-        child: Text(
-          label,
-          style: context.body1.copyWith(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        child: isLoading
+            ? Lottie.asset(
+                'assets/lottie/Lovely cats.json',
+                width: 36.w,
+                height: 36.w,
+                fit: BoxFit.contain,
+              )
+            : Text(
+                label,
+                style: context.body1.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
       ),
     );
   }

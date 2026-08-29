@@ -38,6 +38,45 @@ Future<DateTime?> showAppDatePicker({
   );
 }
 
+Future<({DateTime start, DateTime end})?> showAppDateRangePicker({
+  required BuildContext context,
+  DateTime? initialStart,
+  DateTime? initialEnd,
+  String title = 'Choose dates',
+  DateTime? firstDay,
+  DateTime? lastDay,
+}) {
+  return showModalBottomSheet<({DateTime start, DateTime end})>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    barrierColor: Colors.black.withValues(alpha: 0.35),
+    builder: (_) => _AppDateRangePickerSheet(
+      initialStart: initialStart,
+      initialEnd: initialEnd,
+      title: title,
+      firstDay: firstDay ?? DateUtils.dateOnly(DateTime.now()),
+      lastDay:
+          lastDay ??
+          DateUtils.dateOnly(DateTime.now()).add(const Duration(days: 365)),
+    ),
+  );
+}
+
+Future<DateTime?> showAppTimePicker({
+  required BuildContext context,
+  DateTime? initial,
+  String title = 'Set time',
+}) {
+  return showModalBottomSheet<DateTime>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    barrierColor: Colors.black.withValues(alpha: 0.35),
+    builder: (_) => _AppTimePickerSheet(initial: initial, title: title),
+  );
+}
+
 Future<String?> showAppSpeciesSheet({
   required BuildContext context,
   required String selectedSpecies,
@@ -423,6 +462,274 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _AppDateRangePickerSheet extends StatefulWidget {
+  const _AppDateRangePickerSheet({
+    this.initialStart,
+    this.initialEnd,
+    required this.title,
+    required this.firstDay,
+    required this.lastDay,
+  });
+
+  final DateTime? initialStart;
+  final DateTime? initialEnd;
+  final String title;
+  final DateTime firstDay;
+  final DateTime lastDay;
+
+  @override
+  State<_AppDateRangePickerSheet> createState() =>
+      _AppDateRangePickerSheetState();
+}
+
+class _AppDateRangePickerSheetState extends State<_AppDateRangePickerSheet> {
+  late DateTime _focusedDay;
+  DateTime? _rangeStart;
+  DateTime? _rangeEnd;
+
+  @override
+  void initState() {
+    super.initState();
+    _rangeStart = widget.initialStart != null
+        ? DateUtils.dateOnly(widget.initialStart!)
+        : null;
+    _rangeEnd = widget.initialEnd != null
+        ? DateUtils.dateOnly(widget.initialEnd!)
+        : null;
+    _focusedDay = _rangeStart ?? DateUtils.dateOnly(DateTime.now());
+  }
+
+  bool get _canApply =>
+      _rangeStart != null &&
+      _rangeEnd != null &&
+      _rangeEnd!.isAfter(_rangeStart!);
+
+  @override
+  Widget build(BuildContext context) {
+    return _SheetChrome(
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 24.h),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(widget.title, style: context.body1),
+            SizedBox(height: 4.h),
+            Text(
+              _rangeStart == null
+                  ? 'Select a date range'
+                  : _rangeEnd == null
+                  ? DateFormat('EEE, d MMM').format(_rangeStart!)
+                  : '${DateFormat('EEE, d MMM').format(_rangeStart!)} - '
+                        '${DateFormat('EEE, d MMM yyyy').format(_rangeEnd!)}',
+              style: context.body3.copyWith(color: context.primary300),
+            ),
+            SizedBox(height: 8.h),
+            TableCalendar(
+              firstDay: widget.firstDay,
+              lastDay: widget.lastDay,
+              focusedDay: _focusedDay,
+              rangeStartDay: _rangeStart,
+              rangeEndDay: _rangeEnd,
+              rangeSelectionMode: RangeSelectionMode.toggledOn,
+              calendarFormat: CalendarFormat.month,
+              availableGestures: AvailableGestures.horizontalSwipe,
+              headerStyle: HeaderStyle(
+                titleCentered: true,
+                formatButtonVisible: false,
+                headerPadding: EdgeInsets.symmetric(vertical: 8.h),
+                titleTextStyle: context.body1.copyWith(
+                  color: context.neutral1000,
+                ),
+                leftChevronIcon: Icon(
+                  CupertinoIcons.chevron_left,
+                  size: 18.sp,
+                  color: context.primary300,
+                ),
+                rightChevronIcon: Icon(
+                  CupertinoIcons.chevron_right,
+                  size: 18.sp,
+                  color: context.primary300,
+                ),
+              ),
+              daysOfWeekStyle: DaysOfWeekStyle(
+                weekdayStyle: context.body3.copyWith(color: context.neutral600),
+                weekendStyle: context.body3.copyWith(color: context.neutral600),
+              ),
+              calendarStyle: CalendarStyle(
+                outsideDaysVisible: false,
+                defaultTextStyle: context.body2.copyWith(
+                  color: context.neutral1000,
+                ),
+                weekendTextStyle: context.body2.copyWith(
+                  color: context.neutral1000,
+                ),
+                disabledTextStyle: context.body2.copyWith(
+                  color: context.neutral400,
+                ),
+                todayDecoration: BoxDecoration(
+                  color: context.primary100,
+                  shape: BoxShape.circle,
+                ),
+                todayTextStyle: context.body2.copyWith(
+                  color: context.primary500,
+                  fontWeight: FontWeight.w600,
+                ),
+                rangeHighlightColor: context.primary100.withValues(alpha: 0.5),
+                rangeStartDecoration: BoxDecoration(
+                  color: context.primary300,
+                  shape: BoxShape.circle,
+                ),
+                rangeEndDecoration: BoxDecoration(
+                  color: context.primary300,
+                  shape: BoxShape.circle,
+                ),
+                rangeStartTextStyle: context.body2.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+                rangeEndTextStyle: context.body2.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+                withinRangeDecoration: BoxDecoration(
+                  color: context.primary100.withValues(alpha: 0.5),
+                  shape: BoxShape.circle,
+                ),
+                withinRangeTextStyle: context.body2.copyWith(
+                  color: context.primary400,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              onRangeSelected: (start, end, focusedDay) {
+                setState(() {
+                  _rangeStart = start != null
+                      ? DateUtils.dateOnly(start)
+                      : null;
+                  _rangeEnd = end != null ? DateUtils.dateOnly(end) : null;
+                  _focusedDay = focusedDay;
+                });
+              },
+              onPageChanged: (focused) => setState(() => _focusedDay = focused),
+            ),
+            SizedBox(height: 16.h),
+            SizedBox(
+              width: double.infinity,
+              height: 52.h,
+              child: ElevatedButton(
+                onPressed: _canApply
+                    ? () => Navigator.pop(context, (
+                        start: _rangeStart!,
+                        end: _rangeEnd!,
+                      ))
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: context.primary300,
+                  disabledBackgroundColor: context.primary100,
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                ),
+                child: Text(
+                  'Apply',
+                  style: context.body1.copyWith(color: Colors.white),
+                ),
+              ),
+            ),
+            SizedBox(height: 8.h),
+            TextButton(
+              onPressed: () => setState(() {
+                _rangeStart = null;
+                _rangeEnd = null;
+              }),
+              child: Text(
+                'Reset',
+                style: context.body2.copyWith(color: context.neutral600),
+              ),
+            ),
+            SizedBox(height: MediaQuery.paddingOf(context).bottom),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AppTimePickerSheet extends StatefulWidget {
+  const _AppTimePickerSheet({this.initial, required this.title});
+
+  final DateTime? initial;
+  final String title;
+
+  @override
+  State<_AppTimePickerSheet> createState() => _AppTimePickerSheetState();
+}
+
+class _AppTimePickerSheetState extends State<_AppTimePickerSheet> {
+  late DateTime _selected;
+
+  @override
+  void initState() {
+    super.initState();
+    _selected = widget.initial ?? DateTime.now();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _SheetChrome(
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 24.h),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(widget.title, style: context.body1),
+            SizedBox(height: 12.h),
+            SizedBox(
+              height: 200.h,
+              child: CupertinoDatePicker(
+                mode: CupertinoDatePickerMode.time,
+                initialDateTime: _selected,
+                use24hFormat: false,
+                onDateTimeChanged: (value) => _selected = value,
+              ),
+            ),
+            SizedBox(height: 16.h),
+            SizedBox(
+              width: double.infinity,
+              height: 52.h,
+              child: ElevatedButton(
+                onPressed: () => Navigator.pop(context, _selected),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: context.primary300,
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                ),
+                child: Text(
+                  'Save',
+                  style: context.body1.copyWith(color: Colors.white),
+                ),
+              ),
+            ),
+            SizedBox(height: 8.h),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(
+                'Cancel',
+                style: context.body2.copyWith(color: context.neutral600),
+              ),
+            ),
+            SizedBox(height: MediaQuery.paddingOf(context).bottom),
+          ],
+        ),
       ),
     );
   }

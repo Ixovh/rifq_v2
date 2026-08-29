@@ -47,6 +47,15 @@ import '../../features/auth/data/repositories/auth_repo_data.dart' as _i400;
 import '../../features/auth/domain/repositories/auth_repository_domain.dart'
     as _i998;
 import '../../features/auth/domain/use_cases/auth_use_case.dart' as _i283;
+import '../../features/booking/data/datasources/booking_data_source.dart'
+    as _i394;
+import '../../features/booking/data/repositories/booking_repo_data.dart'
+    as _i730;
+import '../../features/booking/domain/repositories/booking_repository_domain.dart'
+    as _i965;
+import '../../features/booking/domain/use_cases/booking_use_case.dart' as _i245;
+import '../../features/booking/presentation/cubit/booking_details_cubit.dart'
+    as _i581;
 import '../../features/edit_pet/data/datasources/edit_pet_data_source.dart'
     as _i897;
 import '../../features/edit_pet/data/repositories/edit_pet_repo_data.dart'
@@ -150,6 +159,9 @@ extension GetItInjectableX on _i174.GetIt {
       () =>
           _i425.FetchAdoptionPostsUseCase(gh<_i785.AdoptionRepositoryDomain>()),
     );
+    gh.lazySingleton<_i394.BaseBookingDataSource>(
+      () => _i394.BookingDataSource(supabase: gh<_i454.SupabaseClient>()),
+    );
     gh.lazySingleton<_i664.BaseHealthRecordDataSource>(
       () => _i664.HealthRecordDataSource(supabase: gh<_i454.SupabaseClient>()),
     );
@@ -162,6 +174,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i933.HomeUseCase>(
       () => _i933.HomeUseCase(homeRepoData: gh<_i257.HomeRepoDomain>()),
     );
+    gh.lazySingleton<_i965.BookingRepoDomain>(
+      () => _i730.BookingRepoData(
+        bookingDataSource: gh<_i394.BaseBookingDataSource>(),
+      ),
+    );
     gh.lazySingleton<_i603.HotelRepoDomain>(
       () =>
           _i327.HotelRepoData(hotelDataSource: gh<_i292.BaseHotelDataSource>()),
@@ -173,6 +190,10 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i283.AuthUseCase>(
       () => _i283.AuthUseCase(authRepoData: gh<_i998.AuthRepoDomain>()),
+    );
+    gh.lazySingleton<_i245.BookingUseCase>(
+      () =>
+          _i245.BookingUseCase(bookingRepoData: gh<_i965.BookingRepoDomain>()),
     );
     gh.lazySingleton<_i628.EditPetRepoDomain>(
       () => _i76.EditPetRepoData(
@@ -228,6 +249,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i9.HomeCubit>(() => _i9.HomeCubit(gh<_i933.HomeUseCase>()));
     gh.factory<_i493.AddPetCubit>(
       () => _i493.AddPetCubit(gh<_i667.AddPetUseCase>()),
+    );
+    gh.factory<_i581.BookingDetailsCubit>(
+      () => _i581.BookingDetailsCubit(gh<_i245.BookingUseCase>()),
     );
     gh.lazySingleton<_i783.HotelUseCase>(
       () => _i783.HotelUseCase(hotelRepoData: gh<_i603.HotelRepoDomain>()),
