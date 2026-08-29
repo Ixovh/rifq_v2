@@ -73,6 +73,16 @@ import '../../features/home/domain/repositories/home_repository_domain.dart'
     as _i257;
 import '../../features/home/domain/use_cases/home_use_case.dart' as _i933;
 import '../../features/home/presentation/cubit/home_cubit.dart' as _i9;
+import '../../features/home_boarding/data/datasources/home_boarding_data_source.dart'
+    as _i728;
+import '../../features/home_boarding/data/repositories/home_boarding_repo_data.dart'
+    as _i263;
+import '../../features/home_boarding/domain/repositories/home_boarding_repository_domain.dart'
+    as _i926;
+import '../../features/home_boarding/domain/use_cases/home_boarding_use_case.dart'
+    as _i1033;
+import '../../features/home_boarding/presentation/cubit/home_boarding_list_cubit.dart'
+    as _i323;
 import '../../features/hotel/data/datasources/hotel_data_source.dart' as _i292;
 import '../../features/hotel/data/repositories/hotel_repo_data.dart' as _i327;
 import '../../features/hotel/domain/repositories/hotel_repository_domain.dart'
@@ -114,6 +124,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i426.BaseHomeDataSource>(
       () => _i426.HomeDataSource(supabase: gh<_i454.SupabaseClient>()),
     );
+    gh.lazySingleton<_i728.BaseHomeBoardingDataSource>(
+      () => _i728.HomeBoardingDataSource(supabase: gh<_i454.SupabaseClient>()),
+    );
     gh.lazySingleton<_i897.BaseEditPetDataSource>(
       () => _i897.EditPetDataSource(supabase: gh<_i454.SupabaseClient>()),
     );
@@ -150,6 +163,11 @@ extension GetItInjectableX on _i174.GetIt {
       () =>
           _i327.HotelRepoData(hotelDataSource: gh<_i292.BaseHotelDataSource>()),
     );
+    gh.lazySingleton<_i926.HomeBoardingRepoDomain>(
+      () => _i263.HomeBoardingRepoData(
+        homeBoardingDataSource: gh<_i728.BaseHomeBoardingDataSource>(),
+      ),
+    );
     gh.lazySingleton<_i283.AuthUseCase>(
       () => _i283.AuthUseCase(authRepoData: gh<_i998.AuthRepoDomain>()),
     );
@@ -157,6 +175,14 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i76.EditPetRepoData(
         editPetDataSource: gh<_i897.BaseEditPetDataSource>(),
       ),
+    );
+    gh.lazySingleton<_i1033.HomeBoardingUseCase>(
+      () => _i1033.HomeBoardingUseCase(
+        homeBoardingRepoData: gh<_i926.HomeBoardingRepoDomain>(),
+      ),
+    );
+    gh.factory<_i323.HomeBoardingListCubit>(
+      () => _i323.HomeBoardingListCubit(gh<_i1033.HomeBoardingUseCase>()),
     );
     gh.lazySingleton<_i375.HealthRecordRepoDomain>(
       () => _i589.HealthRecordRepoData(
