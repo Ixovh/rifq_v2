@@ -1,12 +1,14 @@
 import 'package:injectable/injectable.dart';
 import 'package:rifq_v2/features/adoption/data/models/adoption_model.dart';
+import 'package:rifq_v2/features/adoption/data/models/adoption_pet_card_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class AdoptionRemoteDataSource {
   Future<AdoptionPostModel> createAdoptionPost(
     AdoptionPostModel adoptionPost,
   );
-    Future<List<AdoptionPostModel>> getAdoptionPosts();
+
+  Future<List<AdoptionPetCardModel>> getAdoptionPetCards();
 }
 
 @LazySingleton(as: AdoptionRemoteDataSource)
@@ -28,18 +30,16 @@ class AdoptionRemoteDataSourceImpl implements AdoptionRemoteDataSource {
     return AdoptionPostModel.fromJson(response);
   }
 
-
-    @override
-  Future<List<AdoptionPostModel>> getAdoptionPosts() async {
+  @override
+  Future<List<AdoptionPetCardModel>> getAdoptionPetCards() async {
     final response = await _supabase
-        .from('adoption_posts')
+        .from('adoption_pet_cards')
         .select()
-        .eq('status', 'available')
-        .order('created_at', ascending: false);
+        .order('adoption_post_id', ascending: false);
 
     return (response as List)
         .map(
-          (json) => AdoptionPostModel.fromJson(json),
+          (json) => AdoptionPetCardModel.fromJson(json),
         )
         .toList();
   }

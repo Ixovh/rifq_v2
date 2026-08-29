@@ -5,11 +5,11 @@ class AdoptionState extends Equatable {
   final String selectedCategory;
 
   // =========================
-  // Get Adoption Posts
+  // Get Adoption Pet Cards
   // =========================
 
   final bool isLoadingPosts;
-  final List<AdoptionPostEntity> adoptionPosts;
+  final List<AdoptionPetCardEntity> adoptionPetCards;
 
   // =========================
   // Create Adoption Post
@@ -25,9 +25,9 @@ class AdoptionState extends Equatable {
     this.selectedTabIndex = 0,
     this.selectedCategory = 'Cat',
 
-    // Get posts
+    // Get adoption pet cards
     this.isLoadingPosts = false,
-    this.adoptionPosts = const [],
+    this.adoptionPetCards = const [],
 
     // Create post
     this.isCreatingPost = false,
@@ -41,9 +41,9 @@ class AdoptionState extends Equatable {
     int? selectedTabIndex,
     String? selectedCategory,
 
-    // Get posts
+    // Get adoption pet cards
     bool? isLoadingPosts,
-    List<AdoptionPostEntity>? adoptionPosts,
+    List<AdoptionPetCardEntity>? adoptionPetCards,
 
     // Create post
     bool? isCreatingPost,
@@ -59,12 +59,12 @@ class AdoptionState extends Equatable {
       selectedCategory:
           selectedCategory ?? this.selectedCategory,
 
-      // Get posts
+      // Get adoption pet cards
       isLoadingPosts:
           isLoadingPosts ?? this.isLoadingPosts,
 
-      adoptionPosts:
-          adoptionPosts ?? this.adoptionPosts,
+      adoptionPetCards:
+          adoptionPetCards ?? this.adoptionPetCards,
 
       // Create post
       isCreatingPost:
@@ -87,7 +87,7 @@ class AdoptionState extends Equatable {
         selectedCategory,
 
         isLoadingPosts,
-        adoptionPosts,
+        adoptionPetCards,
 
         isCreatingPost,
         isPostCreated,

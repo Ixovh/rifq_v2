@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_entity.dart';
+import 'package:rifq_v2/features/adoption/domain/entities/adoption_pet_card_entity.dart';
 import 'package:rifq_v2/features/adoption/domain/use_cases/create_adoption_post_use_case.dart';
 import 'package:rifq_v2/features/adoption/domain/use_cases/fetch_adoption_posts_use_case.dart';
 
@@ -10,11 +11,11 @@ part 'adoption_state.dart';
 @injectable
 class AdoptionCubit extends Cubit<AdoptionState> {
   final CreateAdoptionPostUseCase _createAdoptionPostUseCase;
-  final FetchAdoptionPostsUseCase _fetchAdoptionPostsUseCase;
+  final FetchAdoptionPetCardsUseCase _fetchAdoptionPetCardsUseCase;
 
   AdoptionCubit(
     this._createAdoptionPostUseCase,
-    this._fetchAdoptionPostsUseCase,
+    this._fetchAdoptionPetCardsUseCase,
   ) : super(const AdoptionState());
 
   // =========================
@@ -38,44 +39,38 @@ class AdoptionCubit extends Cubit<AdoptionState> {
   }
 
   // =========================
-  // Get Adoption Posts
+  // Get Adoption Pet Cards
   // =========================
 
-Future<void> getAdoptionPosts() async {
-  emit(
-    state.copyWith(
-      isLoadingPosts: true,
-      errorMessage: null,
-    ),
-  );
+  Future<void> getAdoptionPetCards() async {
+    emit(
+      state.copyWith(
+        isLoadingPosts: true,
+        errorMessage: null,
+      ),
+    );
 
-  final result = await _fetchAdoptionPostsUseCase();
+    final result = await _fetchAdoptionPetCardsUseCase();
 
-  result.when(
-    (posts) {
-      final uniquePosts = <String, AdoptionPostEntity>{};
-
-      for (final post in posts) {
-        uniquePosts[post.petId] = post;
-      }
-
-      emit(
-        state.copyWith(
-          isLoadingPosts: false,
-          adoptionPosts: uniquePosts.values.toList(),
-        ),
-      );
-    },
-    (error) {
-      emit(
-        state.copyWith(
-          isLoadingPosts: false,
-          errorMessage: error.toString(),
-        ),
-      );
-    },
-  );
-}
+    result.when(
+      (cards) {
+        emit(
+          state.copyWith(
+            isLoadingPosts: false,
+            adoptionPetCards: cards,
+          ),
+        );
+      },
+      (error) {
+        emit(
+          state.copyWith(
+            isLoadingPosts: false,
+            errorMessage: error.toString(),
+          ),
+        );
+      },
+    );
+  }
 
   // =========================
   // Create Adoption Post
@@ -106,8 +101,7 @@ Future<void> getAdoptionPosts() async {
           ),
         );
 
-        // بعد إنشاء الإعلان، نحدث القائمة
-        getAdoptionPosts();
+        getAdoptionPetCards();
       },
       (error) {
         emit(

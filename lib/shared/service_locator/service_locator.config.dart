@@ -149,9 +149,10 @@ extension GetItInjectableX on _i174.GetIt {
       () =>
           _i824.CreateAdoptionPostUseCase(gh<_i785.AdoptionRepositoryDomain>()),
     );
-    gh.factory<_i425.FetchAdoptionPostsUseCase>(
-      () =>
-          _i425.FetchAdoptionPostsUseCase(gh<_i785.AdoptionRepositoryDomain>()),
+    gh.factory<_i425.FetchAdoptionPetCardsUseCase>(
+      () => _i425.FetchAdoptionPetCardsUseCase(
+        gh<_i785.AdoptionRepositoryDomain>(),
+      ),
     );
     gh.lazySingleton<_i803.AccountUseCase>(
       () =>
@@ -179,14 +180,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i1036.HealthRecordCubit>(
       () => _i1036.HealthRecordCubit(gh<_i653.HealthRecordUseCase>()),
     );
-    gh.factory<_i578.EditPetCubit>(
-      () => _i578.EditPetCubit(gh<_i430.EditPetUseCase>()),
-    );
     gh.factory<_i431.AdoptionCubit>(
       () => _i431.AdoptionCubit(
         gh<_i824.CreateAdoptionPostUseCase>(),
-        gh<_i425.FetchAdoptionPostsUseCase>(),
+        gh<_i425.FetchAdoptionPetCardsUseCase>(),
       ),
+    );
+    gh.factory<_i578.EditPetCubit>(
+      () => _i578.EditPetCubit(gh<_i430.EditPetUseCase>()),
     );
     gh.singleton<_i261.LocalKeysService>(() => _i261.LocalKeysService());
     return this;

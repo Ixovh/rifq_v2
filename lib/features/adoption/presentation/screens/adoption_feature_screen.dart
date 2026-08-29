@@ -169,10 +169,10 @@
 //   }
 // }
 
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_entity.dart';
 import 'package:rifq_v2/features/adoption/presentation/widgets/adoption_header_widget.dart';
 import 'package:rifq_v2/features/adoption/presentation/widgets/adoption_option_sheet.dart';
@@ -212,8 +212,7 @@ class _AdoptionViewState extends State<_AdoptionView> {
   @override
   void initState() {
     super.initState();
-
-    context.read<AdoptionCubit>().getAdoptionPosts();
+    context.read<AdoptionCubit>().getAdoptionPetCards();
   }
 
   @override
@@ -233,9 +232,7 @@ class _AdoptionViewState extends State<_AdoptionView> {
               isScrollControlled: true,
               backgroundColor: Colors.white,
               shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(24),
-                ),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
               ),
               builder: (_) {
                 return AdoptionOptionSheet(
@@ -247,11 +244,7 @@ class _AdoptionViewState extends State<_AdoptionView> {
 
                     Navigator.pop(context);
 
-                    router.push(
-                      AddPetRoute(
-                        showAdoptionFields: true,
-                      ),
-                    );
+                    router.push(AddPetRoute(showAdoptionFields: true));
                   },
 
                   // =========================
@@ -264,9 +257,7 @@ class _AdoptionViewState extends State<_AdoptionView> {
                         Supabase.instance.client.auth.currentUser?.id;
 
                     if (userId == null) {
-                      context.showErrorToast(
-                        'User profile not found',
-                      );
+                      context.showErrorToast('User profile not found');
                       return;
                     }
 
@@ -290,56 +281,38 @@ class _AdoptionViewState extends State<_AdoptionView> {
                           pets: pets,
 
                           onPetSelected: (pet) async {
-                            final adoptionCubit =
-                                context.read<AdoptionCubit>();
+                            final adoptionCubit = context.read<AdoptionCubit>();
 
                             Navigator.pop(context);
 
-                            final userId = Supabase
-                                .instance
-                                .client
-                                .auth
-                                .currentUser
-                                ?.id;
+                            final userId =
+                                Supabase.instance.client.auth.currentUser?.id;
 
                             if (userId == null) {
-                              context.showErrorToast(
-                                'User profile not found',
-                              );
+                              context.showErrorToast('User profile not found');
                               return;
                             }
 
-                            debugPrint(
-                              '========== CREATE ADOPTION ==========',
-                            );
+                            debugPrint('========== CREATE ADOPTION ==========');
 
-                            debugPrint(
-                              'Pet ID: ${pet['id']}',
-                            );
+                            debugPrint('Pet ID: ${pet['id']}');
 
-                            debugPrint(
-                              'Pet Name: ${pet['name']}',
-                            );
+                            debugPrint('Pet Name: ${pet['name']}');
 
-                            debugPrint(
-                              'Poster ID: $userId',
-                            );
+                            debugPrint('Poster ID: $userId');
 
-                            final adoptionPost =
-                                AdoptionPostEntity(
+                            final adoptionPost = AdoptionPostEntity(
                               id: '',
                               petId: pet['id'].toString(),
                               posterId: userId,
-                              description:
-                                  'Pet available for adoption',
+                              description: 'Pet available for adoption',
                               status: 'available',
                               location: '',
                               createdAt: DateTime.now(),
                               updatedAt: DateTime.now(),
                             );
 
-                            await adoptionCubit
-                                .createAdoptionPost(
+                            await adoptionCubit.createAdoptionPost(
                               adoptionPost: adoptionPost,
                             );
 
@@ -369,23 +342,16 @@ class _AdoptionViewState extends State<_AdoptionView> {
           backgroundColor: context.primary50,
           elevation: 2,
 
-          icon: const Icon(
-            Icons.add,
-            color: Colors.white,
-          ),
+          icon: const Icon(Icons.add, color: Colors.white),
 
           label: const Text(
             'Adopt',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-            ),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
           ),
         ),
       ),
 
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.startFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
 
       // =========================
       // Body
@@ -401,9 +367,7 @@ class _AdoptionViewState extends State<_AdoptionView> {
 
             const SizedBox(height: 12),
 
-            PetCategoriesSection(
-              onMoreCategoryTap: () {},
-            ),
+            PetCategoriesSection(onMoreCategoryTap: () {}),
 
             const SizedBox(height: 12),
 
@@ -417,9 +381,7 @@ class _AdoptionViewState extends State<_AdoptionView> {
                 builder: (context, state) {
                   // Loading
                   if (state.isLoadingPosts) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return const Center(child: CircularProgressIndicator());
                   }
 
                   // Error
@@ -436,52 +398,132 @@ class _AdoptionViewState extends State<_AdoptionView> {
                   }
 
                   // Empty
-                  if (state.adoptionPosts.isEmpty) {
+                  if (state.adoptionPetCards.isEmpty) {
                     return const Center(
-                      child: Text(
-                        'No pets available for adoption',
-                      ),
+                      child: Text('No pets available for adoption'),
                     );
                   }
 
                   // Posts
                   return ListView.builder(
                     padding: const EdgeInsets.all(16),
-                    itemCount: state.adoptionPosts.length,
+                    itemCount: state.adoptionPetCards.length,
                     itemBuilder: (context, index) {
-                      final post =
-                          state.adoptionPosts[index];
+                      final card = state.adoptionPetCards[index];
+                      final imageUrl = card.imageUrl;
 
-                      return Card(
-                        margin: const EdgeInsets.only(
-                          bottom: 12,
+                      return Container(
+                        margin: EdgeInsets.only(bottom: 16.h),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16.r),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.10),
+                              blurRadius: 8,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
                         ),
-                        child: ListTile(
-                          leading: const CircleAvatar(
-                            child: Icon(Icons.pets),
-                          ),
-
-                          title: Text(
-                            'Pet ID: ${post.petId}',
-                          ),
-
-                          subtitle: Column(
-                            crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 4),
-
-                              Text(
-                                post.description,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // =========================
+                            // Pet Image
+                            // =========================
+                            ClipRRect(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(16.r),
                               ),
-
-                              const SizedBox(height: 4),
-
-                              Text(
-                                'Status: ${post.status}',
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: 220.h,
+                                child: imageUrl != null && imageUrl.isNotEmpty
+                                    ? Image.network(
+                                        imageUrl,
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (_, __, ___) {
+                                          return Container(
+                                            color: context.neutral100,
+                                            child: Icon(
+                                              Icons.pets,
+                                              size: 60.r,
+                                              color: context.primary,
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    : Container(
+                                        color: context.neutral100,
+                                        child: Icon(
+                                          Icons.pets,
+                                          size: 60.r,
+                                          color: context.primary,
+                                        ),
+                                      ),
                               ),
-                            ],
-                          ),
+                            ),
+
+                            // =========================
+                            // Pet Info
+                            // =========================
+                            Padding(
+                              padding: EdgeInsets.all(16.r),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    card.name,
+                                    style: context.body1.copyWith(
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.w700,
+                                      color: context.neutral700,
+                                    ),
+                                  ),
+
+                                  SizedBox(height: 8.h),
+
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.location_on_outlined,
+                                        size: 20.r,
+                                        color: context.primary,
+                                      ),
+                                      SizedBox(width: 6.w),
+                                      Expanded(
+                                        child: Text(
+                                          card.location,
+                                          style: context.body2.copyWith(
+                                            color: context.neutral400,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  SizedBox(height: 6.h),
+
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.cake_outlined,
+                                        size: 20.r,
+                                        color: context.primary,
+                                      ),
+                                      SizedBox(width: 6.w),
+                                      Text(
+                                        '${DateTime.now().difference(card.birthdate).inDays ~/ 365} years',
+                                        style: context.body2.copyWith(
+                                          color: context.neutral400,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },

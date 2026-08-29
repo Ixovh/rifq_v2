@@ -1,15 +1,15 @@
 import 'package:injectable/injectable.dart';
 import 'package:multiple_result/multiple_result.dart';
-import 'package:rifq_v2/features/adoption/domain/entities/adoption_entity.dart';
+import 'package:rifq_v2/features/adoption/domain/entities/adoption_pet_card_entity.dart';
 import 'package:rifq_v2/features/adoption/domain/repositories/adoption_repository_domain.dart';
 
 @injectable
-class FetchAdoptionPostsUseCase {
+class FetchAdoptionPetCardsUseCase {
   final AdoptionRepositoryDomain repository;
 
-  FetchAdoptionPostsUseCase(this.repository);
+  FetchAdoptionPetCardsUseCase(this.repository);
 
-  Future<Result<List<AdoptionPostEntity>, Object>> call() {
-    return repository.getAdoptionPosts();
+  Future<Result<List<AdoptionPetCardEntity>, Object>> call() {
+    return repository.getAdoptionPetCards();
   }
 }
