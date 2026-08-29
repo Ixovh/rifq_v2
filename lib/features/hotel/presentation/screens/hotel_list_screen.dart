@@ -49,7 +49,7 @@ class _HotelListViewState extends State<_HotelListView> {
   }
 
   void _openSitterDetail(String sitterId) {
-    // Wired up once the Sitter Detail screen lands (next commit).
+    context.pushRoute(SitterDetailRoute(sitterId: sitterId));
   }
 
   void _openSearch() {

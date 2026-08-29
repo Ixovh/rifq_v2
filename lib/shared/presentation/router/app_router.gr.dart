@@ -482,6 +482,53 @@ class SendsToEmailRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [SitterDetailScreen]
+class SitterDetailRoute extends PageRouteInfo<SitterDetailRouteArgs> {
+  SitterDetailRoute({
+    Key? key,
+    required String sitterId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         SitterDetailRoute.name,
+         args: SitterDetailRouteArgs(key: key, sitterId: sitterId),
+         initialChildren: children,
+       );
+
+  static const String name = 'SitterDetailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<SitterDetailRouteArgs>();
+      return SitterDetailScreen(key: args.key, sitterId: args.sitterId);
+    },
+  );
+}
+
+class SitterDetailRouteArgs {
+  const SitterDetailRouteArgs({this.key, required this.sitterId});
+
+  final Key? key;
+
+  final String sitterId;
+
+  @override
+  String toString() {
+    return 'SitterDetailRouteArgs{key: $key, sitterId: $sitterId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! SitterDetailRouteArgs) return false;
+    return key == other.key && sitterId == other.sitterId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ sitterId.hashCode;
+}
+
+/// generated route for
 /// [SplashScreen]
 class SplashRoute extends PageRouteInfo<void> {
   const SplashRoute({List<PageRouteInfo>? children})

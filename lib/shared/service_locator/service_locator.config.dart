@@ -83,6 +83,8 @@ import '../../features/home_boarding/domain/use_cases/home_boarding_use_case.dar
     as _i1033;
 import '../../features/home_boarding/presentation/cubit/home_boarding_list_cubit.dart'
     as _i323;
+import '../../features/home_boarding/presentation/cubit/sitter_detail_cubit.dart'
+    as _i352;
 import '../../features/hotel/data/datasources/hotel_data_source.dart' as _i292;
 import '../../features/hotel/data/repositories/hotel_repo_data.dart' as _i327;
 import '../../features/hotel/domain/repositories/hotel_repository_domain.dart'
@@ -183,6 +185,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i323.HomeBoardingListCubit>(
       () => _i323.HomeBoardingListCubit(gh<_i1033.HomeBoardingUseCase>()),
+    );
+    gh.factory<_i352.SitterDetailCubit>(
+      () => _i352.SitterDetailCubit(gh<_i1033.HomeBoardingUseCase>()),
     );
     gh.lazySingleton<_i375.HealthRecordRepoDomain>(
       () => _i589.HealthRecordRepoData(
