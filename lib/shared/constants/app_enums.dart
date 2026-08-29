@@ -26,6 +26,24 @@ enum SortOption {
   };
 }
 
+enum PaymentMethodOption {
+  applePay,
+  visa,
+  mastercard;
+
+  String get value => switch (this) {
+    PaymentMethodOption.applePay => 'apple_pay',
+    PaymentMethodOption.visa => 'visa',
+    PaymentMethodOption.mastercard => 'mastercard',
+  };
+
+  String get label => switch (this) {
+    PaymentMethodOption.applePay => 'Apple Pay',
+    PaymentMethodOption.visa => 'Visa',
+    PaymentMethodOption.mastercard => 'Mastercard',
+  };
+}
+
 enum LanguagesEnum {
   ar,
   en;

@@ -54,6 +54,8 @@ import '../../features/booking/data/repositories/booking_repo_data.dart'
 import '../../features/booking/domain/repositories/booking_repository_domain.dart'
     as _i965;
 import '../../features/booking/domain/use_cases/booking_use_case.dart' as _i245;
+import '../../features/booking/presentation/cubit/booking_create_cubit.dart'
+    as _i625;
 import '../../features/booking/presentation/cubit/booking_details_cubit.dart'
     as _i581;
 import '../../features/edit_pet/data/datasources/edit_pet_data_source.dart'
@@ -249,6 +251,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i9.HomeCubit>(() => _i9.HomeCubit(gh<_i933.HomeUseCase>()));
     gh.factory<_i493.AddPetCubit>(
       () => _i493.AddPetCubit(gh<_i667.AddPetUseCase>()),
+    );
+    gh.factory<_i625.BookingCreateCubit>(
+      () => _i625.BookingCreateCubit(gh<_i245.BookingUseCase>()),
     );
     gh.factory<_i581.BookingDetailsCubit>(
       () => _i581.BookingDetailsCubit(gh<_i245.BookingUseCase>()),

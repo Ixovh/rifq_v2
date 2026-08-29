@@ -497,6 +497,56 @@ class OtpRouteArgs {
 }
 
 /// generated route for
+/// [PaymentSuccessScreen]
+class PaymentSuccessRoute extends PageRouteInfo<PaymentSuccessRouteArgs> {
+  PaymentSuccessRoute({
+    Key? key,
+    required BookingConfirmationEntity confirmation,
+    List<PageRouteInfo>? children,
+  }) : super(
+         PaymentSuccessRoute.name,
+         args: PaymentSuccessRouteArgs(key: key, confirmation: confirmation),
+         initialChildren: children,
+       );
+
+  static const String name = 'PaymentSuccessRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<PaymentSuccessRouteArgs>();
+      return PaymentSuccessScreen(
+        key: args.key,
+        confirmation: args.confirmation,
+      );
+    },
+  );
+}
+
+class PaymentSuccessRouteArgs {
+  const PaymentSuccessRouteArgs({this.key, required this.confirmation});
+
+  final Key? key;
+
+  final BookingConfirmationEntity confirmation;
+
+  @override
+  String toString() {
+    return 'PaymentSuccessRouteArgs{key: $key, confirmation: $confirmation}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PaymentSuccessRouteArgs) return false;
+    return key == other.key && confirmation == other.confirmation;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ confirmation.hashCode;
+}
+
+/// generated route for
 /// [PetProfileScreen]
 class PetProfileRoute extends PageRouteInfo<PetProfileRouteArgs> {
   PetProfileRoute({
