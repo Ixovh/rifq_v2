@@ -16,6 +16,7 @@ import 'package:rifq_v2/features/hotel/presentation/screens/hotel_detail_screen.
 import 'package:rifq_v2/features/hotel/presentation/screens/hotel_list_screen.dart';
 import 'package:rifq_v2/features/nav/presentation/screens/nav_screen.dart';
 import 'package:rifq_v2/features/onboarding/presentation/screens/onboarding_feature_screen.dart';
+import 'package:rifq_v2/features/search/presentation/screens/search_screen.dart';
 import 'package:rifq_v2/features/splash/presentation/screens/choose_path.dart';
 import 'package:rifq_v2/features/splash/presentation/screens/splash_screen.dart';
 import 'package:rifq_v2/shared/constants/app_enums.dart';
@@ -46,5 +47,6 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: HotelListRoute.page, path: '/hotel'),
     AutoRoute(page: HotelDetailRoute.page, path: '/hotel-detail/:hotelId'),
     AutoRoute(page: SitterDetailRoute.page, path: '/sitter-detail/:sitterId'),
+    AutoRoute(page: SearchRoute.page, path: '/search'),
   ];
 }

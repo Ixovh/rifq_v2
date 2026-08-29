@@ -466,6 +466,53 @@ class ResetPasswordRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [SearchScreen]
+class SearchRoute extends PageRouteInfo<SearchRouteArgs> {
+  SearchRoute({
+    Key? key,
+    required BoardingTab initialTab,
+    List<PageRouteInfo>? children,
+  }) : super(
+         SearchRoute.name,
+         args: SearchRouteArgs(key: key, initialTab: initialTab),
+         initialChildren: children,
+       );
+
+  static const String name = 'SearchRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<SearchRouteArgs>();
+      return SearchScreen(key: args.key, initialTab: args.initialTab);
+    },
+  );
+}
+
+class SearchRouteArgs {
+  const SearchRouteArgs({this.key, required this.initialTab});
+
+  final Key? key;
+
+  final BoardingTab initialTab;
+
+  @override
+  String toString() {
+    return 'SearchRouteArgs{key: $key, initialTab: $initialTab}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! SearchRouteArgs) return false;
+    return key == other.key && initialTab == other.initialTab;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ initialTab.hashCode;
+}
+
+/// generated route for
 /// [SendsToEmailScreen]
 class SendsToEmailRoute extends PageRouteInfo<void> {
   const SendsToEmailRoute({List<PageRouteInfo>? children})

@@ -53,7 +53,7 @@ class _HotelListViewState extends State<_HotelListView> {
   }
 
   void _openSearch() {
-    // Wired up once the Search screen lands.
+    context.pushRoute(SearchRoute(initialTab: _activeTab));
   }
 
   void _openFilter() {
