@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
-import '../entities/adoption_entity.dart';
-import '../repositories/adoption_repository_domain.dart';
+import 'package:multiple_result/multiple_result.dart';
+import 'package:rifq_v2/features/adoption/domain/entities/adoption_entity.dart';
+import 'package:rifq_v2/features/adoption/domain/repositories/adoption_repository_domain.dart';
 
 @injectable
 class FetchAdoptionPostsUseCase {
@@ -8,7 +9,7 @@ class FetchAdoptionPostsUseCase {
 
   FetchAdoptionPostsUseCase(this.repository);
 
-  // Future<List<AdoptionPostEntity>> call() async {
-  //   return await repository.fetchAvailableAdoptionPosts();
-  // }
+  Future<Result<List<AdoptionPostEntity>, Object>> call() {
+    return repository.getAdoptionPosts();
+  }
 }

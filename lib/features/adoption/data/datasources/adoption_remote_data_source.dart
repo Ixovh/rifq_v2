@@ -6,6 +6,7 @@ abstract class AdoptionRemoteDataSource {
   Future<AdoptionPostModel> createAdoptionPost(
     AdoptionPostModel adoptionPost,
   );
+    Future<List<AdoptionPostModel>> getAdoptionPosts();
 }
 
 @LazySingleton(as: AdoptionRemoteDataSource)
@@ -25,5 +26,21 @@ class AdoptionRemoteDataSourceImpl implements AdoptionRemoteDataSource {
         .single();
 
     return AdoptionPostModel.fromJson(response);
+  }
+
+
+    @override
+  Future<List<AdoptionPostModel>> getAdoptionPosts() async {
+    final response = await _supabase
+        .from('adoption_posts')
+        .select()
+        .eq('status', 'available')
+        .order('created_at', ascending: false);
+
+    return (response as List)
+        .map(
+          (json) => AdoptionPostModel.fromJson(json),
+        )
+        .toList();
   }
 }

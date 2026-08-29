@@ -6,10 +6,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:get_it/get_it.dart';
-import 'package:rifq_v2/features/auth/domain/use_cases/auth_use_case.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
-import 'package:rifq_v2/shared/presentation/router/routers.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
@@ -59,7 +56,8 @@ class ResetPasswordScreen extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                       color: context.primary400,
                     ),
-                    SizedBox(height: 8.h),
+            ),
+                SizedBox(height: 8.h),
 
                     Text(
                       'Please enter your new password to proceed.',
@@ -118,7 +116,7 @@ class ResetPasswordScreen extends StatelessWidget {
             ),
           );
         },
-      ),
-    );
-  }
+   
+   
+  );}
 }

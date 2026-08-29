@@ -10,6 +10,9 @@ class AddPetStepOne extends StatelessWidget {
   final Function(File) onImagePicked;
   final File? photoFile;
   final String selectedGender;
+  final bool showAdoptionFields;
+  final TextEditingController? locationCtrl;
+  final TextEditingController? phoneCtrl;
 
   const AddPetStepOne({
     super.key,
@@ -18,6 +21,9 @@ class AddPetStepOne extends StatelessWidget {
     required this.onImagePicked,
     required this.photoFile,
     required this.selectedGender,
+    this.showAdoptionFields = false,
+    this.locationCtrl,
+    this.phoneCtrl,
   });
 
   Future<void> pickImage(BuildContext context) async {
@@ -188,6 +194,73 @@ class AddPetStepOne extends StatelessWidget {
 
             ///-------------input gender-------------------------
             SizedBox(height: 16),
+
+            if (showAdoptionFields) ...[
+              const SizedBox(height: 24),
+
+              Text('Location', style: context.body1),
+              const SizedBox(height: 12),
+
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFFE5E5E5)),
+                ),
+                child: TextField(
+                  controller: locationCtrl,
+                  style: context.body2,
+                  decoration: InputDecoration(
+                    hintText: 'Riyadh',
+                    hintStyle: context.body2.copyWith(
+                      color: context.neutral500,
+                    ),
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 16,
+                    ),
+                    prefixIcon: Icon(
+                      CupertinoIcons.location,
+                      color: context.neutral500,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              Text('Phone Number', style: context.body1),
+              const SizedBox(height: 12),
+
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFFE5E5E5)),
+                ),
+                child: TextField(
+                  controller: phoneCtrl,
+                  keyboardType: TextInputType.phone,
+                  style: context.body2,
+                  decoration: InputDecoration(
+                    hintText: '05XXXXXXXX',
+                    hintStyle: context.body2.copyWith(
+                      color: context.neutral500,
+                    ),
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 16,
+                    ),
+                    prefixIcon: Icon(
+                      CupertinoIcons.phone,
+                      color: context.neutral500,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),

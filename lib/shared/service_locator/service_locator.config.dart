@@ -183,7 +183,10 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i578.EditPetCubit(gh<_i430.EditPetUseCase>()),
     );
     gh.factory<_i431.AdoptionCubit>(
-      () => _i431.AdoptionCubit(gh<_i824.CreateAdoptionPostUseCase>()),
+      () => _i431.AdoptionCubit(
+        gh<_i824.CreateAdoptionPostUseCase>(),
+        gh<_i425.FetchAdoptionPostsUseCase>(),
+      ),
     );
     gh.singleton<_i261.LocalKeysService>(() => _i261.LocalKeysService());
     return this;

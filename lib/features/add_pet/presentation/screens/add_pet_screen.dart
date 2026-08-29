@@ -8,7 +8,7 @@ import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/presentation/widgets/custome_button_widgets.dart';
 import 'package:rifq_v2/features/add_pet/presentation/cubit/add_pet_cubit.dart';
 import 'package:rifq_v2/features/add_pet/presentation/widgets/add_pet_stepper.dart';
-import 'package:rifq_v2/features/add_pet/presentation/widgets/step1_add_pet.dart';
+import 'package:rifq_v2/shared/presentation/widgets/step1_add_pet.dart';
 import 'package:rifq_v2/features/add_pet/presentation/widgets/step2_add_pet.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:rifq_v2/shared/service_locator/service_locator.dart';
@@ -43,7 +43,7 @@ class AddPetFormState {
 
 @RoutePage()
 class AddPetScreen extends StatelessWidget {
-  AddPetScreen({super.key});
+  AddPetScreen({super.key, this.showAdoptionFields = false});
 
   final PageController controller = PageController();
   final ValueNotifier<int> currentStep = ValueNotifier(0);
@@ -53,6 +53,10 @@ class AddPetScreen extends StatelessWidget {
 
   final TextEditingController nameCtrl = TextEditingController();
   final TextEditingController breedCtrl = TextEditingController();
+
+  final bool showAdoptionFields;
+  final TextEditingController locationCtrl = TextEditingController();
+  final TextEditingController phoneCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -121,6 +125,9 @@ class AddPetScreen extends StatelessWidget {
                           nameCtrl: nameCtrl,
                           selectedGender: form.gender,
                           photoFile: form.photoFile,
+                          showAdoptionFields: showAdoptionFields,
+                          locationCtrl: locationCtrl,
+                          phoneCtrl: phoneCtrl,
                           onImagePicked: (file) {
                             formState.value = formState.value.copyWith(
                               photoFile: file,

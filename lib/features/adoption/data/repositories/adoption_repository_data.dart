@@ -25,4 +25,15 @@ Future<Result<AdoptionPostEntity, Object>> createAdoptionPost({
     return Error(e);
   }
 }
+@override
+Future<Result<List<AdoptionPostEntity>, Object>> getAdoptionPosts() async {
+  try {
+    final result = await _remoteDataSource.getAdoptionPosts();
+
+    return Success(result);
+  } catch (e) {
+    return Error(e);
+  }
+}
+
 }

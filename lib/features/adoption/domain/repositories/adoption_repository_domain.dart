@@ -5,4 +5,6 @@ abstract class AdoptionRepositoryDomain {
   Future<Result<AdoptionPostEntity, Object>> createAdoptionPost({
     required AdoptionPostEntity adoptionPost,
   });
+
+  Future<Result<List<AdoptionPostEntity>, Object>> getAdoptionPosts();
 }

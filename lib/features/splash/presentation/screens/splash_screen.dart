@@ -18,7 +18,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  //   final Duration minDuration = 2000.ms;
+    final Duration minDuration = 2000.ms;
 
   //   @override
   //   void initState() {

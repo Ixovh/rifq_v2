@@ -45,12 +45,18 @@ class AccountRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [AddPetScreen]
 class AddPetRoute extends PageRouteInfo<AddPetRouteArgs> {
-  AddPetRoute({Key? key, List<PageRouteInfo>? children})
-    : super(
-        AddPetRoute.name,
-        args: AddPetRouteArgs(key: key),
-        initialChildren: children,
-      );
+  AddPetRoute({
+    Key? key,
+    bool showAdoptionFields = false,
+    List<PageRouteInfo>? children,
+  }) : super(
+         AddPetRoute.name,
+         args: AddPetRouteArgs(
+           key: key,
+           showAdoptionFields: showAdoptionFields,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'AddPetRoute';
 
@@ -60,30 +66,35 @@ class AddPetRoute extends PageRouteInfo<AddPetRouteArgs> {
       final args = data.argsAs<AddPetRouteArgs>(
         orElse: () => const AddPetRouteArgs(),
       );
-      return AddPetScreen(key: args.key);
+      return AddPetScreen(
+        key: args.key,
+        showAdoptionFields: args.showAdoptionFields,
+      );
     },
   );
 }
 
 class AddPetRouteArgs {
-  const AddPetRouteArgs({this.key});
+  const AddPetRouteArgs({this.key, this.showAdoptionFields = false});
 
   final Key? key;
 
+  final bool showAdoptionFields;
+
   @override
   String toString() {
-    return 'AddPetRouteArgs{key: $key}';
+    return 'AddPetRouteArgs{key: $key, showAdoptionFields: $showAdoptionFields}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! AddPetRouteArgs) return false;
-    return key == other.key;
+    return key == other.key && showAdoptionFields == other.showAdoptionFields;
   }
 
   @override
-  int get hashCode => key.hashCode;
+  int get hashCode => key.hashCode ^ showAdoptionFields.hashCode;
 }
 
 /// generated route for
