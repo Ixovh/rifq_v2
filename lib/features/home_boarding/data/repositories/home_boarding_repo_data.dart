@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:rifq_v2/features/home_boarding/data/datasources/home_boarding_data_source.dart';
+import 'package:rifq_v2/features/home_boarding/domain/entities/boarding_request_entity.dart';
 import 'package:rifq_v2/features/home_boarding/domain/entities/home_boarding_detail_entity.dart';
 import 'package:rifq_v2/features/home_boarding/domain/entities/home_boarding_entity.dart';
 import 'package:rifq_v2/features/home_boarding/domain/repositories/home_boarding_repository_domain.dart';
@@ -25,4 +26,16 @@ class HomeBoardingRepoData implements HomeBoardingRepoDomain {
   Future<Result<HomeBoardingDetailEntity, Object>> getSitterDetail({
     required String sitterId,
   }) async => await homeBoardingDataSource.getSitterDetail(sitterId: sitterId);
+
+  @override
+  Future<Result<BoardingRequestEntity?, Object>> getPendingRequest({
+    required String sitterId,
+  }) async =>
+      await homeBoardingDataSource.getPendingRequest(sitterId: sitterId);
+
+  @override
+  Future<Result<BoardingRequestEntity, Object>> sendBoardingRequest({
+    required String sitterId,
+  }) async =>
+      await homeBoardingDataSource.sendBoardingRequest(sitterId: sitterId);
 }

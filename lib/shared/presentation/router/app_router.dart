@@ -18,6 +18,7 @@ import 'package:rifq_v2/features/auth/presentation/screens/reset_password_screen
 import 'package:rifq_v2/features/auth/presentation/screens/sends_to_email_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/welcome_screen.dart';
 import 'package:rifq_v2/features/home/presentation/screens/home_feature_screen.dart';
+import 'package:rifq_v2/features/home_boarding/presentation/screens/request_sent_screen.dart';
 import 'package:rifq_v2/features/home_boarding/presentation/screens/sitter_detail_screen.dart';
 import 'package:rifq_v2/features/hotel/presentation/screens/hotel_detail_screen.dart';
 import 'package:rifq_v2/features/hotel/presentation/screens/hotel_list_screen.dart';
@@ -59,5 +60,6 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: ConfirmAndPayRoute.page, path: '/confirm-and-pay'),
     AutoRoute(page: PaymentSuccessRoute.page, path: '/payment-success'),
     AutoRoute(page: ReceiptRoute.page, path: '/receipt'),
+    AutoRoute(page: RequestSentRoute.page, path: '/request-sent'),
   ];
 }

@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:multiple_result/multiple_result.dart';
+import 'package:rifq_v2/features/home_boarding/domain/entities/boarding_request_entity.dart';
 import 'package:rifq_v2/features/home_boarding/domain/entities/home_boarding_detail_entity.dart';
 import 'package:rifq_v2/features/home_boarding/domain/entities/home_boarding_entity.dart';
 import 'package:rifq_v2/features/home_boarding/domain/repositories/home_boarding_repository_domain.dart';
@@ -22,4 +23,13 @@ class HomeBoardingUseCase {
   Future<Result<HomeBoardingDetailEntity, Object>> getSitterDetail({
     required String sitterId,
   }) async => await homeBoardingRepoData.getSitterDetail(sitterId: sitterId);
+
+  Future<Result<BoardingRequestEntity?, Object>> getPendingRequest({
+    required String sitterId,
+  }) async => await homeBoardingRepoData.getPendingRequest(sitterId: sitterId);
+
+  Future<Result<BoardingRequestEntity, Object>> sendBoardingRequest({
+    required String sitterId,
+  }) async =>
+      await homeBoardingRepoData.sendBoardingRequest(sitterId: sitterId);
 }

@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
+import 'package:rifq_v2/features/home_boarding/presentation/cubit/boarding_request_cubit.dart';
 import 'package:rifq_v2/features/home_boarding/presentation/cubit/sitter_detail_cubit.dart';
 import 'package:rifq_v2/features/hotel/presentation/widgets/book_now_button_widget.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
+import 'package:rifq_v2/shared/presentation/router/app_router.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/presentation/widgets/lottie_loding.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -17,8 +20,17 @@ class SitterDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => GetIt.I<SitterDetailCubit>()..loadSitterDetail(sitterId),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) =>
+              GetIt.I<SitterDetailCubit>()..loadSitterDetail(sitterId),
+        ),
+        BlocProvider(
+          create: (_) =>
+              GetIt.I<BoardingRequestCubit>()..checkExistingRequest(sitterId),
+        ),
+      ],
       child: _SitterDetailView(sitterId: sitterId),
     );
   }
@@ -38,180 +50,208 @@ class _SitterDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.background,
-      body: SafeArea(
-        child: BlocBuilder<SitterDetailCubit, SitterDetailState>(
-          builder: (context, state) {
-            if (state is SitterDetailLoading || state is SitterDetailInitial) {
-              return const LottieLoding();
-            }
+    return BlocListener<BoardingRequestCubit, BoardingRequestState>(
+      listener: (context, state) {
+        if (state is BoardingRequestSent) {
+          context.router.push(const RequestSentRoute());
+        } else if (state is BoardingRequestError) {
+          context.showErrorToast(state.msg);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: context.background,
+        body: SafeArea(
+          child: BlocBuilder<SitterDetailCubit, SitterDetailState>(
+            builder: (context, state) {
+              if (state is SitterDetailLoading ||
+                  state is SitterDetailInitial) {
+                return const LottieLoding();
+              }
 
-            if (state is SitterDetailError) {
-              return _ErrorView(
-                message: state.msg,
-                onRetry: () => context
-                    .read<SitterDetailCubit>()
-                    .loadSitterDetail(sitterId),
-              );
-            }
+              if (state is SitterDetailError) {
+                return _ErrorView(
+                  message: state.msg,
+                  onRetry: () => context
+                      .read<SitterDetailCubit>()
+                      .loadSitterDetail(sitterId),
+                );
+              }
 
-            final detail = (state as SitterDetailLoaded).detail;
+              final detail = (state as SitterDetailLoaded).detail;
 
-            return Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.w),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        onPressed: () => context.router.maybePop(),
-                        icon: Icon(
-                          Icons.arrow_back_ios_new,
-                          color: context.neutral1000,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: ListView(
-                    padding: EdgeInsets.fromLTRB(18.w, 0, 18.w, 24.h),
-                    children: [
-                      Center(child: _SitterAvatar(imageUrl: detail.imageUrl)),
-                      SizedBox(height: 12.h),
-                      Center(
-                        child: Text(
-                          detail.name,
-                          style: context.h4.copyWith(
-                            color: context.neutral1000,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 4.h),
-                      Center(
-                        child: Text(
-                          detail.specialty,
-                          style: context.body2.copyWith(
-                            color: context.neutral600,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 8.h),
-                      Center(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ...List.generate(
-                              5,
-                              (i) => Icon(
-                                Icons.star_rounded,
-                                size: 16.sp,
-                                color: i < detail.rating.round()
-                                    ? context.warning
-                                    : context.neutral300,
-                              ),
-                            ),
-                            SizedBox(width: 6.w),
-                            Text(
-                              '(${detail.reviewCount} reviews)',
-                              style: context.body3.copyWith(
-                                color: context.neutral600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 16.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          _InfoChip(
-                            icon: Icons.location_on_outlined,
-                            label: detail.areaText,
-                          ),
-                          _InfoChip(
-                            icon: Icons.payments_outlined,
-                            label:
-                                'SAR ${detail.pricePerNight.toStringAsFixed(0)}/night',
-                          ),
-                          _InfoChip(
-                            icon: Icons.work_history_outlined,
-                            label: '${detail.yearsExperience} yrs exp.',
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20.h),
-                      SizedBox(
-                        width: double.infinity,
-                        child: OutlinedButton.icon(
-                          onPressed: detail.phoneNumber == null
-                              ? null
-                              : () => _contactSitter(detail.phoneNumber!),
-                          style: OutlinedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(vertical: 12.h),
-                            side: BorderSide(color: context.primary300),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.r),
-                            ),
-                          ),
+              return Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.w),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          onPressed: () => context.router.maybePop(),
                           icon: Icon(
-                            Icons.call_outlined,
-                            color: context.primary300,
+                            Icons.arrow_back_ios_new,
+                            color: context.neutral1000,
                           ),
-                          label: Text(
-                            'Contact',
-                            style: context.body2.copyWith(
-                              color: context.primary300,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView(
+                      padding: EdgeInsets.fromLTRB(18.w, 0, 18.w, 24.h),
+                      children: [
+                        Center(child: _SitterAvatar(imageUrl: detail.imageUrl)),
+                        SizedBox(height: 12.h),
+                        Center(
+                          child: Text(
+                            detail.name,
+                            style: context.h4.copyWith(
+                              color: context.neutral1000,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
-                      ),
-                      if ((detail.bio ?? '').isNotEmpty) ...[
-                        SizedBox(height: 20.h),
-                        Text(
-                          'About',
-                          style: context.body1.copyWith(
-                            color: context.neutral1000,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        SizedBox(height: 6.h),
-                        Text(
-                          detail.bio!,
-                          style: context.body3.copyWith(
-                            color: context.neutral700,
-                          ),
-                        ),
-                      ],
-                      if (detail.skills.isNotEmpty) ...[
-                        SizedBox(height: 20.h),
-                        Text(
-                          'Skills',
-                          style: context.body1.copyWith(
-                            color: context.neutral1000,
-                            fontWeight: FontWeight.w600,
+                        SizedBox(height: 4.h),
+                        Center(
+                          child: Text(
+                            detail.specialty,
+                            style: context.body2.copyWith(
+                              color: context.neutral600,
+                            ),
                           ),
                         ),
                         SizedBox(height: 8.h),
-                        Wrap(
-                          spacing: 8.w,
-                          runSpacing: 8.h,
-                          children: detail.skills
-                              .map((skill) => _SkillTag(label: skill))
-                              .toList(),
+                        Center(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ...List.generate(
+                                5,
+                                (i) => Icon(
+                                  Icons.star_rounded,
+                                  size: 16.sp,
+                                  color: i < detail.rating.round()
+                                      ? context.warning
+                                      : context.neutral300,
+                                ),
+                              ),
+                              SizedBox(width: 6.w),
+                              Text(
+                                '(${detail.reviewCount} reviews)',
+                                style: context.body3.copyWith(
+                                  color: context.neutral600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 16.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            _InfoChip(
+                              icon: Icons.location_on_outlined,
+                              label: detail.areaText,
+                            ),
+                            _InfoChip(
+                              icon: Icons.payments_outlined,
+                              label:
+                                  'SAR ${detail.pricePerNight.toStringAsFixed(0)}/night',
+                            ),
+                            _InfoChip(
+                              icon: Icons.work_history_outlined,
+                              label: '${detail.yearsExperience} yrs exp.',
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 20.h),
+                        SizedBox(
+                          width: double.infinity,
+                          child: OutlinedButton.icon(
+                            onPressed: detail.phoneNumber == null
+                                ? null
+                                : () => _contactSitter(detail.phoneNumber!),
+                            style: OutlinedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(vertical: 12.h),
+                              side: BorderSide(color: context.primary300),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.r),
+                              ),
+                            ),
+                            icon: Icon(
+                              Icons.call_outlined,
+                              color: context.primary300,
+                            ),
+                            label: Text(
+                              'Contact',
+                              style: context.body2.copyWith(
+                                color: context.primary300,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                        if ((detail.bio ?? '').isNotEmpty) ...[
+                          SizedBox(height: 20.h),
+                          Text(
+                            'About',
+                            style: context.body1.copyWith(
+                              color: context.neutral1000,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(height: 6.h),
+                          Text(
+                            detail.bio!,
+                            style: context.body3.copyWith(
+                              color: context.neutral700,
+                            ),
+                          ),
+                        ],
+                        if (detail.skills.isNotEmpty) ...[
+                          SizedBox(height: 20.h),
+                          Text(
+                            'Skills',
+                            style: context.body1.copyWith(
+                              color: context.neutral1000,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(height: 8.h),
+                          Wrap(
+                            spacing: 8.w,
+                            runSpacing: 8.h,
+                            children: detail.skills
+                                .map((skill) => _SkillTag(label: skill))
+                                .toList(),
+                          ),
+                        ],
+                        SizedBox(height: 24.h),
+                        BlocBuilder<BoardingRequestCubit, BoardingRequestState>(
+                          builder: (context, requestState) {
+                            final alreadyPending =
+                                requestState is BoardingRequestAlreadyPending;
+                            final sending =
+                                requestState is BoardingRequestSending;
+                            return BookNowButton(
+                              label: alreadyPending
+                                  ? 'Request Pending'
+                                  : 'Send Request',
+                              isLoading: sending,
+                              onPressed: alreadyPending
+                                  ? null
+                                  : () => context
+                                        .read<BoardingRequestCubit>()
+                                        .sendRequest(sitterId),
+                            );
+                          },
                         ),
                       ],
-                      SizedBox(height: 24.h),
-                      const BookNowButton(label: 'Send Request'),
-                    ],
+                    ),
                   ),
-                ),
-              ],
-            );
-          },
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

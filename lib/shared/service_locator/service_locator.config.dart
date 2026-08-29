@@ -92,6 +92,8 @@ import '../../features/home_boarding/domain/repositories/home_boarding_repositor
     as _i926;
 import '../../features/home_boarding/domain/use_cases/home_boarding_use_case.dart'
     as _i1033;
+import '../../features/home_boarding/presentation/cubit/boarding_request_cubit.dart'
+    as _i782;
 import '../../features/home_boarding/presentation/cubit/home_boarding_list_cubit.dart'
     as _i323;
 import '../../features/home_boarding/presentation/cubit/sitter_detail_cubit.dart'
@@ -206,6 +208,9 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i1033.HomeBoardingUseCase(
         homeBoardingRepoData: gh<_i926.HomeBoardingRepoDomain>(),
       ),
+    );
+    gh.factory<_i782.BoardingRequestCubit>(
+      () => _i782.BoardingRequestCubit(gh<_i1033.HomeBoardingUseCase>()),
     );
     gh.factory<_i323.HomeBoardingListCubit>(
       () => _i323.HomeBoardingListCubit(gh<_i1033.HomeBoardingUseCase>()),

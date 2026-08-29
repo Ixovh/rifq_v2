@@ -641,6 +641,22 @@ class ReceiptRouteArgs {
 }
 
 /// generated route for
+/// [RequestSentScreen]
+class RequestSentRoute extends PageRouteInfo<void> {
+  const RequestSentRoute({List<PageRouteInfo>? children})
+    : super(RequestSentRoute.name, initialChildren: children);
+
+  static const String name = 'RequestSentRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RequestSentScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [ResetPasswordScreen]
 class ResetPasswordRoute extends PageRouteInfo<void> {
   const ResetPasswordRoute({List<PageRouteInfo>? children})
