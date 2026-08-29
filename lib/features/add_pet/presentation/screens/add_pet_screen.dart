@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/presentation/widgets/custome_button_widgets.dart';
 import 'package:rifq_v2/features/add_pet/presentation/cubit/add_pet_cubit.dart';
 import 'package:rifq_v2/features/add_pet/presentation/widgets/add_pet_stepper.dart';
@@ -39,6 +40,7 @@ class AddPetFormState {
     );
   }
 }
+
 @RoutePage()
 class AddPetScreen extends StatelessWidget {
   AddPetScreen({super.key});
@@ -67,22 +69,10 @@ class AddPetScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is AddPetLoading) {
           } else if (state is AddPetSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                behavior: SnackBarBehavior.floating,
-                backgroundColor: context.green10,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                margin: EdgeInsets.only(bottom: 10, left: 16, right: 16),
-                content: Text("Pet added successfully"),
-              ),
-            );
+            context.showSuccessToast('Pet added successfully');
             Navigator.pop(context, true);
           } else if (state is AddPetFailure) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.error)));
+            context.showErrorToast(state.error);
           }
         },
         child: Scaffold(
@@ -168,55 +158,57 @@ class AddPetScreen extends StatelessWidget {
                 child: ValueListenableBuilder<int>(
                   valueListenable: currentStep,
                   builder: (context, step, _) {
-                    return CustomeButtonWidgets(
-                      titel: step == 1 ? "Save" : "Next",
-                      onPressed: () async {
-                        final form = formState.value;
+                    return BlocBuilder<AddPetCubit, AddPetState>(
+                      builder: (context, state) {
+                        return CustomeButtonWidgets(
+                          titel: step == 1 ? "Save" : "Next",
+                          isLoading: state is AddPetLoading,
+                          onPressed: () async {
+                            final form = formState.value;
 
-                        if (step == 0) {
-                          currentStep.value = 1;
-                          controller.nextPage(
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.ease,
-                          );
-                          return;
-                        }
+                            if (step == 0) {
+                              currentStep.value = 1;
+                              controller.nextPage(
+                                duration: Duration(milliseconds: 300),
+                                curve: Curves.ease,
+                              );
+                              return;
+                            }
 
-                        if (form.photoFile == null ||
-                            nameCtrl.text.isEmpty ||
-                            breedCtrl.text.isEmpty ||
-                            form.gender.isEmpty ||
-                            form.species.isEmpty ||
-                            form.birthdate == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("Please complete all fields"),
-                            ),
-                          );
-                          return;
-                        }
+                            if (form.photoFile == null ||
+                                nameCtrl.text.isEmpty ||
+                                breedCtrl.text.isEmpty ||
+                                form.gender.isEmpty ||
+                                form.species.isEmpty ||
+                                form.birthdate == null) {
+                              context.showWarningToast(
+                                'Please complete all fields',
+                              );
+                              return;
+                            }
 
-                        final ownerId = await getOwnerId();
+                            final ownerId = await getOwnerId();
 
-                        if (ownerId == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("User profile not found")),
-                          );
-                          return;
-                        }
+                            if (ownerId == null) {
+                              if (!context.mounted) return;
+                              context.showErrorToast('User profile not found');
+                              return;
+                            }
 
-                        context.read<AddPetCubit>().addPet(
-                          ownerId: ownerId,
-                          name: nameCtrl.text,
-                          species: form.species,
-                          gender: form.gender,
-                          breed: breedCtrl.text,
-                          birthdate: form.birthdate!,
-                          photoFile: form.photoFile!,
+                            context.read<AddPetCubit>().addPet(
+                              ownerId: ownerId,
+                              name: nameCtrl.text,
+                              species: form.species,
+                              gender: form.gender,
+                              breed: breedCtrl.text,
+                              birthdate: form.birthdate!,
+                              photoFile: form.photoFile!,
+                            );
+                          },
+                          buttonWidth: 366,
+                          buttonhight: 58,
                         );
                       },
-                      buttonWidth: 366,
-                      buttonhight: 58,
                     );
                   },
                 ),

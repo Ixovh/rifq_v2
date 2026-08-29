@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rifq_v2/features/adoption/presentation/screens/adoption_feature_screen.dart';
 import 'package:rifq_v2/features/home/presentation/screens/home_feature_screen.dart';
 
-
 import 'nav_state.dart';
 
 class NavCubit extends Cubit<NavState> {

@@ -1,4 +1,3 @@
-
 enum LoadingState { initial, loading, success, error }
 
 enum NetworkStatus { connected, disconnected, unknown }
@@ -6,6 +5,8 @@ enum NetworkStatus { connected, disconnected, unknown }
 enum StateLoadUser { local, remote }
 
 enum AuthStatus { authenticated, unauthenticated, unknown }
+
+enum OtpPurpose { signUp, resetPassword, emailChange }
 
 enum LanguagesEnum {
   ar,
@@ -21,4 +22,3 @@ enum LanguagesEnum {
     }
   }
 }
-

@@ -12,7 +12,6 @@ import 'package:rifq_v2/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:rifq_v2/shared/presentation/widgets/container_button.dart';
 import 'package:rifq_v2/features/auth/presentation/widgets/custom_form_builder_text_field.dart';
 
-
 class LoginTab extends StatelessWidget {
   const LoginTab({super.key});
 
@@ -71,9 +70,7 @@ class LoginTab extends StatelessWidget {
         SizedBox(height: 8.h),
         TextButton(
           onPressed: () {
-            context.pushRoute(
-  const SendsToEmailRoute(),
-);
+            context.pushRoute(const SendsToEmailRoute());
             // context.push(Routes.sendsToEmail, extra: cubit);
           },
           child: Text(

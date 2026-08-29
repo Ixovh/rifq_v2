@@ -137,5 +137,3 @@ class UnknownFailure extends Failure {
 class CancelledFailure extends Failure {
   const CancelledFailure([super.message = 'Cancelled']);
 }
-
-

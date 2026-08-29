@@ -23,7 +23,7 @@ class AccountCubit extends Cubit<AccountState> {
 
   AccountCubit(this._accountUseCase) : super(AccountInitial());
 
-  Future<void> loadAccount() async {
+  Future<void> loadAccount({bool forceRefresh = false}) async {
     emit(AccountLoading());
 
     if (AuthHelper.isGuestUser()) {
@@ -31,7 +31,7 @@ class AccountCubit extends Cubit<AccountState> {
       return;
     }
 
-    (await _accountUseCase.getAccountData()).when(
+    (await _accountUseCase.getAccountData(forceRefresh: forceRefresh)).when(
       (data) {
         _populateEditControllers(data);
         emit(AccountLoadedState(data: data));

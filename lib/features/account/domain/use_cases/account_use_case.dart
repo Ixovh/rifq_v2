@@ -11,8 +11,9 @@ class AccountUseCase {
 
   const AccountUseCase({required this.accountRepoData});
 
-  Future<Result<AccountDataEntity, Object>> getAccountData() async =>
-      await accountRepoData.getAccountData();
+  Future<Result<AccountDataEntity, Object>> getAccountData({
+    bool forceRefresh = false,
+  }) async => await accountRepoData.getAccountData(forceRefresh: forceRefresh);
 
   Future<Result<AccountUpdateResult, Object>> updateProfile({
     required String fullName,

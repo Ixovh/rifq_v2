@@ -2,10 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
-import 'package:rifq_v2/shared/presentation/router/routers.dart';
 import 'package:rifq_v2/shared/presentation/theme/app_color.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
-
 
 class GuestCard extends StatelessWidget {
   const GuestCard({super.key});
@@ -54,13 +52,13 @@ class GuestCard extends StatelessWidget {
           SizedBox(height: 16.h),
           TextButton(
             onPressed: () {
-              context.pushRoute(AuthRoute(role:'pet_owner'));
+              context.pushRoute(AuthRoute(role: 'pet_owner'));
             },
             child: Center(
               child: Text(
                 "Get Started Now",
                 style: context.h4.copyWith(
-                  color: AppColors.primary100,
+                  color: AppColors.primary300,
                   fontWeight: FontWeight.w400,
                 ),
               ),

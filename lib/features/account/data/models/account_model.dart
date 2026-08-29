@@ -56,15 +56,33 @@ class AccountPetModel extends AccountPetEntity with AccountPetModelMappable {
   @override
   final bool listedForAdoption;
 
+  @override
+  final DateTime? birthdate;
+
+  @override
+  final double? weight;
+
+  @override
+  final String species;
+
   const AccountPetModel({
     required super.id,
     required super.name,
+    this.species = '',
     required super.gender,
     required super.breed,
     super.age,
+    this.birthdate,
+    this.weight,
     this.photoUrl,
     this.listedForAdoption = false,
-  }) : super(photoUrl: photoUrl, listedForAdoption: listedForAdoption);
+  }) : super(
+         species: species,
+         birthdate: birthdate,
+         weight: weight,
+         photoUrl: photoUrl,
+         listedForAdoption: listedForAdoption,
+       );
 
   factory AccountPetModel.fromJson(Map<String, dynamic> json) =>
       AccountPetModelMapper.fromMap(json);

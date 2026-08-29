@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_pickers.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
-
 
 class AddPetStepTwo extends StatelessWidget {
   final Function(String) onSpeciesSelected;
@@ -21,6 +21,36 @@ class AddPetStepTwo extends StatelessWidget {
     required this.selectedBirthdate,
   });
 
+  bool get _isDropdownSpecies {
+    return selectedSpecies.isNotEmpty &&
+        selectedSpecies != 'cat' &&
+        selectedSpecies != 'dog';
+  }
+
+  String get _dropdownLabel {
+    for (final option in otherSpecies) {
+      if (option.value == selectedSpecies) return option.label;
+    }
+    return 'Other';
+  }
+
+  Future<void> _pickDate(BuildContext context) async {
+    final picked = await showAppDatePicker(
+      context: context,
+      selectedDate: selectedBirthdate,
+      title: 'Choose date of birth',
+    );
+    if (picked != null) onBirthdateSelected(picked);
+  }
+
+  Future<void> _pickSpecies(BuildContext context) async {
+    final picked = await showAppSpeciesSheet(
+      context: context,
+      selectedSpecies: selectedSpecies,
+    );
+    if (picked != null) onSpeciesSelected(picked);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,98 +60,67 @@ class AddPetStepTwo extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 20),
-
-            // ----------------age----------------
+            const SizedBox(height: 20),
             Text("What's your pet's age ?", style: context.body1),
-            SizedBox(height: 10),
-
-            InkWell(
-              onTap: () async {
-                final today = DateTime.now();
-                final picked = await showDatePicker(
-                  context: context,
-                  initialDate: selectedBirthdate ?? today,
-                  firstDate: DateTime(2000),
-                  lastDate: today,
-                );
-
-                if (picked != null) {
-                  onBirthdateSelected(picked);
-                }
-              },
-              child: Container(
-                height: 58,
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: Colors.grey.shade300),
-                ),
-                child: Row(
-                  children: [
-                    Icon(CupertinoIcons.calendar, color: Colors.grey.shade600),
-                    SizedBox(width: 10),
-                    Text(
-                      selectedBirthdate == null
-                          ? "Choose Date"
-                          : DateFormat('dd/MM/yyyy').format(selectedBirthdate!),
-                      style: TextStyle(
-                        color: selectedBirthdate == null
-                            ? Colors.grey.shade500
-                            : Colors.black,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
+            const SizedBox(height: 10),
+            _InputTile(
+              onTap: () => _pickDate(context),
+              isActive: selectedBirthdate != null,
+              leading: Icon(
+                CupertinoIcons.calendar,
+                color: selectedBirthdate != null
+                    ? context.primary300
+                    : context.neutral600,
               ),
+              label: selectedBirthdate == null
+                  ? 'Choose Date'
+                  : DateFormat('dd/MM/yyyy').format(selectedBirthdate!),
+              isPlaceholder: selectedBirthdate == null,
             ),
-
             if (selectedBirthdate != null) ...[
-               SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
-                "Age: ${_calculateAge(selectedBirthdate!)} years",
+                'Age: ${_ageLabel(selectedBirthdate!)}',
                 style: context.body2.copyWith(color: context.neutral600),
               ),
             ],
-
-            SizedBox(height: 30),
-
-            // ----------------species----------------
-            Text("What type of pet do you have ?", style: context.body1),
-            SizedBox(height: 20),
-
+            const SizedBox(height: 30),
+            Text('What type of pet do you have ?', style: context.body1),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 _buildSpeciesBox(
                   context,
-                  img: "assets/images/Frame 1984077842.png",
-                  label: "Cat",
-                  selected: selectedSpecies == "cat",
-                  onTap: () => onSpeciesSelected("cat"),
+                  img: 'assets/images/Frame 1984077842.png',
+                  label: 'Cat',
+                  selected: selectedSpecies == 'cat',
+                  onTap: () => onSpeciesSelected('cat'),
                 ),
                 _buildSpeciesBox(
                   context,
-                  img: "assets/images/Frame 1984077843.png",
-                  label: "Dog",
-                  selected: selectedSpecies == "dog",
-                  onTap: () => onSpeciesSelected("dog"),
+                  img: 'assets/images/Frame 1984077843.png',
+                  label: 'Dog',
+                  selected: selectedSpecies == 'dog',
+                  onTap: () => onSpeciesSelected('dog'),
                 ),
               ],
             ),
-
-            SizedBox(height: 20),
-
-            _buildOtherOption(context),
-            SizedBox(height: 30),
-
-            // ----------------BREED----------------
+            const SizedBox(height: 20),
+            _InputTile(
+              onTap: () => _pickSpecies(context),
+              isActive: _isDropdownSpecies,
+              label: _dropdownLabel,
+              trailing: Icon(
+                CupertinoIcons.chevron_down,
+                color: _isDropdownSpecies
+                    ? context.primary300
+                    : context.neutral600,
+              ),
+            ),
+            const SizedBox(height: 30),
             Text("What's your pet's breed ?", style: context.body1),
-            SizedBox(height: 20),
-
+            const SizedBox(height: 20),
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -132,7 +131,7 @@ class AddPetStepTwo extends StatelessWidget {
                 controller: breedCtrl,
                 style: context.body2,
                 decoration: InputDecoration(
-                  hintText: "Husky",
+                  hintText: 'Husky',
                   hintStyle: context.body2.copyWith(color: context.neutral500),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(
@@ -165,17 +164,17 @@ class AddPetStepTwo extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
               border: Border.all(
-                color: selected ? Color(0xff2DB598) : Colors.transparent,
+                color: selected ? context.primary300 : Colors.transparent,
                 width: 3,
               ),
               image: DecorationImage(image: AssetImage(img), fit: BoxFit.cover),
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             label,
             style: context.body1.copyWith(
-              color: selected ? Color(0xff2DB598) : Colors.grey.shade700,
+              color: selected ? context.primary300 : Colors.grey.shade700,
             ),
           ),
         ],
@@ -183,38 +182,76 @@ class AddPetStepTwo extends StatelessWidget {
     );
   }
 
-  int _calculateAge(DateTime birthdate) {
+  /// Matches pet profile age formatting (months when under 1 year).
+  String _ageLabel(DateTime birthdate) {
     final now = DateTime.now();
-    int years = now.year - birthdate.year;
-    if (now.month < birthdate.month ||
-        (now.month == birthdate.month && now.day < birthdate.day)) {
-      years--;
+    var months =
+        (now.year - birthdate.year) * 12 + now.month - birthdate.month;
+    if (now.day < birthdate.day) months--;
+    if (months < 0) months = 0;
+
+    if (months < 12) {
+      final display = months < 1 ? 1 : months;
+      return display == 1 ? '1 month' : '$display month';
     }
-    return years;
+
+    final years = months ~/ 12;
+    return years == 1 ? '1 Year' : '$years Years';
   }
+}
 
-  Widget _buildOtherOption(BuildContext context) {
-    final isSelected = selectedSpecies == "other";
+class _InputTile extends StatelessWidget {
+  const _InputTile({
+    required this.onTap,
+    required this.label,
+    required this.isActive,
+    this.leading,
+    this.trailing,
+    this.isPlaceholder = false,
+  });
 
-    return InkWell(
-      onTap: () => onSpeciesSelected("other"),
-      child: Container(
-        height: 58,
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xffE4F7F1) : Colors.white,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: isSelected ? const Color(0xff2DB598) : Colors.grey.shade300,
+  final VoidCallback onTap;
+  final String label;
+  final bool isActive;
+  final Widget? leading;
+  final Widget? trailing;
+  final bool isPlaceholder;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: isActive ? const Color(0xffE4F7F1) : Colors.white,
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          height: 58,
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: isActive ? context.primary300 : Colors.grey.shade300,
+            ),
           ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Other", style: context.body1),
-            Icon(CupertinoIcons.chevron_down, color: Colors.grey.shade600),
-          ],
+          child: Row(
+            children: [
+              ?leading,
+              if (leading != null) const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  label,
+                  style: context.body2.copyWith(
+                    color: isPlaceholder
+                        ? context.neutral500
+                        : context.neutral1000,
+                  ),
+                ),
+              ),
+              ?trailing,
+            ],
+          ),
         ),
       ),
     );

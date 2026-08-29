@@ -8,10 +8,13 @@ import 'package:rifq_v2/shared/constants/storage_buckets.dart';
 import 'package:rifq_v2/shared/errors/custome_exception.dart';
 import 'package:rifq_v2/shared/storage_service/auth_helper.dart';
 import 'package:rifq_v2/shared/storage_service/profile_image_cache.dart';
+import 'package:rifq_v2/shared/storage_service/user_data_store.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class BaseAccountDataSource {
-  Future<Result<AccountDataEntity, Object>> getAccountData();
+  Future<Result<AccountDataEntity, Object>> getAccountData({
+    bool forceRefresh = false,
+  });
 
   Future<Result<AccountUpdateResult, Object>> updateProfile({
     required String fullName,
@@ -35,7 +38,9 @@ class AccountDataSource implements BaseAccountDataSource {
       'id, role, full_name, phone_number, image_url, created_at, updated_at';
 
   @override
-  Future<Result<AccountDataEntity, Object>> getAccountData() async {
+  Future<Result<AccountDataEntity, Object>> getAccountData({
+    bool forceRefresh = false,
+  }) async {
     try {
       if (AuthHelper.isGuestUser()) {
         return Error('guest');
@@ -46,71 +51,14 @@ class AccountDataSource implements BaseAccountDataSource {
         return Error('User not found');
       }
 
-      final profileRow = await _supabase
-          .from('profiles')
-          .select(_profileSelect)
-          .eq('id', userId)
-          .maybeSingle();
+      var snapshot = forceRefresh ? null : UserDataStore.read(userId);
+      snapshot ??= await UserDataStore.fetchAndCache(_supabase, userId);
 
-      if (profileRow == null) {
-        return Error('Profile not found');
-      }
-
-      final profile = AccountModel.fromJson(profileRow);
-      final email = _supabase.auth.currentUser?.email ?? '';
-
-      final petsRows = await _supabase
-          .from('pets')
-          .select('''
-            id,
-            name,
-            gender,
-            breed,
-            age,
-            pet_photos ( public_url, is_primary, display_order ),
-            adoption_posts ( status )
-          ''')
-          .eq('owner_id', userId)
-          .order('created_at', ascending: false);
-
-      final pets = (petsRows as List<dynamic>).map((raw) {
-        final row = Map<String, dynamic>.from(raw as Map);
-        final photos = (row['pet_photos'] as List<dynamic>?) ?? [];
-        String? photoUrl;
-        if (photos.isNotEmpty) {
-          final sorted = [...photos]
-            ..sort((a, b) {
-              final aMap = Map<String, dynamic>.from(a as Map);
-              final bMap = Map<String, dynamic>.from(b as Map);
-              final aPrimary = aMap['is_primary'] == true ? 0 : 1;
-              final bPrimary = bMap['is_primary'] == true ? 0 : 1;
-              if (aPrimary != bPrimary) return aPrimary.compareTo(bPrimary);
-              final aOrder = aMap['display_order'] as int? ?? 0;
-              final bOrder = bMap['display_order'] as int? ?? 0;
-              return aOrder.compareTo(bOrder);
-            });
-          photoUrl =
-              (Map<String, dynamic>.from(sorted.first as Map))['public_url']
-                  as String?;
-        }
-
-        final adoptionPosts = (row['adoption_posts'] as List<dynamic>?) ?? [];
-        final listedForAdoption = adoptionPosts.any(
-          (post) =>
-              (post as Map)['status'] == 'available' ||
-              post['status'] == 'pending',
-        );
-
-        return AccountPetModel(
-          id: row['id'] as String,
-          name: row['name'] as String? ?? '',
-          gender: row['gender'] as String? ?? '',
-          breed: row['breed'] as String? ?? '',
-          age: row['age'] as int?,
-          photoUrl: photoUrl,
-          listedForAdoption: listedForAdoption,
-        );
-      }).toList();
+      final profile = AccountModel.fromJson(UserDataStore.profileOf(snapshot));
+      final email = (snapshot['email'] as String?) ?? '';
+      final pets = UserDataStore.petsOf(
+        snapshot,
+      ).map(AccountPetModel.fromJson).toList();
 
       return Success(
         AccountDataEntity(profile: profile, email: email, pets: pets),
@@ -129,12 +77,23 @@ class AccountDataSource implements BaseAccountDataSource {
     bool removeImage = false,
     required String email,
   }) async {
-    try {
-      final userId = AuthHelper.getUserId() ?? _supabase.auth.currentUser?.id;
-      if (userId == null) {
-        return Error('User not found');
-      }
+    final userId = AuthHelper.getUserId() ?? _supabase.auth.currentUser?.id;
+    if (userId == null) {
+      return Error('User not found');
+    }
 
+    // Local-first: apply the edits to the cached snapshot before hitting the
+    // server, so every screen reading the store sees them immediately.
+    // Kept for rollback if the server rejects the update.
+    final previousSnapshot = UserDataStore.read(userId);
+    await UserDataStore.mergeProfileFields(userId, {
+      'full_name': fullName.trim().isEmpty ? null : fullName.trim(),
+      'phone_number': phoneNumber?.trim().isEmpty == true
+          ? null
+          : phoneNumber?.trim(),
+    });
+
+    try {
       final uploadedImageUrl = imageFile != null
           ? await _replaceProfileImage(userId: userId, file: imageFile)
           : null;
@@ -176,6 +135,14 @@ class AccountDataSource implements BaseAccountDataSource {
         resolvedEmail = emailConfirmationPending ? currentEmail : nextEmail;
       }
 
+      // Sync the store with the authoritative server row (adds image_url
+      // and updated_at on top of the optimistic local write above).
+      await UserDataStore.mergeProfileFields(
+        userId,
+        Map<String, dynamic>.from(updated),
+        email: resolvedEmail,
+      );
+
       return Success(
         AccountUpdateResult(
           profile: AccountModel.fromJson(updated),
@@ -185,6 +152,9 @@ class AccountDataSource implements BaseAccountDataSource {
         ),
       );
     } catch (e) {
+      if (previousSnapshot != null) {
+        await UserDataStore.write(userId, previousSnapshot);
+      }
       return Result.error(CatchErrorMessage(error: e).getWriteMessage());
     }
   }
@@ -197,6 +167,7 @@ class AccountDataSource implements BaseAccountDataSource {
       await AuthHelper.logout();
       if (userId != null) {
         await ProfileImageCache.clear(userId);
+        await UserDataStore.clear(userId);
       }
       return Success(null);
     } catch (e) {
@@ -209,9 +180,15 @@ class AccountDataSource implements BaseAccountDataSource {
     required File file,
   }) async {
     final compressed = await ProfileImageCache.compress(file);
+
+    // Drop the stale local copy and old remote files before uploading, and
+    // use a timestamped name so the public URL changes — otherwise clients
+    // that cached the previous URL would keep showing the old picture.
+    await ProfileImageCache.clear(userId);
     await _deleteRemoteProfileImages(userId);
 
-    final storagePath = '$userId/avatar.jpg';
+    final storagePath =
+        '$userId/avatar_${DateTime.now().millisecondsSinceEpoch}.jpg';
     await _supabase.storage
         .from(StorageBuckets.userProfiles)
         .upload(

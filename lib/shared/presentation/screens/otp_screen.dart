@@ -9,9 +9,10 @@ import 'package:get_it/get_it.dart';
 import 'package:pinput/pinput.dart';
 import 'package:rifq_v2/features/auth/domain/use_cases/auth_use_case.dart';
 import 'package:rifq_v2/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:rifq_v2/shared/constants/otp_purpose.dart';
+import 'package:rifq_v2/shared/constants/app_enums.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/presentation/widgets/container_button.dart';
 import 'package:rifq_v2/shared/presentation/widgets/custom_bottom_sheet.dart';
 
@@ -48,15 +49,8 @@ class OtpScreen extends StatelessWidget {
             listener: (context, state) {
               switch (state) {
                 case AuthSuccessState _:
-                  if (purpose == OtpPurpose.resetPassword) {
-                    context.pushRoute(const ResetPasswordRoute());
-                  } else if (purpose == OtpPurpose.emailChange) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Email updated successfully'),
-                      ),
-                    );
-
+                  if (purpose == OtpPurpose.emailChange) {
+                    context.showSuccessToast('Email updated successfully');
                     context.router.popUntil(
                       (route) =>
                           route.settings.name == AccountRoute.name ||
@@ -85,9 +79,7 @@ class OtpScreen extends StatelessWidget {
                   //   }
                   break;
                 case AuthErrorState _:
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(state.msg)));
+                  context.showErrorToast(state.msg);
                   break;
                 default:
                   break;
@@ -212,9 +204,7 @@ class _OtpContentState extends State<_OtpContent> {
         if (state is AuthOtpResentState) {
           setState(() => _isResending = false);
           _startTimer();
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(const SnackBar(content: Text('OTP sent again')));
+          context.showInfoToast('OTP sent again');
         } else if (state is AuthErrorState && _isResending) {
           setState(() => _isResending = false);
         }

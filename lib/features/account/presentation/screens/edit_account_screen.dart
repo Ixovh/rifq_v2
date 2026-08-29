@@ -9,9 +9,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:rifq_v2/features/account/presentation/cubit/account_cubit.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/account_avatar.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/account_outlined_field.dart';
-import 'package:rifq_v2/shared/constants/otp_purpose.dart';
+import 'package:rifq_v2/features/account/presentation/widgets/account_phone_field.dart';
+import 'package:rifq_v2/shared/constants/app_enums.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/presentation/widgets/container_button.dart';
 import 'package:rifq_v2/shared/presentation/widgets/lottie_loding.dart';
 import 'package:rifq_v2/shared/storage_service/profile_image_cache.dart';
@@ -57,9 +59,7 @@ class _EditAccountViewState extends State<_EditAccountView> {
       });
     } catch (_) {
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Could not pick image')));
+      context.showErrorToast('Could not pick image');
     }
   }
 
@@ -125,9 +125,7 @@ class _EditAccountViewState extends State<_EditAccountView> {
         if (state is AccountUpdateSuccessState) {
           if (state.emailConfirmationPending &&
               (state.pendingEmail?.isNotEmpty ?? false)) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('We sent an OTP to your new email')),
-            );
+            context.showInfoToast('We sent an OTP to your new email');
             await context.pushRoute(
               OtpRoute(
                 email: state.pendingEmail!,
@@ -140,15 +138,11 @@ class _EditAccountViewState extends State<_EditAccountView> {
             return;
           }
 
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(const SnackBar(content: Text('Profile updated')));
+          context.showSuccessToast('Profile updated');
           context.router.maybePop(true);
         }
         if (state is AccountErrorState) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.msg)));
+          context.showErrorToast(state.msg);
         }
       },
       builder: (context, state) {
@@ -280,10 +274,13 @@ class _EditAccountViewState extends State<_EditAccountView> {
                             },
                           ),
                           SizedBox(height: 42.h),
-                          AccountOutlinedField(
-                            label: 'Phone number',
-                            controller: cubit.phoneController,
-                            keyboardType: TextInputType.phone,
+                          AccountPhoneField(
+                            initialValue: cubit.phoneController.text,
+                            onChanged: (phone) {
+                              cubit.phoneController.text = phone.number.isEmpty
+                                  ? ''
+                                  : phone.completeNumber;
+                            },
                           ),
                           SizedBox(height: 40.h),
                         ],

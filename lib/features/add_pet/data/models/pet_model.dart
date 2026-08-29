@@ -27,13 +27,13 @@ class PetModel extends AddPetEntity with PetModelMappable {
     required this.photoUrl,
     required this.createdAt,
   }) : super(
-          id: id,
-          ownerId: ownerId,
-          name: name,
-          species: species,
-          gender: gender,
-          breed: breed,
-          birthdate: birthdate,
-          photoUrl: photoUrl,
-        );
+         id: id,
+         ownerId: ownerId,
+         name: name,
+         species: species,
+         gender: gender,
+         breed: breed,
+         birthdate: birthdate,
+         photoUrl: photoUrl,
+       );
 }

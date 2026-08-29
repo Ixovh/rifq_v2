@@ -20,4 +20,3 @@ class LocalKeysService {
   final String userEmail = 'user_email';
   final String userAvatar = 'user_avatar';
 }
-

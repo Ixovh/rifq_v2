@@ -10,15 +10,9 @@ class AddPetStepper extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _buildLine(
-          isActive: currentStep == 0 || currentStep == 1,
-          width: 120,
-        ),
+        _buildLine(isActive: currentStep == 0 || currentStep == 1, width: 120),
         const SizedBox(width: 10),
-        _buildLine(
-          isActive: currentStep == 1,
-          width: 120,
-        ),
+        _buildLine(isActive: currentStep == 1, width: 120),
       ],
     );
   }

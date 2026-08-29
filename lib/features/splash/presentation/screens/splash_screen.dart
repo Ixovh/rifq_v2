@@ -8,6 +8,7 @@ import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.d
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
+
 @RoutePage()
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -96,40 +97,16 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     debugPrint("Splash init");
-
-    final existingSession = Supabase.instance.client.auth.currentSession;
-    if (existingSession != null) {
-      _handleNavigation();
-      return;
-    }
-
-    _authSub = Supabase.instance.client.auth.onAuthStateChange.listen((data) {
-      if (data.event == AuthChangeEvent.signedIn ||
-          data.event == AuthChangeEvent.initialSession) {
-        _handleNavigation();
-      }
-    });
-
-    _fallbackTimer = Timer(const Duration(milliseconds: 3500), () {
-      if (!_navigated) _handleNavigation();
-    });
-  }
-
-
-  Future<void> _handleNavigation() async {
-    if (_navigated || !mounted) return;
-    _navigated = true;
-    _fallbackTimer?.cancel();
-    await _authSub?.cancel();
-    await _checkAuth();
+    Future.delayed(minDuration, _checkAuth);
   }
 
   Future<void> _checkAuth() async {
-    final user = Supabase.instance.client.auth.currentUser;
+    final session = Supabase.instance.client.auth.currentUser;
     PageRouteInfo route = const ChoosePathRoute();
 
-    if (user != null) {
-      if (user.emailConfirmedAt == null) {
+    if (session != null) {
+      // ✅ هذا هو الإصلاح - تحقق أولاً
+      if (session.emailConfirmedAt == null) {
         await Supabase.instance.client.auth.signOut();
         if (!mounted) return;
         context.router.replace(const ChoosePathRoute());
@@ -139,13 +116,15 @@ class _SplashScreenState extends State<SplashScreen> {
       final profile = await Supabase.instance.client
           .from('profiles')
           .select('id, role')
-          .eq('id', user.id)
+          .eq('id', session.id)
           .maybeSingle();
 
       if (profile != null) {
         final role = profile['role'] as String?;
-        if (role == 'pet_owner' || role == 'service_provider') {
+        if (role == 'pet_owner') {
           route = const NavWrapperRoute();
+        } else if (role == 'service_provider') {
+          route = const NavWrapperRoute(); // غيّره لاحقاً لشاشة مقدم الخدمة
         }
       }
     }
@@ -153,6 +132,33 @@ class _SplashScreenState extends State<SplashScreen> {
     if (!mounted) return;
     context.router.replace(route);
   }
+  //حق حاتم القديم
+  //   Future<void> _checkAuth() async {
+  //     final session = Supabase.instance.client.auth.currentUser;
+  //     PageRouteInfo route = const ChoosePathRoute();
+
+  //     if (session != null) {
+  //       final provider = await Supabase.instance.client
+  //           .from('profiles')
+  //           .select('id')
+  //           .eq('id', session.id)
+  //           .maybeSingle();
+
+  //       final user = await Supabase.instance.client
+  //           .from('users')
+  //           .select('id')
+  //           .eq('id', session.id)
+  //           .maybeSingle();
+
+  //       // if (user != null) {
+  //       //   route = Routes.navbar;
+  //       // } else if (provider != null) {
+  //       //   route = Routes.providerNavbar;
+  //       // }
+  //     }
+  //     if (!mounted) return;
+  // context.router.replace(route);
+  //  }
 
   @override
   void dispose() {

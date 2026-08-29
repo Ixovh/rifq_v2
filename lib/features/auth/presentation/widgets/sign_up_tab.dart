@@ -9,9 +9,8 @@ import 'package:rifq_v2/shared/presentation/widgets/container_button.dart';
 import 'package:rifq_v2/features/auth/presentation/widgets/custom_form_builder_text_field.dart';
 
 class SignUpTab extends StatelessWidget {
-    final String role;
+  final String role;
   const SignUpTab({super.key, required this.role});
-
 
   @override
   Widget build(BuildContext context) {

@@ -220,6 +220,13 @@ class AccountPetModelMapper extends ClassMapperBase<AccountPetModel> {
   static const Field<AccountPetModel, String> _f$id = Field('id', _$id);
   static String _$name(AccountPetModel v) => v.name;
   static const Field<AccountPetModel, String> _f$name = Field('name', _$name);
+  static String _$species(AccountPetModel v) => v.species;
+  static const Field<AccountPetModel, String> _f$species = Field(
+    'species',
+    _$species,
+    opt: true,
+    def: '',
+  );
   static String _$gender(AccountPetModel v) => v.gender;
   static const Field<AccountPetModel, String> _f$gender = Field(
     'gender',
@@ -234,6 +241,18 @@ class AccountPetModelMapper extends ClassMapperBase<AccountPetModel> {
   static const Field<AccountPetModel, int> _f$age = Field(
     'age',
     _$age,
+    opt: true,
+  );
+  static DateTime? _$birthdate(AccountPetModel v) => v.birthdate;
+  static const Field<AccountPetModel, DateTime> _f$birthdate = Field(
+    'birthdate',
+    _$birthdate,
+    opt: true,
+  );
+  static double? _$weight(AccountPetModel v) => v.weight;
+  static const Field<AccountPetModel, double> _f$weight = Field(
+    'weight',
+    _$weight,
     opt: true,
   );
   static String? _$photoUrl(AccountPetModel v) => v.photoUrl;
@@ -256,9 +275,12 @@ class AccountPetModelMapper extends ClassMapperBase<AccountPetModel> {
   final MappableFields<AccountPetModel> fields = const {
     #id: _f$id,
     #name: _f$name,
+    #species: _f$species,
     #gender: _f$gender,
     #breed: _f$breed,
     #age: _f$age,
+    #birthdate: _f$birthdate,
+    #weight: _f$weight,
     #photoUrl: _f$photoUrl,
     #listedForAdoption: _f$listedForAdoption,
   };
@@ -267,9 +289,12 @@ class AccountPetModelMapper extends ClassMapperBase<AccountPetModel> {
     return AccountPetModel(
       id: data.dec(_f$id),
       name: data.dec(_f$name),
+      species: data.dec(_f$species),
       gender: data.dec(_f$gender),
       breed: data.dec(_f$breed),
       age: data.dec(_f$age),
+      birthdate: data.dec(_f$birthdate),
+      weight: data.dec(_f$weight),
       photoUrl: data.dec(_f$photoUrl),
       listedForAdoption: data.dec(_f$listedForAdoption),
     );
@@ -340,9 +365,12 @@ abstract class AccountPetModelCopyWith<$R, $In extends AccountPetModel, $Out>
   $R call({
     String? id,
     String? name,
+    String? species,
     String? gender,
     String? breed,
     int? age,
+    DateTime? birthdate,
+    double? weight,
     String? photoUrl,
     bool? listedForAdoption,
   });
@@ -363,18 +391,24 @@ class _AccountPetModelCopyWithImpl<$R, $Out>
   $R call({
     String? id,
     String? name,
+    String? species,
     String? gender,
     String? breed,
     Object? age = $none,
+    Object? birthdate = $none,
+    Object? weight = $none,
     Object? photoUrl = $none,
     bool? listedForAdoption,
   }) => $apply(
     FieldCopyWithData({
       if (id != null) #id: id,
       if (name != null) #name: name,
+      if (species != null) #species: species,
       if (gender != null) #gender: gender,
       if (breed != null) #breed: breed,
       if (age != $none) #age: age,
+      if (birthdate != $none) #birthdate: birthdate,
+      if (weight != $none) #weight: weight,
       if (photoUrl != $none) #photoUrl: photoUrl,
       if (listedForAdoption != null) #listedForAdoption: listedForAdoption,
     }),
@@ -383,9 +417,12 @@ class _AccountPetModelCopyWithImpl<$R, $Out>
   AccountPetModel $make(CopyWithData data) => AccountPetModel(
     id: data.get(#id, or: $value.id),
     name: data.get(#name, or: $value.name),
+    species: data.get(#species, or: $value.species),
     gender: data.get(#gender, or: $value.gender),
     breed: data.get(#breed, or: $value.breed),
     age: data.get(#age, or: $value.age),
+    birthdate: data.get(#birthdate, or: $value.birthdate),
+    weight: data.get(#weight, or: $value.weight),
     photoUrl: data.get(#photoUrl, or: $value.photoUrl),
     listedForAdoption: data.get(
       #listedForAdoption,

@@ -7,9 +7,7 @@ abstract class NavState extends Equatable {
   List<Object?> get props => [];
 }
 
-class NavInitialState extends NavState {
-
-}
+class NavInitialState extends NavState {}
 
 class NavLoadingState extends NavState {}
 

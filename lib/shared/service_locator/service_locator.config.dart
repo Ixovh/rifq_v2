@@ -38,17 +38,37 @@ import '../../features/adoption/domain/repositories/adoption_repository_domain.d
     as _i785;
 import '../../features/adoption/domain/use_cases/create_adoption_post_use_case.dart'
     as _i824;
+import '../../features/adoption/domain/use_cases/fetch_adoption_posts_use_case.dart'
+    as _i425;
 import '../../features/adoption/presentation/cubit/adoption_cubit.dart'
-    as _i430;
+    as _i431;
 import '../../features/auth/data/datasources/auth_data_source.dart' as _i970;
 import '../../features/auth/data/repositories/auth_repo_data.dart' as _i400;
 import '../../features/auth/domain/repositories/auth_repository_domain.dart'
     as _i998;
 import '../../features/auth/domain/use_cases/auth_use_case.dart' as _i283;
-import '../../features/home/data/datasources/home_remote_data_source.dart'
-    as _i362;
-import '../../features/home/data/repositories/home_repository_data.dart'
-    as _i145;
+import '../../features/edit_pet/data/datasources/edit_pet_data_source.dart'
+    as _i897;
+import '../../features/edit_pet/data/repositories/edit_pet_repo_data.dart'
+    as _i76;
+import '../../features/edit_pet/domain/repositories/edit_pet_repository_domain.dart'
+    as _i628;
+import '../../features/edit_pet/domain/use_cases/edit_pet_use_case.dart'
+    as _i430;
+import '../../features/edit_pet/presentation/cubit/edit_pet_cubit.dart'
+    as _i578;
+import '../../features/health_record/data/datasources/health_record_data_source.dart'
+    as _i664;
+import '../../features/health_record/data/repositories/health_record_repo_data.dart'
+    as _i589;
+import '../../features/health_record/domain/repositories/health_record_repository_domain.dart'
+    as _i375;
+import '../../features/health_record/domain/use_cases/health_record_use_case.dart'
+    as _i653;
+import '../../features/health_record/presentation/cubit/health_record_cubit.dart'
+    as _i1036;
+import '../../features/home/data/datasources/home_data_source.dart' as _i426;
+import '../../features/home/data/repositories/home_repo_data.dart' as _i475;
 import '../../features/home/domain/repositories/home_repository_domain.dart'
     as _i257;
 import '../../features/home/domain/use_cases/home_use_case.dart' as _i933;
@@ -74,17 +94,26 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i734.BaseAddPetDataSource>(
       () => _i734.AddPetDataSource(gh<_i454.SupabaseClient>()),
     );
-    gh.lazySingleton<_i362.BaseHomeDataSource>(
-      () => _i362.HomeDataSource(gh<_i454.SupabaseClient>()),
-    );
     gh.lazySingleton<_i970.BaseAuthDataSource>(
       () => _i970.SubaBaseDataSource(
         supabase: gh<_i454.SupabaseClient>(),
         box: gh<_i792.GetStorage>(),
       ),
     );
+    gh.lazySingleton<_i426.BaseHomeDataSource>(
+      () => _i426.HomeDataSource(supabase: gh<_i454.SupabaseClient>()),
+    );
+    gh.lazySingleton<_i897.BaseEditPetDataSource>(
+      () => _i897.EditPetDataSource(supabase: gh<_i454.SupabaseClient>()),
+    );
+    gh.lazySingleton<_i257.HomeRepoDomain>(
+      () => _i475.HomeRepoData(homeDataSource: gh<_i426.BaseHomeDataSource>()),
+    );
     gh.lazySingleton<_i1012.BaseAccountDataSource>(
       () => _i1012.AccountDataSource(supabase: gh<_i454.SupabaseClient>()),
+    );
+    gh.lazySingleton<_i664.BaseHealthRecordDataSource>(
+      () => _i664.HealthRecordDataSource(supabase: gh<_i454.SupabaseClient>()),
     );
     gh.lazySingleton<_i998.AuthRepoDomain>(
       () => _i400.AuthRepoData(authDataSource: gh<_i970.BaseAuthDataSource>()),
@@ -92,17 +121,24 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i52.AddPetRepoDomain>(
       () => _i63.AddPetRepoData(gh<_i734.BaseAddPetDataSource>()),
     );
-    gh.lazySingleton<_i257.HomeRepoDomain>(
-      () => _i145.HomeRepoImpl(gh<_i362.BaseHomeDataSource>()),
+    gh.lazySingleton<_i933.HomeUseCase>(
+      () => _i933.HomeUseCase(homeRepoData: gh<_i257.HomeRepoDomain>()),
     );
     gh.lazySingleton<_i785.AdoptionRepositoryDomain>(
       () => _i321.AdoptionRepositoryData(gh<_i956.AdoptionRemoteDataSource>()),
     );
-    gh.factory<_i933.GetHomeDataUseCase>(
-      () => _i933.GetHomeDataUseCase(gh<_i257.HomeRepoDomain>()),
-    );
     gh.lazySingleton<_i283.AuthUseCase>(
       () => _i283.AuthUseCase(authRepoData: gh<_i998.AuthRepoDomain>()),
+    );
+    gh.lazySingleton<_i628.EditPetRepoDomain>(
+      () => _i76.EditPetRepoData(
+        editPetDataSource: gh<_i897.BaseEditPetDataSource>(),
+      ),
+    );
+    gh.lazySingleton<_i375.HealthRecordRepoDomain>(
+      () => _i589.HealthRecordRepoData(
+        healthRecordDataSource: gh<_i664.BaseHealthRecordDataSource>(),
+      ),
     );
     gh.lazySingleton<_i533.AccountRepoDomain>(
       () => _i1013.AccountRepoData(
@@ -113,9 +149,22 @@ extension GetItInjectableX on _i174.GetIt {
       () =>
           _i824.CreateAdoptionPostUseCase(gh<_i785.AdoptionRepositoryDomain>()),
     );
+    gh.factory<_i425.FetchAdoptionPostsUseCase>(
+      () =>
+          _i425.FetchAdoptionPostsUseCase(gh<_i785.AdoptionRepositoryDomain>()),
+    );
     gh.lazySingleton<_i803.AccountUseCase>(
       () =>
           _i803.AccountUseCase(accountRepoData: gh<_i533.AccountRepoDomain>()),
+    );
+    gh.lazySingleton<_i653.HealthRecordUseCase>(
+      () => _i653.HealthRecordUseCase(
+        healthRecordRepoData: gh<_i375.HealthRecordRepoDomain>(),
+      ),
+    );
+    gh.lazySingleton<_i430.EditPetUseCase>(
+      () =>
+          _i430.EditPetUseCase(editPetRepoData: gh<_i628.EditPetRepoDomain>()),
     );
     gh.factory<_i667.AddPetUseCase>(
       () => _i667.AddPetUseCase(gh<_i52.AddPetRepoDomain>()),
@@ -123,14 +172,18 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i439.AccountCubit>(
       () => _i439.AccountCubit(gh<_i803.AccountUseCase>()),
     );
+    gh.factory<_i9.HomeCubit>(() => _i9.HomeCubit(gh<_i933.HomeUseCase>()));
     gh.factory<_i493.AddPetCubit>(
       () => _i493.AddPetCubit(gh<_i667.AddPetUseCase>()),
     );
-    gh.factory<_i9.HomeCubit>(
-      () => _i9.HomeCubit(gh<_i933.GetHomeDataUseCase>()),
+    gh.factory<_i1036.HealthRecordCubit>(
+      () => _i1036.HealthRecordCubit(gh<_i653.HealthRecordUseCase>()),
     );
-    gh.factory<_i430.AdoptionCubit>(
-      () => _i430.AdoptionCubit(gh<_i824.CreateAdoptionPostUseCase>()),
+    gh.factory<_i578.EditPetCubit>(
+      () => _i578.EditPetCubit(gh<_i430.EditPetUseCase>()),
+    );
+    gh.factory<_i431.AdoptionCubit>(
+      () => _i431.AdoptionCubit(gh<_i824.CreateAdoptionPostUseCase>()),
     );
     gh.singleton<_i261.LocalKeysService>(() => _i261.LocalKeysService());
     return this;

@@ -11,41 +11,33 @@ class HomeInitial extends HomeState {}
 
 class HomeLoading extends HomeState {}
 
-///!!----------------USER IS GUEST------------------
-class HomeGuestState extends HomeState {}
+class HomeGuestState extends HomeState {
+  const HomeGuestState();
+}
 
-///!!----------------NO PETS-------------------
 class HomeEmptyState extends HomeState {
-  final String username;
-  final String? imageUrl;
+  final HomeDataEntity data;
 
-  const HomeEmptyState(this.username, {this.imageUrl});
+  const HomeEmptyState({required this.data});
 
   @override
-  List<Object?> get props => [username, imageUrl];
+  List<Object?> get props => [data];
 }
 
-///!!----------------HAS PETS-------------------
 class HomeLoadedState extends HomeState {
-  final String username;
-  final String? imageUrl;
-  final List<PetModel> pets;
+  final HomeDataEntity data;
 
-  const HomeLoadedState({
-    required this.username,
-    this.imageUrl,
-    required this.pets,
-  });
+  const HomeLoadedState({required this.data});
 
   @override
-  List<Object?> get props => [username, imageUrl, pets];
+  List<Object?> get props => [data];
 }
 
-class HomeError extends HomeState {
-  final String message;
+class HomeErrorState extends HomeState {
+  final String msg;
 
-  const HomeError(this.message);
+  const HomeErrorState({required this.msg});
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [msg];
 }

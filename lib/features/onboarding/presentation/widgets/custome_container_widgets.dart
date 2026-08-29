@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/shared/presentation/theme/app_color.dart';
 
-class CustomeContainerWidgets extends StatelessWidget{
+class CustomeContainerWidgets extends StatelessWidget {
   final String title;
   final String subTitle;
   final int pageIndex;
   final PageController controller;
 
   const CustomeContainerWidgets({
-    super.key, required this.title,
+    super.key,
+    required this.title,
     required this.subTitle,
     required this.pageIndex,
     required this.controller,
@@ -26,8 +27,11 @@ class CustomeContainerWidgets extends StatelessWidget{
         left: 18.w,
       ),
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(topLeft:Radius.circular(50),topRight:Radius.circular(50),)
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(50),
+          topRight: Radius.circular(50),
+        ),
       ),
       child: SingleChildScrollView(
         physics: NeverScrollableScrollPhysics(),
@@ -51,7 +55,9 @@ class CustomeContainerWidgets extends StatelessWidget{
                             width: isActive ? 22.w : 18.w,
                             height: isActive ? 22.w : 18.w,
                             decoration: BoxDecoration(
-                              color: isActive ? AppColors.primary200 : Colors.white,
+                              color: isActive
+                                  ? AppColors.primary200
+                                  : Colors.white,
                               borderRadius: BorderRadius.circular(50),
                               border: Border.all(color: AppColors.primary200),
                             ),
@@ -69,16 +75,28 @@ class CustomeContainerWidgets extends StatelessWidget{
                 );
               },
             ),
-            Text(title,style: TextStyle(color: AppColors.neutral900,fontSize:32.sp,fontWeight: FontWeight.w500)),
+            Text(
+              title,
+              style: TextStyle(
+                color: AppColors.neutral900,
+                fontSize: 32.sp,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
             SizedBox(height: 18.h),
-            Text(subTitle,textAlign: TextAlign.center,style: TextStyle(color: AppColors.neutral800,fontSize:18.sp,fontWeight: FontWeight.w400)),
-            SizedBox(height: 24.h,),
+            Text(
+              subTitle,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: AppColors.neutral800,
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            SizedBox(height: 24.h),
           ],
-
-    )));
-
-
+        ),
+      ),
+    );
   }
 }
-
-

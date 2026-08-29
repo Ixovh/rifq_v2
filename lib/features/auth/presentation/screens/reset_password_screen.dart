@@ -12,6 +12,7 @@ import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/router/routers.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/presentation/widgets/container_button.dart';
 import 'package:rifq_v2/shared/presentation/widgets/custom_bottom_sheet.dart';
 import 'package:rifq_v2/features/auth/presentation/widgets/custom_form_builder_text_field.dart';
@@ -22,46 +23,41 @@ class ResetPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => AuthCubit(GetIt.I.get<AuthUseCase>()),
-      child: Builder(
-        builder: (context) {
-          final cubit = context.read<AuthCubit>();
-          return BlocListener<AuthCubit, AuthState>(
-            listener: (context, state) {
-              switch (state) {
-                case AuthPasswordResetSuccessState _:
-                  context.replaceRoute(AuthRoute(role: 'pet_owner'));
-                  // context.push(Routes.auth);
-                  break;
-                case AuthLoadingState _:
-                  Center(child: CircularProgressIndicator());
-                  break;
-                case AuthErrorState _:
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(state.msg)));
-                  break;
-                default:
-                  Center(child: CircularProgressIndicator());
-                  break;
-              }
-            },
-            child: Scaffold(
-              backgroundColor: context.neutral100,
-              resizeToAvoidBottomInset: false,
-              bottomSheet: CustomBottomSheet(
-                content: Column(
-                  mainAxisAlignment: .center,
-                  crossAxisAlignment: .center,
-                  children: [
-                    Text(
-                      'Reset Password',
-                      style: context.h5.copyWith(
-                        fontSize: 24.sp,
-                        fontWeight: FontWeight.w500,
-                        color: context.primary400,
-                      ),
+    return Builder(
+      builder: (context) {
+        final cubit = context.read<AuthCubit>();
+        return BlocListener<AuthCubit, AuthState>(
+          listener: (context, state) {
+            switch (state) {
+              case AuthPasswordResetSuccessState _:
+                context.replaceRoute(AuthRoute(role: 'pet_owner'));
+                // context.push(Routes.auth);
+                break;
+              case AuthLoadingState _:
+                Center(child: CircularProgressIndicator());
+                break;
+              case AuthErrorState _:
+                context.showErrorToast(state.msg);
+                break;
+              default:
+                Center(child: CircularProgressIndicator());
+                break;
+            }
+          },
+          child: Scaffold(
+            backgroundColor: context.neutral100,
+            resizeToAvoidBottomInset: false,
+            bottomSheet: CustomBottomSheet(
+              content: Column(
+                mainAxisAlignment: .center,
+                crossAxisAlignment: .center,
+                children: [
+                  Text(
+                    'Reset Password',
+                    style: context.h5.copyWith(
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.w500,
+                      color: context.primary400,
                     ),
                     SizedBox(height: 8.h),
 

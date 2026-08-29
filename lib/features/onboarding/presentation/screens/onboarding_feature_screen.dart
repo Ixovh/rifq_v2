@@ -11,7 +11,7 @@ import 'package:auto_route/auto_route.dart';
 @RoutePage()
 class OnbordingScreen extends StatelessWidget {
   final PageController controller = PageController();
-    final String role;
+  final String role;
 
   OnbordingScreen({super.key, required this.role});
   @override
@@ -170,7 +170,7 @@ class OnbordingScreen extends StatelessWidget {
                             } else {
                               //  context.router.push( AuthRoute(role:role));
 
-                              context.router.push( WelcomeRoute());
+                              context.router.push(WelcomeRoute());
                               // context.go(Routes.);
                             }
                           },

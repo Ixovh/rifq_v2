@@ -2,7 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:rifq_v2/features/auth/domain/entities/auth_entity.dart';
 import 'package:rifq_v2/features/auth/domain/repositories/auth_repository_domain.dart';
-import 'package:rifq_v2/shared/constants/otp_purpose.dart';
+import 'package:rifq_v2/shared/constants/app_enums.dart';
 
 @lazySingleton
 class AuthUseCase {
@@ -15,13 +15,12 @@ class AuthUseCase {
     required String email,
     required String password,
     required String role,
-  }) async =>
-      await authRepoData.signUp(
-        name: name,
-        email: email,
-        password: password,
-        role: role,
-      );
+  }) async => await authRepoData.signUp(
+    name: name,
+    email: email,
+    password: password,
+    role: role,
+  );
 
   Future<Result<Null, Object>> login({
     required String email,
@@ -51,10 +50,7 @@ class AuthUseCase {
     required String email,
     required OtpPurpose purpose,
   }) async {
-    return await authRepoData.resendOtp(
-      email: email,
-      purpose: purpose,
-    );
+    return await authRepoData.resendOtp(email: email, purpose: purpose);
   }
 
   Future<Result<Null, Object>> anonymousUser() async {

@@ -63,7 +63,7 @@ class ChoosePathScreen extends StatelessWidget {
                 PathButton(
                   title: "I own a pet",
                   icon: Icons.pets,
-            
+
                   onTap: () {
                     print("Pet button pressed");
                     context.router.push(OnbordingRoute(role: 'pet_owner'));
@@ -76,8 +76,8 @@ class ChoosePathScreen extends StatelessWidget {
                   title: "I provide care services",
                   icon: Icons.add_circle_outline,
                   onTap: () {
-    // context.router.push(OnbordingRoute(role: 'service_provider'));
-  },
+                    // context.router.push(OnbordingRoute(role: 'service_provider'));
+                  },
                 ),
 
                 SizedBox(height: 60.h),
