@@ -9,12 +9,14 @@ class PriceDetailsWidget extends StatelessWidget {
     required this.addonPriceTotal,
     required this.appServiceFee,
     required this.totalPrice,
+    this.title = 'Price Details',
   });
 
   final double roomPriceTotal;
   final double addonPriceTotal;
   final double appServiceFee;
   final double totalPrice;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class PriceDetailsWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Price Details',
+          title,
           style: context.body1.copyWith(
             color: context.neutral1000,
             fontWeight: FontWeight.w600,

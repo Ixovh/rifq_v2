@@ -594,6 +594,53 @@ class PetProfileRouteArgs {
 }
 
 /// generated route for
+/// [ReceiptScreen]
+class ReceiptRoute extends PageRouteInfo<ReceiptRouteArgs> {
+  ReceiptRoute({
+    Key? key,
+    required BookingConfirmationEntity confirmation,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ReceiptRoute.name,
+         args: ReceiptRouteArgs(key: key, confirmation: confirmation),
+         initialChildren: children,
+       );
+
+  static const String name = 'ReceiptRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ReceiptRouteArgs>();
+      return ReceiptScreen(key: args.key, confirmation: args.confirmation);
+    },
+  );
+}
+
+class ReceiptRouteArgs {
+  const ReceiptRouteArgs({this.key, required this.confirmation});
+
+  final Key? key;
+
+  final BookingConfirmationEntity confirmation;
+
+  @override
+  String toString() {
+    return 'ReceiptRouteArgs{key: $key, confirmation: $confirmation}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ReceiptRouteArgs) return false;
+    return key == other.key && confirmation == other.confirmation;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ confirmation.hashCode;
+}
+
+/// generated route for
 /// [ResetPasswordScreen]
 class ResetPasswordRoute extends PageRouteInfo<void> {
   const ResetPasswordRoute({List<PageRouteInfo>? children})

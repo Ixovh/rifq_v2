@@ -10,6 +10,7 @@ import 'package:rifq_v2/features/booking/domain/entities/hotel_booking_entity.da
 import 'package:rifq_v2/features/booking/presentation/screens/booking_details_screen.dart';
 import 'package:rifq_v2/features/booking/presentation/screens/confirm_and_pay_screen.dart';
 import 'package:rifq_v2/features/booking/presentation/screens/payment_success_screen.dart';
+import 'package:rifq_v2/features/booking/presentation/screens/receipt_screen.dart';
 import 'package:rifq_v2/features/hotel/domain/entities/hotel_detail_entity.dart';
 import 'package:rifq_v2/features/edit_pet/presentation/screens/edit_pet_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/auth_screen.dart';
@@ -57,5 +58,6 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: BookingDetailsRoute.page, path: '/booking-details'),
     AutoRoute(page: ConfirmAndPayRoute.page, path: '/confirm-and-pay'),
     AutoRoute(page: PaymentSuccessRoute.page, path: '/payment-success'),
+    AutoRoute(page: ReceiptRoute.page, path: '/receipt'),
   ];
 }
