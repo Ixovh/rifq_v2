@@ -25,7 +25,11 @@ class HotelRoomModelMapper extends ClassMapperBase<HotelRoomModel> {
   static String _$id(HotelRoomModel v) => v.id;
   static const Field<HotelRoomModel, String> _f$id = Field('id', _$id);
   static String _$name(HotelRoomModel v) => v.name;
-  static const Field<HotelRoomModel, String> _f$name = Field('name', _$name);
+  static const Field<HotelRoomModel, String> _f$name = Field(
+    'name',
+    _$name,
+    key: r'room_type',
+  );
   static double _$pricePerNight(HotelRoomModel v) => v.pricePerNight;
   static const Field<HotelRoomModel, double> _f$pricePerNight = Field(
     'pricePerNight',
@@ -36,7 +40,7 @@ class HotelRoomModelMapper extends ClassMapperBase<HotelRoomModel> {
   static const Field<HotelRoomModel, String> _f$sizeText = Field(
     'sizeText',
     _$sizeText,
-    key: r'size_text',
+    key: r'size_label',
     opt: true,
   );
   static List<String> _$includes(HotelRoomModel v) => v.includes;
@@ -44,11 +48,11 @@ class HotelRoomModelMapper extends ClassMapperBase<HotelRoomModel> {
     'includes',
     _$includes,
   );
-  static int? _$availableRooms(HotelRoomModel v) => v.availableRooms;
-  static const Field<HotelRoomModel, int> _f$availableRooms = Field(
-    'availableRooms',
-    _$availableRooms,
-    key: r'available_rooms',
+  static int? _$totalRooms(HotelRoomModel v) => v.totalRooms;
+  static const Field<HotelRoomModel, int> _f$totalRooms = Field(
+    'totalRooms',
+    _$totalRooms,
+    key: r'total_rooms',
     opt: true,
   );
 
@@ -59,7 +63,7 @@ class HotelRoomModelMapper extends ClassMapperBase<HotelRoomModel> {
     #pricePerNight: _f$pricePerNight,
     #sizeText: _f$sizeText,
     #includes: _f$includes,
-    #availableRooms: _f$availableRooms,
+    #totalRooms: _f$totalRooms,
   };
 
   static HotelRoomModel _instantiate(DecodingData data) {
@@ -69,7 +73,7 @@ class HotelRoomModelMapper extends ClassMapperBase<HotelRoomModel> {
       pricePerNight: data.dec(_f$pricePerNight),
       sizeText: data.dec(_f$sizeText),
       includes: data.dec(_f$includes),
-      availableRooms: data.dec(_f$availableRooms),
+      totalRooms: data.dec(_f$totalRooms),
     );
   }
 
@@ -142,7 +146,7 @@ abstract class HotelRoomModelCopyWith<$R, $In extends HotelRoomModel, $Out>
     double? pricePerNight,
     String? sizeText,
     List<String>? includes,
-    int? availableRooms,
+    int? totalRooms,
   });
   HotelRoomModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
@@ -171,7 +175,7 @@ class _HotelRoomModelCopyWithImpl<$R, $Out>
     double? pricePerNight,
     Object? sizeText = $none,
     List<String>? includes,
-    Object? availableRooms = $none,
+    Object? totalRooms = $none,
   }) => $apply(
     FieldCopyWithData({
       if (id != null) #id: id,
@@ -179,7 +183,7 @@ class _HotelRoomModelCopyWithImpl<$R, $Out>
       if (pricePerNight != null) #pricePerNight: pricePerNight,
       if (sizeText != $none) #sizeText: sizeText,
       if (includes != null) #includes: includes,
-      if (availableRooms != $none) #availableRooms: availableRooms,
+      if (totalRooms != $none) #totalRooms: totalRooms,
     }),
   );
   @override
@@ -189,7 +193,7 @@ class _HotelRoomModelCopyWithImpl<$R, $Out>
     pricePerNight: data.get(#pricePerNight, or: $value.pricePerNight),
     sizeText: data.get(#sizeText, or: $value.sizeText),
     includes: data.get(#includes, or: $value.includes),
-    availableRooms: data.get(#availableRooms, or: $value.availableRooms),
+    totalRooms: data.get(#totalRooms, or: $value.totalRooms),
   );
 
   @override

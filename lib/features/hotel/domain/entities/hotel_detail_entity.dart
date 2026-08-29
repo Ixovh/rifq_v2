@@ -7,7 +7,7 @@ class HotelRoomEntity extends Equatable {
   final double pricePerNight;
   final String? sizeText;
   final List<String> includes;
-  final int? availableRooms;
+  final int? totalRooms;
 
   const HotelRoomEntity({
     required this.id,
@@ -15,7 +15,7 @@ class HotelRoomEntity extends Equatable {
     required this.pricePerNight,
     this.sizeText,
     required this.includes,
-    this.availableRooms,
+    this.totalRooms,
   });
 
   @override
@@ -25,7 +25,7 @@ class HotelRoomEntity extends Equatable {
     pricePerNight,
     sizeText,
     includes,
-    availableRooms,
+    totalRooms,
   ];
 }
 

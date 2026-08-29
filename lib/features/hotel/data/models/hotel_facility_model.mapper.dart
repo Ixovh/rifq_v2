@@ -33,6 +33,7 @@ class HotelFacilityModelMapper extends ClassMapperBase<HotelFacilityModel> {
   static const Field<HotelFacilityModel, String> _f$name = Field(
     'name',
     _$name,
+    key: r'label',
   );
 
   @override

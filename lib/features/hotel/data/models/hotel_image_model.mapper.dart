@@ -28,7 +28,7 @@ class HotelImageModelMapper extends ClassMapperBase<HotelImageModel> {
   static const Field<HotelImageModel, String> _f$imageUrl = Field(
     'imageUrl',
     _$imageUrl,
-    key: r'image_url',
+    key: r'public_url',
   );
   static int _$displayOrder(HotelImageModel v) => v.displayOrder;
   static const Field<HotelImageModel, int> _f$displayOrder = Field(

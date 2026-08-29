@@ -1,5 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:rifq_v2/features/hotel/data/models/hotel_image_model.dart';
+import 'package:rifq_v2/features/hotel/data/models/hotel_owner_profile_model.dart';
 import 'package:rifq_v2/features/hotel/data/models/hotel_room_model.dart';
 import 'package:rifq_v2/features/hotel/data/models/hotel_service_model.dart';
 import 'package:rifq_v2/features/hotel/domain/entities/hotel_entity.dart';
@@ -9,7 +10,6 @@ part 'hotel_list_item_model.mapper.dart';
 @MappableClass()
 class HotelListItemModel with HotelListItemModelMappable {
   final String id;
-  final String name;
   final double rating;
 
   @MappableField(key: 'review_count')
@@ -20,6 +20,9 @@ class HotelListItemModel with HotelListItemModelMappable {
 
   final double? latitude;
   final double? longitude;
+
+  @MappableField(key: 'profiles')
+  final HotelOwnerProfileModel? profile;
 
   @MappableField(key: 'hotel_images')
   final List<HotelImageModel> images;
@@ -32,12 +35,12 @@ class HotelListItemModel with HotelListItemModelMappable {
 
   const HotelListItemModel({
     required this.id,
-    required this.name,
     required this.rating,
     required this.reviewCount,
     required this.locationText,
     this.latitude,
     this.longitude,
+    this.profile,
     this.images = const [],
     this.rooms = const [],
     this.services = const [],
@@ -60,7 +63,7 @@ class HotelListItemModel with HotelListItemModelMappable {
 
     return HotelListItemEntity(
       id: id,
-      name: name,
+      name: profile?.fullName ?? 'Hotel',
       rating: rating,
       reviewCount: reviewCount,
       locationText: locationText,

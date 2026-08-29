@@ -7,7 +7,7 @@ part 'hotel_image_model.mapper.dart';
 class HotelImageModel extends HotelImageEntity with HotelImageModelMappable {
   const HotelImageModel({
     required super.id,
-    @MappableField(key: 'image_url') required super.imageUrl,
+    @MappableField(key: 'public_url') required super.imageUrl,
     @MappableField(key: 'display_order') required super.displayOrder,
     @MappableField(key: 'is_primary') super.isPrimary = false,
   });

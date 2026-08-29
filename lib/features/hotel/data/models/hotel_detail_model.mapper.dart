@@ -15,6 +15,7 @@ class HotelDetailModelMapper extends ClassMapperBase<HotelDetailModel> {
   static HotelDetailModelMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = HotelDetailModelMapper._());
+      HotelOwnerProfileModelMapper.ensureInitialized();
       HotelImageModelMapper.ensureInitialized();
       HotelRoomModelMapper.ensureInitialized();
       HotelServiceModelMapper.ensureInitialized();
@@ -29,8 +30,6 @@ class HotelDetailModelMapper extends ClassMapperBase<HotelDetailModel> {
 
   static String _$id(HotelDetailModel v) => v.id;
   static const Field<HotelDetailModel, String> _f$id = Field('id', _$id);
-  static String _$name(HotelDetailModel v) => v.name;
-  static const Field<HotelDetailModel, String> _f$name = Field('name', _$name);
   static String _$locationText(HotelDetailModel v) => v.locationText;
   static const Field<HotelDetailModel, String> _f$locationText = Field(
     'locationText',
@@ -55,6 +54,9 @@ class HotelDetailModelMapper extends ClassMapperBase<HotelDetailModel> {
     _$description,
     opt: true,
   );
+  static HotelOwnerProfileModel? _$profile(HotelDetailModel v) => v.profile;
+  static const Field<HotelDetailModel, HotelOwnerProfileModel> _f$profile =
+      Field('profile', _$profile, key: r'profiles', opt: true);
   static List<HotelImageModel> _$images(HotelDetailModel v) => v.images;
   static const Field<HotelDetailModel, List<HotelImageModel>> _f$images = Field(
     'images',
@@ -102,11 +104,11 @@ class HotelDetailModelMapper extends ClassMapperBase<HotelDetailModel> {
   @override
   final MappableFields<HotelDetailModel> fields = const {
     #id: _f$id,
-    #name: _f$name,
     #locationText: _f$locationText,
     #latitude: _f$latitude,
     #longitude: _f$longitude,
     #description: _f$description,
+    #profile: _f$profile,
     #images: _f$images,
     #rooms: _f$rooms,
     #services: _f$services,
@@ -117,11 +119,11 @@ class HotelDetailModelMapper extends ClassMapperBase<HotelDetailModel> {
   static HotelDetailModel _instantiate(DecodingData data) {
     return HotelDetailModel(
       id: data.dec(_f$id),
-      name: data.dec(_f$name),
       locationText: data.dec(_f$locationText),
       latitude: data.dec(_f$latitude),
       longitude: data.dec(_f$longitude),
       description: data.dec(_f$description),
+      profile: data.dec(_f$profile),
       images: data.dec(_f$images),
       rooms: data.dec(_f$rooms),
       services: data.dec(_f$services),
@@ -192,6 +194,12 @@ extension HotelDetailModelValueCopy<$R, $Out>
 
 abstract class HotelDetailModelCopyWith<$R, $In extends HotelDetailModel, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
+  HotelOwnerProfileModelCopyWith<
+    $R,
+    HotelOwnerProfileModel,
+    HotelOwnerProfileModel
+  >?
+  get profile;
   ListCopyWith<
     $R,
     HotelImageModel,
@@ -224,11 +232,11 @@ abstract class HotelDetailModelCopyWith<$R, $In extends HotelDetailModel, $Out>
   get rules;
   $R call({
     String? id,
-    String? name,
     String? locationText,
     double? latitude,
     double? longitude,
     String? description,
+    HotelOwnerProfileModel? profile,
     List<HotelImageModel>? images,
     List<HotelRoomModel>? rooms,
     List<HotelServiceModel>? services,
@@ -248,6 +256,13 @@ class _HotelDetailModelCopyWithImpl<$R, $Out>
   @override
   late final ClassMapperBase<HotelDetailModel> $mapper =
       HotelDetailModelMapper.ensureInitialized();
+  @override
+  HotelOwnerProfileModelCopyWith<
+    $R,
+    HotelOwnerProfileModel,
+    HotelOwnerProfileModel
+  >?
+  get profile => $value.profile?.copyWith.$chain((v) => call(profile: v));
   @override
   ListCopyWith<
     $R,
@@ -306,11 +321,11 @@ class _HotelDetailModelCopyWithImpl<$R, $Out>
   @override
   $R call({
     String? id,
-    String? name,
     String? locationText,
     Object? latitude = $none,
     Object? longitude = $none,
     Object? description = $none,
+    Object? profile = $none,
     List<HotelImageModel>? images,
     List<HotelRoomModel>? rooms,
     List<HotelServiceModel>? services,
@@ -319,11 +334,11 @@ class _HotelDetailModelCopyWithImpl<$R, $Out>
   }) => $apply(
     FieldCopyWithData({
       if (id != null) #id: id,
-      if (name != null) #name: name,
       if (locationText != null) #locationText: locationText,
       if (latitude != $none) #latitude: latitude,
       if (longitude != $none) #longitude: longitude,
       if (description != $none) #description: description,
+      if (profile != $none) #profile: profile,
       if (images != null) #images: images,
       if (rooms != null) #rooms: rooms,
       if (services != null) #services: services,
@@ -334,11 +349,11 @@ class _HotelDetailModelCopyWithImpl<$R, $Out>
   @override
   HotelDetailModel $make(CopyWithData data) => HotelDetailModel(
     id: data.get(#id, or: $value.id),
-    name: data.get(#name, or: $value.name),
     locationText: data.get(#locationText, or: $value.locationText),
     latitude: data.get(#latitude, or: $value.latitude),
     longitude: data.get(#longitude, or: $value.longitude),
     description: data.get(#description, or: $value.description),
+    profile: data.get(#profile, or: $value.profile),
     images: data.get(#images, or: $value.images),
     rooms: data.get(#rooms, or: $value.rooms),
     services: data.get(#services, or: $value.services),

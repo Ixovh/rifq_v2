@@ -7,11 +7,11 @@ part 'hotel_room_model.mapper.dart';
 class HotelRoomModel extends HotelRoomEntity with HotelRoomModelMappable {
   const HotelRoomModel({
     required super.id,
-    required super.name,
+    @MappableField(key: 'room_type') required super.name,
     @MappableField(key: 'price_per_night') required super.pricePerNight,
-    @MappableField(key: 'size_text') super.sizeText,
+    @MappableField(key: 'size_label') super.sizeText,
     required super.includes,
-    @MappableField(key: 'available_rooms') super.availableRooms,
+    @MappableField(key: 'total_rooms') super.totalRooms,
   });
 
   factory HotelRoomModel.fromJson(Map<String, dynamic> json) =>

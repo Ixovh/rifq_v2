@@ -65,10 +65,10 @@ class HotelRoomCard extends StatelessWidget {
                   .toList(),
             ),
           ],
-          if (room.availableRooms != null) ...[
+          if (room.totalRooms != null) ...[
             SizedBox(height: 8.h),
             Text(
-              'Availability : ${room.availableRooms} rooms available',
+              '${room.totalRooms} rooms total',
               style: context.body3.copyWith(
                 color: context.success,
                 fontWeight: FontWeight.w600,

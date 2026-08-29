@@ -9,7 +9,7 @@ class HotelFacilityModel extends HotelFacilityEntity
   const HotelFacilityModel({
     required super.id,
     required super.category,
-    required super.name,
+    @MappableField(key: 'label') required super.name,
   });
 
   factory HotelFacilityModel.fromJson(Map<String, dynamic> json) =>

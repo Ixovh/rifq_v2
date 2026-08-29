@@ -5,11 +5,15 @@ import 'package:rifq_v2/features/hotel/data/models/hotel_detail_model.dart';
 import 'package:rifq_v2/features/hotel/data/models/hotel_list_item_model.dart';
 import 'package:rifq_v2/features/hotel/domain/entities/hotel_detail_entity.dart';
 import 'package:rifq_v2/features/hotel/domain/entities/hotel_entity.dart';
+import 'package:rifq_v2/shared/constants/app_enums.dart';
 import 'package:rifq_v2/shared/errors/custome_exception.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class BaseHotelDataSource {
-  Future<Result<List<HotelListItemEntity>, Object>> getHotels();
+  Future<Result<List<HotelListItemEntity>, Object>> getHotels({
+    SortOption sortOption = SortOption.recommended,
+    String? searchQuery,
+  });
 
   Future<Result<HotelDetailEntity, Object>> getHotelDetail({
     required String hotelId,
@@ -24,30 +28,32 @@ class HotelDataSource implements BaseHotelDataSource {
   final SupabaseClient _supabase;
 
   static const _hotelListSelect =
-      'id, name, rating, review_count, location_text, latitude, longitude, '
-      'hotel_images(id, image_url, display_order, is_primary), '
-      'hotel_rooms(id, name, price_per_night, size_text, includes, available_rooms), '
+      'id, rating, review_count, location_text, latitude, longitude, '
+      'profiles(full_name), '
+      'hotel_images(id, public_url, display_order, is_primary), '
+      'hotel_rooms(id, room_type, price_per_night, size_label, includes, total_rooms), '
       'hotel_services(id, name, price, price_unit)';
 
   static const _hotelDetailSelect =
-      'id, name, location_text, latitude, longitude, description, '
-      'hotel_images(id, image_url, display_order, is_primary), '
-      'hotel_rooms(id, name, price_per_night, size_text, includes, available_rooms), '
+      'id, location_text, latitude, longitude, description, '
+      'profiles(full_name), '
+      'hotel_images(id, public_url, display_order, is_primary), '
+      'hotel_rooms(id, room_type, price_per_night, size_label, includes, total_rooms), '
       'hotel_services(id, name, price, price_unit), '
-      'hotel_facilities(id, category, name), '
+      'hotel_facilities(id, category, label), '
       'hotel_rules(id, rule_text)';
 
   @override
-  Future<Result<List<HotelListItemEntity>, Object>> getHotels() async {
+  Future<Result<List<HotelListItemEntity>, Object>> getHotels({
+    SortOption sortOption = SortOption.recommended,
+    String? searchQuery,
+  }) async {
     try {
-      final rows = await _supabase
-          .from('pet_hotels')
-          .select(_hotelListSelect)
-          .order('name');
+      final rows = await _supabase.from('pet_hotels').select(_hotelListSelect);
 
       final position = await _currentPositionOrNull();
 
-      final hotels = rows.map((row) {
+      var hotels = rows.map((row) {
         final model = HotelListItemModel.fromJson(row);
         final distanceKm = _distanceKmOrNull(
           from: position,
@@ -57,10 +63,52 @@ class HotelDataSource implements BaseHotelDataSource {
         return model.toEntity(distanceKm: distanceKm);
       }).toList();
 
+      hotels = _applySort(hotels, sortOption);
+
+      final query = searchQuery?.trim().toLowerCase();
+      if (query != null && query.isNotEmpty) {
+        hotels = hotels
+            .where(
+              (h) =>
+                  h.name.toLowerCase().contains(query) ||
+                  h.locationText.toLowerCase().contains(query),
+            )
+            .toList();
+      }
+
       return Success(hotels);
     } catch (e) {
       return Result.error(CatchErrorMessage(error: e).getWriteMessage());
     }
+  }
+
+  List<HotelListItemEntity> _applySort(
+    List<HotelListItemEntity> hotels,
+    SortOption sortOption,
+  ) {
+    final sorted = [...hotels];
+    switch (sortOption) {
+      case SortOption.nearest:
+        sorted.sort((a, b) {
+          if (a.distanceKm == null && b.distanceKm == null) return 0;
+          if (a.distanceKm == null) return 1;
+          if (b.distanceKm == null) return -1;
+          return a.distanceKm!.compareTo(b.distanceKm!);
+        });
+      case SortOption.topRated:
+        sorted.sort((a, b) => b.rating.compareTo(a.rating));
+      case SortOption.lowestPrice:
+        sorted.sort((a, b) {
+          if (a.startingPrice == null && b.startingPrice == null) return 0;
+          if (a.startingPrice == null) return 1;
+          if (b.startingPrice == null) return -1;
+          return a.startingPrice!.compareTo(b.startingPrice!);
+        });
+      case SortOption.recommended:
+      case SortOption.mostExperienced:
+        break;
+    }
+    return sorted;
   }
 
   @override
