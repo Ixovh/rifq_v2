@@ -60,7 +60,9 @@ class _EditPetViewState extends State<_EditPetView> {
       setState(() => _pickedImage = compressed);
     } catch (_) {
       if (!mounted) return;
-      context.showErrorToast(AppLocalizations.of(context)!.common_couldNotPickImage);
+      context.showErrorToast(
+        AppLocalizations.of(context)!.common_couldNotPickImage,
+      );
     }
   }
 
@@ -74,7 +76,9 @@ class _EditPetViewState extends State<_EditPetView> {
             children: [
               ListTile(
                 leading: const Icon(Icons.photo_library_outlined),
-                title: Text(AppLocalizations.of(context)!.common_chooseFromGallery),
+                title: Text(
+                  AppLocalizations.of(context)!.common_chooseFromGallery,
+                ),
                 onTap: () {
                   Navigator.pop(sheetContext);
                   _pickPhoto(ImageSource.gallery);
@@ -114,7 +118,9 @@ class _EditPetViewState extends State<_EditPetView> {
     return BlocConsumer<EditPetCubit, EditPetState>(
       listener: (context, state) {
         if (state is EditPetUpdateSuccess) {
-          context.showSuccessToast(AppLocalizations.of(context)!.editPet_updated);
+          context.showSuccessToast(
+            AppLocalizations.of(context)!.editPet_updated,
+          );
           context.router.maybePop(true);
         }
         if (state is EditPetError) {
@@ -264,11 +270,15 @@ class _EditPetViewState extends State<_EditPetView> {
                           ),
                           SizedBox(height: 48.h),
                           AccountOutlinedField(
-                            label: AppLocalizations.of(context)!.editPet_nameLabel,
+                            label: AppLocalizations.of(
+                              context,
+                            )!.editPet_nameLabel,
                             controller: cubit.nameController,
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
-                                return AppLocalizations.of(context)!.common_nameRequired;
+                                return AppLocalizations.of(
+                                  context,
+                                )!.common_nameRequired;
                               }
                               return null;
                             },
@@ -282,18 +292,24 @@ class _EditPetViewState extends State<_EditPetView> {
                           ),
                           SizedBox(height: 42.h),
                           AccountOutlinedField(
-                            label: AppLocalizations.of(context)!.editPet_breedLabel,
+                            label: AppLocalizations.of(
+                              context,
+                            )!.editPet_breedLabel,
                             controller: cubit.breedController,
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
-                                return AppLocalizations.of(context)!.editPet_breedRequired;
+                                return AppLocalizations.of(
+                                  context,
+                                )!.editPet_breedRequired;
                               }
                               return null;
                             },
                           ),
                           SizedBox(height: 42.h),
                           AccountOutlinedField(
-                            label: AppLocalizations.of(context)!.editPet_weightLabel,
+                            label: AppLocalizations.of(
+                              context,
+                            )!.editPet_weightLabel,
                             controller: cubit.weightController,
                             keyboardType: const TextInputType.numberWithOptions(
                               decimal: true,
@@ -320,8 +336,9 @@ class _EditPetViewState extends State<_EditPetView> {
                       onTap: () => cubit.savePet(
                         petId: widget.petId,
                         photoFile: _pickedImage,
-                        ageRequiredMessage:
-                            AppLocalizations.of(context)!.editPet_ageRequired,
+                        ageRequiredMessage: AppLocalizations.of(
+                          context,
+                        )!.editPet_ageRequired,
                         invalidWeightMessage: AppLocalizations.of(
                           context,
                         )!.editPet_invalidWeight,
@@ -389,8 +406,8 @@ class _BirthdateField extends StatelessWidget {
             ),
           ),
         ),
-        Positioned(
-          left: 22.w,
+        PositionedDirectional(
+          start: 22.w,
           top: -10.h,
           child: Container(
             color: context.neutral100,

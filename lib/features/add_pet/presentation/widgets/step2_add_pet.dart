@@ -190,8 +190,7 @@ class AddPetStepTwo extends StatelessWidget {
   String _ageLabel(BuildContext context, DateTime birthdate) {
     final l10n = AppLocalizations.of(context)!;
     final now = DateTime.now();
-    var months =
-        (now.year - birthdate.year) * 12 + now.month - birthdate.month;
+    var months = (now.year - birthdate.year) * 12 + now.month - birthdate.month;
     if (now.day < birthdate.day) months--;
     if (months < 0) months = 0;
 

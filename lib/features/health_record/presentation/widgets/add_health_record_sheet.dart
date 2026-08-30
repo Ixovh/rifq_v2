@@ -66,7 +66,9 @@ class _AddHealthRecordSheetState extends State<_AddHealthRecordSheet> {
   Future<void> _save() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     if (_visitDate == null) {
-      context.showWarningToast(AppLocalizations.of(context)!.healthRecord_visitDateRequired);
+      context.showWarningToast(
+        AppLocalizations.of(context)!.healthRecord_visitDateRequired,
+      );
       return;
     }
 
@@ -85,7 +87,9 @@ class _AddHealthRecordSheetState extends State<_AddHealthRecordSheet> {
     setState(() => _isSaving = false);
 
     if (success) {
-      context.showSuccessToast(AppLocalizations.of(context)!.healthRecord_saved);
+      context.showSuccessToast(
+        AppLocalizations.of(context)!.healthRecord_saved,
+      );
       Navigator.pop(context);
     }
   }
@@ -134,12 +138,16 @@ class _AddHealthRecordSheetState extends State<_AddHealthRecordSheet> {
                   ),
                   SizedBox(height: 8.h),
                   _HealthRecordField(
-                    label: AppLocalizations.of(context)!.healthRecord_fieldTitle,
+                    label: AppLocalizations.of(
+                      context,
+                    )!.healthRecord_fieldTitle,
                     icon: Icons.badge_outlined,
                     controller: _titleController,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return AppLocalizations.of(context)!.healthRecord_titleRequired;
+                        return AppLocalizations.of(
+                          context,
+                        )!.healthRecord_titleRequired;
                       }
                       return null;
                     },
@@ -151,14 +159,18 @@ class _AddHealthRecordSheetState extends State<_AddHealthRecordSheet> {
                     controller: _typeController,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return AppLocalizations.of(context)!.healthRecord_typeRequired;
+                        return AppLocalizations.of(
+                          context,
+                        )!.healthRecord_typeRequired;
                       }
                       return null;
                     },
                   ),
                   SizedBox(height: 24.h),
                   _HealthRecordField(
-                    label: AppLocalizations.of(context)!.healthRecord_fieldDescription,
+                    label: AppLocalizations.of(
+                      context,
+                    )!.healthRecord_fieldDescription,
                     icon: Icons.menu_book_outlined,
                     controller: _descriptionController,
                     maxLines: 4,
@@ -166,7 +178,9 @@ class _AddHealthRecordSheetState extends State<_AddHealthRecordSheet> {
                   ),
                   SizedBox(height: 24.h),
                   _HealthRecordField(
-                    label: AppLocalizations.of(context)!.healthRecord_fieldClinic,
+                    label: AppLocalizations.of(
+                      context,
+                    )!.healthRecord_fieldClinic,
                     icon: Icons.local_hospital_outlined,
                     controller: _clinicController,
                   ),
@@ -174,7 +188,9 @@ class _AddHealthRecordSheetState extends State<_AddHealthRecordSheet> {
                   _VisitDateField(visitDate: _visitDate, onTap: _pickDate),
                   SizedBox(height: 28.h),
                   ContainerButton(
-                    label: AppLocalizations.of(context)!.healthRecord_saveRecord,
+                    label: AppLocalizations.of(
+                      context,
+                    )!.healthRecord_saveRecord,
                     containerColor: context.primary300,
                     textColor: context.neutral100,
                     fontSize: 20,
@@ -247,8 +263,8 @@ class _HealthRecordField extends StatelessWidget {
             ],
           ),
         ),
-        Positioned(
-          left: 22.w,
+        PositionedDirectional(
+          start: 22.w,
           top: -10.h,
           child: Container(
             color: context.neutral100,
@@ -317,8 +333,8 @@ class _VisitDateField extends StatelessWidget {
             ),
           ),
         ),
-        Positioned(
-          left: 22.w,
+        PositionedDirectional(
+          start: 22.w,
           top: -10.h,
           child: Container(
             color: context.neutral100,

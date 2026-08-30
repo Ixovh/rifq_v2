@@ -70,10 +70,10 @@ class _AccountPhoneFieldState extends State<AccountPhoneField> {
   }
 
   PhoneNumber get _phoneNumber => PhoneNumber(
-        countryISOCode: _country.code,
-        countryCode: '+${_country.fullCountryCode}',
-        number: _controller.text.trim(),
-      );
+    countryISOCode: _country.code,
+    countryCode: '+${_country.fullCountryCode}',
+    number: _controller.text.trim(),
+  );
 
   void _emit() => widget.onChanged(_phoneNumber);
 
@@ -114,7 +114,7 @@ class _AccountPhoneFieldState extends State<AccountPhoneField> {
                 Container(
                   height: 56.h,
                   width: double.infinity,
-                  padding: EdgeInsets.only(left: 10.w, right: 16.w),
+                  padding: EdgeInsetsDirectional.only(start: 10.w, end: 16.w),
                   decoration: BoxDecoration(
                     color: context.neutral100,
                     borderRadius: BorderRadius.circular(18.r),
@@ -124,76 +124,81 @@ class _AccountPhoneFieldState extends State<AccountPhoneField> {
                           : context.neutral200,
                     ),
                   ),
-                  child: Row(
-                    children: [
-                      InkWell(
-                        onTap: _pickCountry,
-                        borderRadius: BorderRadius.circular(12.r),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 8.w,
-                            vertical: 8.h,
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                _country.flag,
-                                style: TextStyle(fontSize: 20.sp),
-                              ),
-                              SizedBox(width: 6.w),
-                              Text(
-                                '+${_country.dialCode}',
-                                style: context.body2.copyWith(
-                                  color: context.neutral1000,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16.sp,
+                  // Phone numbers read left-to-right in any UI language: keep the
+                  // dial code, divider and digit field in fixed LTR order.
+                  child: Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: Row(
+                      children: [
+                        InkWell(
+                          onTap: _pickCountry,
+                          borderRadius: BorderRadius.circular(12.r),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8.w,
+                              vertical: 8.h,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  _country.flag,
+                                  style: TextStyle(fontSize: 20.sp),
                                 ),
-                              ),
-                              Icon(
-                                Icons.keyboard_arrow_down_rounded,
-                                color: context.neutral700,
-                                size: 22.sp,
-                              ),
+                                SizedBox(width: 6.w),
+                                Text(
+                                  '+${_country.dialCode}',
+                                  style: context.body2.copyWith(
+                                    color: context.neutral1000,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16.sp,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  color: context.neutral700,
+                                  size: 22.sp,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 1,
+                          height: 24.h,
+                          color: context.neutral200,
+                        ),
+                        SizedBox(width: 10.w),
+                        Expanded(
+                          child: TextField(
+                            controller: _controller,
+                            keyboardType: TextInputType.phone,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(9),
                             ],
+                            onChanged: (value) {
+                              field.didChange(value);
+                              _emit();
+                            },
+                            style: context.body2.copyWith(
+                              color: context.neutral1000,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18.sp,
+                            ),
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                            ),
                           ),
                         ),
-                      ),
-                      Container(
-                        width: 1,
-                        height: 24.h,
-                        color: context.neutral200,
-                      ),
-                      SizedBox(width: 10.w),
-                      Expanded(
-                        child: TextField(
-                          controller: _controller,
-                          keyboardType: TextInputType.phone,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(9),
-                          ],
-                          onChanged: (value) {
-                            field.didChange(value);
-                            _emit();
-                          },
-                          style: context.body2.copyWith(
-                            color: context.neutral1000,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18.sp,
-                          ),
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            isDense: true,
-                            contentPadding: EdgeInsets.zero,
-                          ),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-                Positioned(
-                  left: 22.w,
+                PositionedDirectional(
+                  start: 22.w,
                   top: -10.h,
                   child: Container(
                     color: context.neutral100,
@@ -234,10 +239,8 @@ Future<Country?> showAccountCountryPickerSheet({
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     barrierColor: Colors.black.withValues(alpha: 0.35),
-    builder: (_) => _AccountCountryPickerSheet(
-      countries: countries,
-      selected: selected,
-    ),
+    builder: (_) =>
+        _AccountCountryPickerSheet(countries: countries, selected: selected),
   );
 }
 
@@ -255,7 +258,8 @@ class _AccountCountryPickerSheet extends StatefulWidget {
       _AccountCountryPickerSheetState();
 }
 
-class _AccountCountryPickerSheetState extends State<_AccountCountryPickerSheet> {
+class _AccountCountryPickerSheetState
+    extends State<_AccountCountryPickerSheet> {
   late final TextEditingController _searchController;
   late List<Country> _filtered;
 
@@ -394,7 +398,9 @@ class _AccountCountryPickerSheetState extends State<_AccountCountryPickerSheet> 
                   ? Center(
                       child: Text(
                         AppLocalizations.of(context)!.account_noCountriesFound,
-                        style: context.body2.copyWith(color: context.neutral700),
+                        style: context.body2.copyWith(
+                          color: context.neutral700,
+                        ),
                       ),
                     )
                   : ListView.separated(
@@ -406,8 +412,7 @@ class _AccountCountryPickerSheetState extends State<_AccountCountryPickerSheet> 
                       ),
                       itemBuilder: (context, index) {
                         final country = _filtered[index];
-                        final isSelected =
-                            country.code == widget.selected.code;
+                        final isSelected = country.code == widget.selected.code;
 
                         return InkWell(
                           onTap: () => Navigator.of(context).pop(country),

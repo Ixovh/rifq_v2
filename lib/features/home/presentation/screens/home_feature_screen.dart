@@ -150,7 +150,7 @@ class _HomeBody extends StatelessWidget {
                       children: [
                         ...pets.map(
                           (pet) => Padding(
-                            padding: EdgeInsets.only(right: 18.w),
+                            padding: EdgeInsetsDirectional.only(end: 18.w),
                             child: PetCircleWidget(
                               petName: pet.name,
                               imageUrl: pet.photoUrl,

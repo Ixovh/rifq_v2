@@ -56,7 +56,7 @@ class WelcomeScreen extends StatelessWidget {
 
                     SizedBox(
                       child: Padding(
-                        padding: EdgeInsets.only(left: 18.r),
+                        padding: EdgeInsetsDirectional.only(start: 18.r),
                         child: Column(
                           crossAxisAlignment: .start,
                           children: [

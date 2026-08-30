@@ -43,9 +43,7 @@ class AddPetStepOne extends StatelessWidget {
             SizedBox(height: 12),
 
             ///-------------input photo-------------------------
-            Center(
-              child: Text(l10n.addPet_uploadPhoto, style: context.body1),
-            ),
+            Center(child: Text(l10n.addPet_uploadPhoto, style: context.body1)),
             SizedBox(height: 24),
 
             Center(
@@ -144,7 +142,10 @@ class AddPetStepOne extends StatelessWidget {
                   ),
 
                   prefixIcon: Padding(
-                    padding: const EdgeInsets.only(left: 12, right: 8),
+                    padding: const EdgeInsetsDirectional.only(
+                      start: 12,
+                      end: 8,
+                    ),
                     child: Icon(
                       Icons.pets,
                       color: context.neutral500,

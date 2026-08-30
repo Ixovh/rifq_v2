@@ -174,7 +174,7 @@ class _ConfirmAndPayScreenState extends State<ConfirmAndPayScreen> {
                           children: [
                             for (final method in PaymentMethodOption.values)
                               Padding(
-                                padding: EdgeInsets.only(right: 12.w),
+                                padding: EdgeInsetsDirectional.only(end: 12.w),
                                 child: _PaymentMethodIcon(
                                   method: method,
                                   selected: _selectedMethod == method,

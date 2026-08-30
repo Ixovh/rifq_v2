@@ -163,7 +163,9 @@ class AddPetScreen extends StatelessWidget {
                     return BlocBuilder<AddPetCubit, AddPetState>(
                       builder: (context, state) {
                         return CustomeButtonWidgets(
-                          titel: step == 1 ? l10n.common_save : l10n.common_next,
+                          titel: step == 1
+                              ? l10n.common_save
+                              : l10n.common_next,
                           isLoading: state is AddPetLoading,
                           onPressed: () async {
                             final form = formState.value;
@@ -183,7 +185,9 @@ class AddPetScreen extends StatelessWidget {
                                 form.gender.isEmpty ||
                                 form.species.isEmpty ||
                                 form.birthdate == null) {
-                              context.showWarningToast(l10n.addPet_completeAllFields);
+                              context.showWarningToast(
+                                l10n.addPet_completeAllFields,
+                              );
                               return;
                             }
 
@@ -191,7 +195,9 @@ class AddPetScreen extends StatelessWidget {
 
                             if (ownerId == null) {
                               if (!context.mounted) return;
-                              context.showErrorToast(l10n.addPet_profileNotFound);
+                              context.showErrorToast(
+                                l10n.addPet_profileNotFound,
+                              );
                               return;
                             }
 
