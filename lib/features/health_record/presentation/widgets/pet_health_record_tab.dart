@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/features/health_record/domain/entities/health_record_entity.dart';
 import 'package:rifq_v2/features/health_record/presentation/cubit/health_record_cubit.dart';
 import 'package:rifq_v2/features/health_record/presentation/widgets/add_health_record_sheet.dart';
@@ -52,7 +53,7 @@ class PetHealthRecordTab extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.only(top: 200.h),
                   child: Text(
-                    'No Health Record Yet',
+                    AppLocalizations.of(context)!.healthRecord_empty,
                     style: context.body1.copyWith(
                       color: context.neutral700,
                       fontWeight: FontWeight.w500,
@@ -85,7 +86,7 @@ class PetHealthRecordTab extends StatelessWidget {
                     height: 58.h,
                     alignment: Alignment.center,
                     child: Text(
-                      'Add new health record',
+                      AppLocalizations.of(context)!.healthRecord_addNew,
                       style: context.bodyLarge.copyWith(
                         color: context.neutral100,
                         fontWeight: FontWeight.w600,
