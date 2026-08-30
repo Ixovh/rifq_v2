@@ -10,6 +10,7 @@ import 'package:rifq_v2/features/home/domain/use_cases/home_use_case.dart';
 import 'package:rifq_v2/features/home/presentation/cubit/home_cubit.dart';
 import 'package:rifq_v2/features/nav/presentation/cubit/nav_cubit.dart';
 import 'package:rifq_v2/features/nav/presentation/screens/nav_screen.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 
 /// Stub repo so HomeCubit.loadHomeData() resolves instantly to a guest
 /// state, without touching Supabase — the bug under test lives entirely in
@@ -25,7 +26,11 @@ class _StubHomeRepoDomain implements HomeRepoDomain {
 Widget _wrap(Widget child) {
   return ScreenUtilInit(
     designSize: const Size(402, 874),
-    builder: (_, _) => MaterialApp(home: child),
+    builder: (_, _) => MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: child,
+    ),
   );
 }
 
