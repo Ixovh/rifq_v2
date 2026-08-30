@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pinput/pinput.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/features/auth/domain/use_cases/auth_use_case.dart';
 import 'package:rifq_v2/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:rifq_v2/shared/constants/app_enums.dart';
@@ -27,11 +28,14 @@ class OtpScreen extends StatelessWidget {
   final String email;
   final OtpPurpose purpose;
 
-  String get _title => switch (purpose) {
-    OtpPurpose.resetPassword => 'Reset Password',
-    OtpPurpose.emailChange => 'Confirm New Email',
-    OtpPurpose.signUp => 'Email Verification',
-  };
+  String _titleFor(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return switch (purpose) {
+      OtpPurpose.resetPassword => l10n.auth_resetPasswordTitle,
+      OtpPurpose.emailChange => l10n.otp_confirmNewEmailTitle,
+      OtpPurpose.signUp => l10n.otp_emailVerificationTitle,
+    };
+  }
 
   bool get _canResend =>
       purpose == OtpPurpose.signUp || purpose == OtpPurpose.emailChange;
@@ -48,7 +52,9 @@ class OtpScreen extends StatelessWidget {
               switch (state) {
                 case AuthSuccessState _:
                   if (purpose == OtpPurpose.emailChange) {
-                    context.showSuccessToast('Email updated successfully');
+                    context.showSuccessToast(
+                      AppLocalizations.of(context)!.otp_emailUpdated,
+                    );
                     context.router.popUntil(
                       (route) =>
                           route.settings.name == AccountRoute.name ||
@@ -70,7 +76,7 @@ class OtpScreen extends StatelessWidget {
               resizeToAvoidBottomInset: false,
               bottomSheet: CustomBottomSheet(
                 content: _OtpContent(
-                  title: _title,
+                  title: _titleFor(context),
                   email: email,
                   purpose: purpose,
                   canResend: _canResend,
@@ -179,12 +185,13 @@ class _OtpContentState extends State<_OtpContent> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthOtpResentState) {
           setState(() => _isResending = false);
           _startTimer();
-          context.showInfoToast('OTP sent again');
+          context.showInfoToast(l10n.otp_sentAgain);
         } else if (state is AuthErrorState && _isResending) {
           setState(() => _isResending = false);
         }
@@ -204,8 +211,8 @@ class _OtpContentState extends State<_OtpContent> {
           SizedBox(height: 8.h),
           Text(
             widget.purpose == OtpPurpose.emailChange
-                ? 'We have sent an OTP to your new email address'
-                : 'We have sent an OTP to your email address',
+                ? l10n.otp_sentNewEmailBody
+                : l10n.otp_sentEmailBody,
             style: context.body2.copyWith(color: context.neutral800),
             textAlign: TextAlign.center,
           ),
@@ -219,7 +226,7 @@ class _OtpContentState extends State<_OtpContent> {
           ),
           SizedBox(height: 8.h),
           Text(
-            'Please enter the OTP below',
+            l10n.otp_enterBelow,
             style: context.body2.copyWith(color: context.neutral800),
           ),
           SizedBox(height: 24.h),
@@ -247,14 +254,14 @@ class _OtpContentState extends State<_OtpContent> {
             SizedBox(height: 20.h),
             if (_remainingSeconds > 0)
               Text(
-                'Resend code in $_timerLabel',
+                l10n.otp_resendCodeIn(_timerLabel),
                 style: context.body2.copyWith(color: context.neutral800),
               )
             else
               TextButton(
                 onPressed: _canTapResend ? _handleResend : null,
                 child: Text(
-                  _isResending ? 'Sending...' : 'Resend OTP',
+                  _isResending ? l10n.otp_sending : l10n.otp_resend,
                   style: context.body2.copyWith(
                     fontWeight: FontWeight.w600,
                     color: _canTapResend
@@ -266,7 +273,7 @@ class _OtpContentState extends State<_OtpContent> {
           ],
           const Spacer(),
           ContainerButton(
-            label: 'Cancel',
+            label: l10n.common_cancel,
             containerColor: context.neutral100,
             textColor: context.primary300,
             fontSize: 20,

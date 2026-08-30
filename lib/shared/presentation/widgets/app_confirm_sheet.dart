@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/widgets/container_button.dart';
 
@@ -8,10 +9,12 @@ Future<bool> showAppConfirmSheet({
   required String title,
   required String message,
   required String confirmLabel,
-  String cancelLabel = 'Cancel',
+  String? cancelLabel,
   IconData icon = Icons.logout_rounded,
   bool isDestructive = false,
 }) async {
+  final resolvedCancelLabel =
+      cancelLabel ?? AppLocalizations.of(context)!.common_cancel;
   final result = await showModalBottomSheet<bool>(
     context: context,
     isScrollControlled: true,
@@ -21,7 +24,7 @@ Future<bool> showAppConfirmSheet({
       title: title,
       message: message,
       confirmLabel: confirmLabel,
-      cancelLabel: cancelLabel,
+      cancelLabel: resolvedCancelLabel,
       icon: icon,
       isDestructive: isDestructive,
     ),

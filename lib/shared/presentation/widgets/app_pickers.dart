@@ -2,9 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+/// Species options shown in the "other pet types" sheet. `label` is an
+/// English fallback only — the UI renders [speciesLabel] instead.
 const otherSpecies = <({String value, String label, IconData icon})>[
   (value: 'bird', label: 'Bird', icon: Icons.flutter_dash_outlined),
   (value: 'falcon', label: 'Falcon', icon: Icons.air),
@@ -17,13 +20,48 @@ const otherSpecies = <({String value, String label, IconData icon})>[
   (value: 'other', label: 'Other', icon: Icons.more_horiz),
 ];
 
+/// Localized display name for a stored pet-species value (`'cat'`, `'dog'`,
+/// or one of [otherSpecies]). Falls back to the raw value for anything
+/// unrecognised (e.g. legacy free-text species).
+String speciesLabel(BuildContext context, String value) {
+  final l10n = AppLocalizations.of(context)!;
+  switch (value) {
+    case 'cat':
+      return l10n.species_cat;
+    case 'dog':
+      return l10n.species_dog;
+    case 'bird':
+      return l10n.species_bird;
+    case 'falcon':
+      return l10n.species_falcon;
+    case 'rabbit':
+      return l10n.species_rabbit;
+    case 'fish':
+      return l10n.species_fish;
+    case 'turtle':
+      return l10n.species_turtle;
+    case 'hamster':
+      return l10n.species_hamster;
+    case 'pigeon':
+      return l10n.species_pigeon;
+    case 'horse':
+      return l10n.species_horse;
+    case 'other':
+      return l10n.species_other;
+    default:
+      return value;
+  }
+}
+
 Future<DateTime?> showAppDatePicker({
   required BuildContext context,
   DateTime? selectedDate,
-  String title = 'Choose date',
+  String? title,
   DateTime? firstDay,
   DateTime? lastDay,
 }) {
+  final resolvedTitle =
+      title ?? AppLocalizations.of(context)!.common_chooseDateTitle;
   return showModalBottomSheet<DateTime>(
     context: context,
     isScrollControlled: true,
@@ -31,7 +69,7 @@ Future<DateTime?> showAppDatePicker({
     barrierColor: Colors.black.withValues(alpha: 0.35),
     builder: (_) => _AppDatePickerSheet(
       selectedDate: selectedDate,
-      title: title,
+      title: resolvedTitle,
       firstDay: firstDay ?? DateTime(2000),
       lastDay: lastDay ?? DateUtils.dateOnly(DateTime.now()),
     ),
@@ -42,10 +80,12 @@ Future<({DateTime start, DateTime end})?> showAppDateRangePicker({
   required BuildContext context,
   DateTime? initialStart,
   DateTime? initialEnd,
-  String title = 'Choose dates',
+  String? title,
   DateTime? firstDay,
   DateTime? lastDay,
 }) {
+  final resolvedTitle =
+      title ?? AppLocalizations.of(context)!.common_chooseDatesTitle;
   return showModalBottomSheet<({DateTime start, DateTime end})>(
     context: context,
     isScrollControlled: true,
@@ -54,7 +94,7 @@ Future<({DateTime start, DateTime end})?> showAppDateRangePicker({
     builder: (_) => _AppDateRangePickerSheet(
       initialStart: initialStart,
       initialEnd: initialEnd,
-      title: title,
+      title: resolvedTitle,
       firstDay: firstDay ?? DateUtils.dateOnly(DateTime.now()),
       lastDay:
           lastDay ??
@@ -66,14 +106,17 @@ Future<({DateTime start, DateTime end})?> showAppDateRangePicker({
 Future<DateTime?> showAppTimePicker({
   required BuildContext context,
   DateTime? initial,
-  String title = 'Set time',
+  String? title,
 }) {
+  final resolvedTitle =
+      title ?? AppLocalizations.of(context)!.common_setTimeTitle;
   return showModalBottomSheet<DateTime>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     barrierColor: Colors.black.withValues(alpha: 0.35),
-    builder: (_) => _AppTimePickerSheet(initial: initial, title: title),
+    builder: (_) =>
+        _AppTimePickerSheet(initial: initial, title: resolvedTitle),
   );
 }
 
@@ -264,7 +307,9 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              _pickingMonthYear ? 'Choose month' : widget.title,
+              _pickingMonthYear
+                  ? AppLocalizations.of(context)!.pickers_chooseMonth
+                  : widget.title,
               style: context.body1,
             ),
             SizedBox(height: 4.h),
@@ -302,7 +347,9 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
                   ),
                 ),
                 child: Text(
-                  _pickingMonthYear ? 'Done' : 'Confirm',
+                  _pickingMonthYear
+                      ? AppLocalizations.of(context)!.common_done
+                      : AppLocalizations.of(context)!.common_confirm,
                   style: context.body1.copyWith(color: Colors.white),
                 ),
               ),
@@ -312,7 +359,7 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
               TextButton(
                 onPressed: () => setState(() => _pickingMonthYear = false),
                 child: Text(
-                  'Back to calendar',
+                  AppLocalizations.of(context)!.pickers_backToCalendar,
                   style: context.body2.copyWith(color: context.neutral600),
                 ),
               ),
@@ -521,7 +568,7 @@ class _AppDateRangePickerSheetState extends State<_AppDateRangePickerSheet> {
             SizedBox(height: 4.h),
             Text(
               _rangeStart == null
-                  ? 'Select a date range'
+                  ? AppLocalizations.of(context)!.pickers_selectDateRange
                   : _rangeEnd == null
                   ? DateFormat('EEE, d MMM').format(_rangeStart!)
                   : '${DateFormat('EEE, d MMM').format(_rangeStart!)} - '
@@ -637,7 +684,7 @@ class _AppDateRangePickerSheetState extends State<_AppDateRangePickerSheet> {
                   ),
                 ),
                 child: Text(
-                  'Apply',
+                  AppLocalizations.of(context)!.common_apply,
                   style: context.body1.copyWith(color: Colors.white),
                 ),
               ),
@@ -649,7 +696,7 @@ class _AppDateRangePickerSheetState extends State<_AppDateRangePickerSheet> {
                 _rangeEnd = null;
               }),
               child: Text(
-                'Reset',
+                AppLocalizations.of(context)!.common_reset,
                 style: context.body2.copyWith(color: context.neutral600),
               ),
             ),
@@ -714,7 +761,7 @@ class _AppTimePickerSheetState extends State<_AppTimePickerSheet> {
                   ),
                 ),
                 child: Text(
-                  'Save',
+                  AppLocalizations.of(context)!.common_save,
                   style: context.body1.copyWith(color: Colors.white),
                 ),
               ),
@@ -723,7 +770,7 @@ class _AppTimePickerSheetState extends State<_AppTimePickerSheet> {
             TextButton(
               onPressed: () => Navigator.pop(context),
               child: Text(
-                'Cancel',
+                AppLocalizations.of(context)!.common_cancel,
                 style: context.body2.copyWith(color: context.neutral600),
               ),
             ),
@@ -754,10 +801,13 @@ class _AppSpeciesSheet extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Select pet type', style: context.body1),
+            Text(
+              AppLocalizations.of(context)!.pickers_selectPetType,
+              style: context.body1,
+            ),
             SizedBox(height: 4.h),
             Text(
-              'Another common pets',
+              AppLocalizations.of(context)!.pickers_otherCommonPets,
               style: context.body3.copyWith(color: context.neutral600),
             ),
             SizedBox(height: 16.h),
@@ -811,7 +861,7 @@ class _AppSpeciesSheet extends StatelessWidget {
                             SizedBox(width: 12.w),
                             Expanded(
                               child: Text(
-                                option.label,
+                                speciesLabel(context, option.value),
                                 style: context.body2.copyWith(
                                   color: selected
                                       ? context.primary400
