@@ -5,6 +5,8 @@ import 'package:rifq_v2/features/account/presentation/screens/account_screen.dar
 import 'package:rifq_v2/features/account/presentation/screens/edit_account_screen.dart';
 import 'package:rifq_v2/features/account/presentation/screens/pet_profile_screen.dart';
 import 'package:rifq_v2/features/add_pet/presentation/screens/add_pet_screen.dart';
+import 'package:rifq_v2/features/adoption/data/models/adoption_pet_card_model.dart';
+import 'package:rifq_v2/features/adoption/domain/entities/adoption_pet_card_entity.dart';
 import 'package:rifq_v2/features/edit_pet/presentation/screens/edit_pet_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/auth_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/check_email_screen.dart';
@@ -19,6 +21,7 @@ import 'package:rifq_v2/features/splash/presentation/screens/splash_screen.dart'
 import 'package:rifq_v2/shared/constants/app_enums.dart';
 import 'package:rifq_v2/shared/presentation/screens/otp_screen.dart';
 import 'package:rifq_v2/features/adoption/presentation/screens/adoption_feature_screen.dart';
+import 'package:rifq_v2/features/adoption/presentation/screens/pet_details_screen.dart';
 part 'app_router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen,Route')
@@ -41,5 +44,9 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: PetProfileRoute.page, path: '/pet-profile/:petId'),
     AutoRoute(page: EditPetRoute.page, path: '/edit-pet/:petId'),
     AutoRoute(page: EditAccountRoute.page, path: '/edit-account'),
+ AutoRoute(
+  page: PetDetailsRoute.page,
+  path: '/pet-details',
+),
   ];
 }

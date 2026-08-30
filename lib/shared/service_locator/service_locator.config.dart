@@ -38,6 +38,8 @@ import '../../features/adoption/domain/repositories/adoption_repository_domain.d
     as _i785;
 import '../../features/adoption/domain/use_cases/create_adoption_post_use_case.dart'
     as _i824;
+import '../../features/adoption/domain/use_cases/fetch_adoption_pet_details_use_case.dart'
+    as _i729;
 import '../../features/adoption/domain/use_cases/fetch_adoption_posts_use_case.dart'
     as _i425;
 import '../../features/adoption/presentation/cubit/adoption_cubit.dart'
@@ -149,6 +151,11 @@ extension GetItInjectableX on _i174.GetIt {
       () =>
           _i824.CreateAdoptionPostUseCase(gh<_i785.AdoptionRepositoryDomain>()),
     );
+    gh.factory<_i729.FetchAdoptionPetDetailsUseCase>(
+      () => _i729.FetchAdoptionPetDetailsUseCase(
+        gh<_i785.AdoptionRepositoryDomain>(),
+      ),
+    );
     gh.factory<_i425.FetchAdoptionPetCardsUseCase>(
       () => _i425.FetchAdoptionPetCardsUseCase(
         gh<_i785.AdoptionRepositoryDomain>(),
@@ -180,14 +187,15 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i1036.HealthRecordCubit>(
       () => _i1036.HealthRecordCubit(gh<_i653.HealthRecordUseCase>()),
     );
+    gh.factory<_i578.EditPetCubit>(
+      () => _i578.EditPetCubit(gh<_i430.EditPetUseCase>()),
+    );
     gh.factory<_i431.AdoptionCubit>(
       () => _i431.AdoptionCubit(
         gh<_i824.CreateAdoptionPostUseCase>(),
         gh<_i425.FetchAdoptionPetCardsUseCase>(),
+        gh<_i729.FetchAdoptionPetDetailsUseCase>(),
       ),
-    );
-    gh.factory<_i578.EditPetCubit>(
-      () => _i578.EditPetCubit(gh<_i430.EditPetUseCase>()),
     );
     gh.singleton<_i261.LocalKeysService>(() => _i261.LocalKeysService());
     return this;

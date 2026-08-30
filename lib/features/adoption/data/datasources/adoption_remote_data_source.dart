@@ -9,6 +9,10 @@ abstract class AdoptionRemoteDataSource {
   );
 
   Future<List<AdoptionPetCardModel>> getAdoptionPetCards();
+
+   Future<Map<String, dynamic>> getAdoptionPetDetails(
+    String adoptionPostId,
+  );
 }
 
 @LazySingleton(as: AdoptionRemoteDataSource)
@@ -43,4 +47,41 @@ class AdoptionRemoteDataSourceImpl implements AdoptionRemoteDataSource {
         )
         .toList();
   }
+Future<Map<String, dynamic>> getAdoptionPetDetails(
+  String adoptionPostId,
+) async {
+  final response = await _supabase
+      .from('adoption_posts')
+      .select('''
+        id,
+        description,
+        status,
+        location,
+
+        pet:pets (
+          id,
+          name,
+          birthdate,
+          gender,
+          breed,
+          weight,
+
+          pet_photos (
+            public_url,
+            is_primary,
+            display_order
+          )
+        ),
+
+        owner:profiles (
+          id,
+          full_name,
+          avatar_url
+        )
+      ''')
+      .eq('id', adoptionPostId)
+      .single();
+
+  return response;
+}
 }

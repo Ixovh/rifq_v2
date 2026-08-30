@@ -29,6 +29,10 @@ class AdoptionState extends Equatable {
     this.isLoadingPosts = false,
     this.adoptionPetCards = const [],
 
+    // Get adoption pet details
+    this.isLoadingPetDetails = false,
+    this.petDetails,
+
     // Create post
     this.isCreatingPost = false,
     this.isPostCreated = false,
@@ -49,50 +53,59 @@ class AdoptionState extends Equatable {
     bool? isCreatingPost,
     bool? isPostCreated,
     AdoptionPostEntity? createdPost,
+    // Get adoption pet details
+    bool? isLoadingPetDetails,
+    AdoptionPetDetailsEntity? petDetails,
 
     String? errorMessage,
   }) {
     return AdoptionState(
-      selectedTabIndex:
-          selectedTabIndex ?? this.selectedTabIndex,
+      selectedTabIndex: selectedTabIndex ?? this.selectedTabIndex,
 
-      selectedCategory:
-          selectedCategory ?? this.selectedCategory,
+      selectedCategory: selectedCategory ?? this.selectedCategory,
 
       // Get adoption pet cards
-      isLoadingPosts:
-          isLoadingPosts ?? this.isLoadingPosts,
+      isLoadingPosts: isLoadingPosts ?? this.isLoadingPosts,
 
-      adoptionPetCards:
-          adoptionPetCards ?? this.adoptionPetCards,
+      adoptionPetCards: adoptionPetCards ?? this.adoptionPetCards,
+
+      // Get adoption pet details
+      isLoadingPetDetails: isLoadingPetDetails ?? this.isLoadingPetDetails,
+
+      petDetails: petDetails ?? this.petDetails,
 
       // Create post
-      isCreatingPost:
-          isCreatingPost ?? this.isCreatingPost,
+      isCreatingPost: isCreatingPost ?? this.isCreatingPost,
 
-      isPostCreated:
-          isPostCreated ?? this.isPostCreated,
+      isPostCreated: isPostCreated ?? this.isPostCreated,
 
-      createdPost:
-          createdPost ?? this.createdPost,
+      createdPost: createdPost ?? this.createdPost,
 
-      errorMessage:
-          errorMessage,
+      errorMessage: errorMessage,
     );
   }
 
+  // =========================
+  // Get Pet Details
+  // =========================
+  final bool isLoadingPetDetails;
+  final AdoptionPetDetailsEntity? petDetails;
+
   @override
   List<Object?> get props => [
-        selectedTabIndex,
-        selectedCategory,
+    selectedTabIndex,
+    selectedCategory,
 
-        isLoadingPosts,
-        adoptionPetCards,
+    isLoadingPosts,
+    adoptionPetCards,
 
-        isCreatingPost,
-        isPostCreated,
-        createdPost,
+    isLoadingPetDetails,
+    petDetails,
 
-        errorMessage,
-      ];
+    isCreatingPost,
+    isPostCreated,
+    createdPost,
+
+    errorMessage,
+  ];
 }

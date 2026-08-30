@@ -414,6 +414,53 @@ class OtpRouteArgs {
 }
 
 /// generated route for
+/// [PetDetailsScreen]
+class PetDetailsRoute extends PageRouteInfo<PetDetailsRouteArgs> {
+  PetDetailsRoute({
+    Key? key,
+    required AdoptionPetCardEntity pet,
+    List<PageRouteInfo>? children,
+  }) : super(
+         PetDetailsRoute.name,
+         args: PetDetailsRouteArgs(key: key, pet: pet),
+         initialChildren: children,
+       );
+
+  static const String name = 'PetDetailsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<PetDetailsRouteArgs>();
+      return PetDetailsScreen(key: args.key, pet: args.pet);
+    },
+  );
+}
+
+class PetDetailsRouteArgs {
+  const PetDetailsRouteArgs({this.key, required this.pet});
+
+  final Key? key;
+
+  final AdoptionPetCardEntity pet;
+
+  @override
+  String toString() {
+    return 'PetDetailsRouteArgs{key: $key, pet: $pet}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PetDetailsRouteArgs) return false;
+    return key == other.key && pet == other.pet;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ pet.hashCode;
+}
+
+/// generated route for
 /// [PetProfileScreen]
 class PetProfileRoute extends PageRouteInfo<PetProfileRouteArgs> {
   PetProfileRoute({

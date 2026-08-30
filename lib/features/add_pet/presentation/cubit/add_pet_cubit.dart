@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
+import 'package:rifq_v2/features/add_pet/domain/entities/add_pet_entity.dart';
 import 'package:rifq_v2/features/add_pet/domain/use_cases/add_pet_use_case.dart';
 
 part 'add_pet_state.dart';
@@ -24,7 +25,7 @@ class AddPetCubit extends Cubit<AddPetState> {
     emit(AddPetLoading());
 
     try {
-      await addPetUseCase.addPet(
+      final pet = await addPetUseCase.addPet(
         ownerId: ownerId,
         name: name,
         species: species,
@@ -33,8 +34,19 @@ class AddPetCubit extends Cubit<AddPetState> {
         birthdate: birthdate,
         photoFile: photoFile,
       );
+  emit(AddPetSuccess(pet));
+      // emit(AddPetSuccess("Pet added successfully"));
+      // await addPetUseCase.addPet(
+      //   ownerId: ownerId,
+      //   name: name,
+      //   species: species,
+      //   gender: gender,
+      //   breed: breed,
+      //   birthdate: birthdate,
+      //   photoFile: photoFile,
+      // );
 
-      emit(AddPetSuccess("Pet added successfully"));
+      // emit(AddPetSuccess("Pet added successfully"));
     } catch (e) {
       emit(AddPetFailure(e.toString()));
     }

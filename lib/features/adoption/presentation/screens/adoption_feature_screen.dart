@@ -245,7 +245,7 @@ class _AdoptionViewState extends State<_AdoptionView> {
                     Navigator.pop(context);
 
                     router.push(AddPetRoute(showAdoptionFields: true));
-                  },
+                  },  
 
                   // =========================
                   // Select My Pet
@@ -412,120 +412,127 @@ class _AdoptionViewState extends State<_AdoptionView> {
                       final card = state.adoptionPetCards[index];
                       final imageUrl = card.imageUrl;
 
-                      return Container(
-                        margin: EdgeInsets.only(bottom: 16.h),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16.r),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.10),
-                              blurRadius: 8,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // =========================
-                            // Pet Image
-                            // =========================
-                            ClipRRect(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(16.r),
+                      return InkWell(
+                        onTap: () {
+                          context.router.root.push(PetDetailsRoute(pet: card));
+                        },
+                        borderRadius: BorderRadius.circular(16.r),
+                        child: Container(
+                          margin: EdgeInsets.only(bottom: 16.h),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16.r),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.10),
+                                blurRadius: 8,
+                                offset: const Offset(0, 3),
                               ),
-                              child: SizedBox(
-                                width: double.infinity,
-                                height: 220.h,
-                                child: imageUrl != null && imageUrl.isNotEmpty
-                                    ? Image.network(
-                                        imageUrl,
-                                        fit: BoxFit.cover,
-                                        errorBuilder: (_, __, ___) {
-                                          return Container(
-                                            color: context.neutral100,
-                                            child: Icon(
-                                              Icons.pets,
-                                              size: 60.r,
-                                              color: context.primary,
-                                            ),
-                                          );
-                                        },
-                                      )
-                                    : Container(
-                                        color: context.neutral100,
-                                        child: Icon(
-                                          Icons.pets,
-                                          size: 60.r,
-                                          color: context.primary,
-                                        ),
-                                      ),
-                              ),
-                            ),
-
-                            // =========================
-                            // Pet Info
-                            // =========================
-                            Padding(
-                              padding: EdgeInsets.all(16.r),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    card.name,
-                                    style: context.body1.copyWith(
-                                      fontSize: 20.sp,
-                                      fontWeight: FontWeight.w700,
-                                      color: context.neutral700,
-                                    ),
-                                  ),
-
-                                  SizedBox(height: 8.h),
-
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.location_on_outlined,
-                                        size: 20.r,
-                                        color: context.primary,
-                                      ),
-                                      SizedBox(width: 6.w),
-                                      Expanded(
-                                        child: Text(
-                                          card.location,
-                                          style: context.body2.copyWith(
-                                            color: context.neutral400,
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // =========================
+                              // Pet Image
+                              // =========================
+                              ClipRRect(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(16.r),
+                                ),
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  height: 220.h,
+                                  child: imageUrl != null && imageUrl.isNotEmpty
+                                      ? Image.network(
+                                          imageUrl,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (_, __, ___) {
+                                            return Container(
+                                              color: context.neutral100,
+                                              child: Icon(
+                                                Icons.pets,
+                                                size: 60.r,
+                                                color: context.primary,
+                                              ),
+                                            );
+                                          },
+                                        )
+                                      : Container(
+                                          color: context.neutral100,
+                                          child: Icon(
+                                            Icons.pets,
+                                            size: 60.r,
+                                            color: context.primary,
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-
-                                  SizedBox(height: 6.h),
-
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.cake_outlined,
-                                        size: 20.r,
-                                        color: context.primary,
-                                      ),
-                                      SizedBox(width: 6.w),
-                                      Text(
-                                        '${DateTime.now().difference(card.birthdate).inDays ~/ 365} years',
-                                        style: context.body2.copyWith(
-                                          color: context.neutral400,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ],
+
+                              // =========================
+                              // Pet Info
+                              // =========================
+                              Padding(
+                                padding: EdgeInsets.all(16.r),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      card.name,
+                                      style: context.body1.copyWith(
+                                        fontSize: 20.sp,
+                                        fontWeight: FontWeight.w700,
+                                        color: context.neutral700,
+                                      ),
+                                    ),
+
+                                    SizedBox(height: 8.h),
+
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.location_on_outlined,
+                                          size: 20.r,
+                                          color: context.primary,
+                                        ),
+                                        SizedBox(width: 6.w),
+                                        Expanded(
+                                          child: Text(
+                                            card.location,
+                                            style: context.body2.copyWith(
+                                              color: context.neutral400,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    SizedBox(height: 6.h),
+
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.cake_outlined,
+                                          size: 20.r,
+                                          color: context.primary,
+                                        ),
+                                        SizedBox(width: 6.w),
+                                      Text(
+  _formatAge(card.birthdate),
+  style: context.body2.copyWith(
+    color: context.neutral400,
+  ),
+),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       );
+
                     },
                   );
                 },
@@ -535,5 +542,37 @@ class _AdoptionViewState extends State<_AdoptionView> {
         ),
       ),
     );
+  }
+
+
+  String _formatAge(DateTime birthdate) {
+    final now = DateTime.now();
+
+    int years = now.year - birthdate.year;
+
+    if (now.month < birthdate.month ||
+        (now.month == birthdate.month &&
+            now.day < birthdate.day)) {
+      years--;
+    }
+
+    if (years < 0) {
+      years = 0;
+    }
+
+    if (years == 0) {
+      final months =
+          (now.year - birthdate.year) * 12 +
+          now.month -
+          birthdate.month;
+
+      if (months <= 0) {
+        return 'Less than 1 month';
+      }
+
+      return months == 1 ? '1 month' : '$months months';
+    }
+
+    return years == 1 ? '1 year' : '$years years';
   }
 }
