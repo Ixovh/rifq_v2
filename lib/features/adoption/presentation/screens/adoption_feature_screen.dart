@@ -1,174 +1,3 @@
-// import 'package:auto_route/auto_route.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:rifq_v2/features/adoption/domain/entities/adoption_entity.dart';
-// import 'package:rifq_v2/features/adoption/presentation/widgets/adoption_header_widget.dart';
-// import 'package:rifq_v2/features/adoption/presentation/widgets/adoption_option_sheet.dart';
-// import 'package:rifq_v2/features/adoption/presentation/widgets/adoption_tabs_widgets.dart';
-// import 'package:rifq_v2/features/adoption/presentation/widgets/my_pets_selection_sheet.dart';
-// import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
-// import 'package:rifq_v2/shared/presentation/router/app_router.dart';
-// import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
-// import 'package:rifq_v2/shared/service_locator/service_locator.dart';
-// import 'package:rifq_v2/shared/storage_service/user_data_store.dart';
-// import 'package:supabase_flutter/supabase_flutter.dart';
-
-// import '../cubit/adoption_cubit.dart';
-
-// import '../widgets/pet_categories_section.dart';
-
-// @RoutePage()
-// class AdoptionFeatureScreen extends StatelessWidget {
-//   const AdoptionFeatureScreen({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocProvider(
-//       create: (_) => getIt<AdoptionCubit>(),
-//       child: const _AdoptionView(),
-//     );
-//   }
-// }
-
-// class _AdoptionView extends StatelessWidget {
-//   const _AdoptionView();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.white,
-//       floatingActionButton: Padding(
-//         padding: const EdgeInsets.only(bottom: 70),
-//         child: FloatingActionButton.extended(
-//           onPressed: () {
-//             showModalBottomSheet(
-//               context: context,
-//               isScrollControlled: true,
-//               backgroundColor: Colors.white,
-//               shape: const RoundedRectangleBorder(
-//                 borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-//               ),
-//               builder: (_) {
-//                 return AdoptionOptionSheet(
-//                   onAddNewPet: () {
-//                     final router = context.router;
-
-//                     Navigator.pop(context);
-
-//                     router.push(AddPetRoute(showAdoptionFields: true));
-//                   },
-//                   onSelectMyPet: () {
-//                     Navigator.pop(context);
-
-//                     final userId =
-//                         Supabase.instance.client.auth.currentUser?.id;
-
-//                     if (userId == null) {
-//                       context.showErrorToast('User profile not found');
-//                       return;
-//                     }
-
-//                     final snapshot = UserDataStore.read(userId);
-
-//                     final pets = snapshot == null
-//                         ? <Map<String, dynamic>>[]
-//                         : UserDataStore.petsOf(snapshot);
-
-//                     showModalBottomSheet(
-//                       context: context,
-//                       isScrollControlled: true,
-//                       backgroundColor: Colors.white,
-//                       shape: const RoundedRectangleBorder(
-//                         borderRadius: BorderRadius.vertical(
-//                           top: Radius.circular(24),
-//                         ),
-//                       ),
-//                       builder: (_) {
-//                         return MyPetsSelectionSheet(
-//                           pets: pets,
-//                           onPetSelected: (pet) async {
-//                             final adoptionCubit = context.read<AdoptionCubit>();
-
-//                             Navigator.pop(context);
-
-//                             final userId =
-//                                 Supabase.instance.client.auth.currentUser?.id;
-
-//                             if (userId == null) {
-//                               context.showErrorToast('User profile not found');
-//                               return;
-//                             }
-
-//                             debugPrint('========== CREATE ADOPTION ==========');
-//                             debugPrint('Pet ID: ${pet['id']}');
-//                             debugPrint('Pet Name: ${pet['name']}');
-//                             debugPrint('Poster ID: $userId');
-
-//                             final adoptionPost = AdoptionPostEntity(
-//                               petId: pet['id'].toString(),
-//                               posterId: userId,
-//                               description: 'Pet available for adoption',
-//                               status: 'available',
-//                               location: '',
-//                             );
-
-//                             await adoptionCubit.createAdoptionPost(
-//                               adoptionPost: adoptionPost,
-//                             );
-
-//                             debugPrint(
-//                               '========== CREATE ADOPTION FINISHED ==========',
-//                             );
-//                             debugPrint(
-//                               'isPostCreated: ${adoptionCubit.state.isPostCreated}',
-//                             );
-//                             debugPrint(
-//                               'errorMessage: ${adoptionCubit.state.errorMessage}',
-//                             );
-//                           },
-//                         );
-//                       },
-//                     );
-//                   },
-//                 );
-//               },
-//             );
-//           },
-//           backgroundColor: context.primary50,
-//           elevation: 2,
-//           icon: const Icon(Icons.add, color: Colors.white),
-//           label: const Text(
-//             'Adopt',
-//             style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-//           ),
-//         ),
-//       ),
-//       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-//       body: SafeArea(
-//         child: Column(
-//           children: [
-//             AdoptionHeader(
-//               onNotificationTap: () {
-//                 // TODO
-//               },
-//             ),
-
-//             const SizedBox(height: 12),
-
-//             PetCategoriesSection(onMoreCategoryTap: () {}),
-
-//             const SizedBox(height: 12),
-
-//             const AdoptionTabs(),
-
-//             const Expanded(child: SizedBox()),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -245,7 +74,7 @@ class _AdoptionViewState extends State<_AdoptionView> {
                     Navigator.pop(context);
 
                     router.push(AddPetRoute(showAdoptionFields: true));
-                  },  
+                  },
 
                   // =========================
                   // Select My Pet
@@ -360,6 +189,7 @@ class _AdoptionViewState extends State<_AdoptionView> {
         child: Column(
           children: [
             AdoptionHeader(
+              userInitial: _getUserInitial(),
               onNotificationTap: () {
                 // TODO
               },
@@ -517,12 +347,12 @@ class _AdoptionViewState extends State<_AdoptionView> {
                                           color: context.primary,
                                         ),
                                         SizedBox(width: 6.w),
-                                      Text(
-  _formatAge(card.birthdate),
-  style: context.body2.copyWith(
-    color: context.neutral400,
-  ),
-),
+                                        Text(
+                                          _formatAge(card.birthdate),
+                                          style: context.body2.copyWith(
+                                            color: context.neutral400,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ],
@@ -532,7 +362,6 @@ class _AdoptionViewState extends State<_AdoptionView> {
                           ),
                         ),
                       );
-
                     },
                   );
                 },
@@ -544,15 +373,13 @@ class _AdoptionViewState extends State<_AdoptionView> {
     );
   }
 
-
   String _formatAge(DateTime birthdate) {
     final now = DateTime.now();
 
     int years = now.year - birthdate.year;
 
     if (now.month < birthdate.month ||
-        (now.month == birthdate.month &&
-            now.day < birthdate.day)) {
+        (now.month == birthdate.month && now.day < birthdate.day)) {
       years--;
     }
 
@@ -562,9 +389,7 @@ class _AdoptionViewState extends State<_AdoptionView> {
 
     if (years == 0) {
       final months =
-          (now.year - birthdate.year) * 12 +
-          now.month -
-          birthdate.month;
+          (now.year - birthdate.year) * 12 + now.month - birthdate.month;
 
       if (months <= 0) {
         return 'Less than 1 month';
@@ -574,5 +399,28 @@ class _AdoptionViewState extends State<_AdoptionView> {
     }
 
     return years == 1 ? '1 year' : '$years years';
+  }
+
+  String _getUserInitial() {
+    final user = Supabase.instance.client.auth.currentUser;
+
+    if (user == null) {
+      return '?';
+    }
+
+    final metadata = user.userMetadata;
+
+    final name =
+        metadata?['name']?.toString() ??
+        metadata?['full_name']?.toString() ??
+        metadata?['username']?.toString() ??
+        user.email?.split('@').first ??
+        '';
+
+    if (name.trim().isEmpty) {
+      return '?';
+    }
+
+    return name.trim()[0].toUpperCase();
   }
 }
