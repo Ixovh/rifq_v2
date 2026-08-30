@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/features/home_boarding/presentation/widgets/sitter_card_widget.dart';
 import 'package:rifq_v2/features/hotel/presentation/widgets/hotel_card_widget.dart';
 import 'package:rifq_v2/features/search/presentation/cubit/search_cubit.dart';
@@ -81,7 +82,7 @@ class _SearchViewState extends State<_SearchView> {
                       onSubmitted: (q) =>
                           context.read<SearchCubit>().runRecentSearch(q),
                       decoration: InputDecoration(
-                        hintText: 'Search...',
+                        hintText: AppLocalizations.of(context)!.common_searchHint,
                         hintStyle: context.body2.copyWith(
                           color: context.neutral500,
                         ),
@@ -121,12 +122,12 @@ class _SearchViewState extends State<_SearchView> {
                   }
 
                   if (state is SearchEmpty) {
-                    return const _MessageView(message: 'No results found.');
+                    return _MessageView(message: AppLocalizations.of(context)!.search_noResults);
                   }
 
                   if (state is SearchError) {
                     return _MessageView(
-                      message: state.msg,
+                      message: AppLocalizations.of(context)!.search_error,
                       onRetry: () =>
                           context.read<SearchCubit>().retryLastSearch(),
                     );
@@ -191,7 +192,7 @@ class _RecentSearches extends StatelessWidget {
     if (queries.isEmpty) {
       return Center(
         child: Text(
-          'Start typing to search.',
+          AppLocalizations.of(context)!.search_startTyping,
           style: context.body2.copyWith(color: context.neutral600),
         ),
       );
@@ -204,7 +205,7 @@ class _RecentSearches extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Recent Searches',
+              AppLocalizations.of(context)!.search_recentSearches,
               style: context.body1.copyWith(
                 color: context.neutral1000,
                 fontWeight: FontWeight.w600,
@@ -213,7 +214,7 @@ class _RecentSearches extends StatelessWidget {
             GestureDetector(
               onTap: onClearAll,
               child: Text(
-                'Clear all',
+                AppLocalizations.of(context)!.search_clearAll,
                 style: context.body3.copyWith(color: context.neutral600),
               ),
             ),
@@ -285,7 +286,10 @@ class _MessageView extends StatelessWidget {
           ),
           if (onRetry != null) ...[
             SizedBox(height: 12.h),
-            TextButton(onPressed: onRetry, child: const Text('Retry')),
+            TextButton(
+            onPressed: onRetry,
+            child: Text(AppLocalizations.of(context)!.common_retry),
+          ),
           ],
         ],
       ),
