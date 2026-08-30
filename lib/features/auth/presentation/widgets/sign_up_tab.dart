@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:rifq_v2/shared/presentation/widgets/container_button.dart';
@@ -15,13 +16,14 @@ class SignUpTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AuthCubit>();
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 24.h),
         Text(
-          'Please fill in your details to continue.',
+          l10n.auth_signupPrompt,
           style: context.body1.copyWith(fontSize: 16.sp),
         ),
         SizedBox(height: 24.h),
@@ -32,40 +34,39 @@ class SignUpTab extends StatelessWidget {
             children: [
               CustomFormBuilderTextField(
                 name: 'name',
-                label: 'name',
+                label: l10n.common_name,
                 iconData: CupertinoIcons.person_alt,
                 controller: cubit.nameController,
               ),
               SizedBox(height: 24.h),
               CustomFormBuilderTextField(
                 name: 'email',
-                label: 'Email',
+                label: l10n.common_email,
                 iconData: CupertinoIcons.mail_solid,
                 controller: cubit.sinUpEmailController,
                 validators: [
                   FormBuilderValidators.required(
-                    errorText: '(e.g., username@example.com).',
+                    errorText: l10n.auth_emailHintError,
                   ),
                   FormBuilderValidators.email(
-                    errorText: '(e.g., username@example.com).',
+                    errorText: l10n.auth_emailHintError,
                   ),
                 ],
               ),
               SizedBox(height: 24.h),
               CustomFormBuilderTextField(
                 name: 'password',
-                label: 'Password',
+                label: l10n.common_password,
                 iconData: CupertinoIcons.lock_fill,
                 controller: cubit.sinUpPasswordController,
                 isPassword: true,
                 validators: [
                   FormBuilderValidators.required(
-                    errorText: 'Incorrect password. Please try again.',
+                    errorText: l10n.auth_passwordError,
                   ),
                   FormBuilderValidators.minLength(
                     6,
-                    errorText:
-                        'Includes at least one number or symbol (e.g., @, #, \$, !).',
+                    errorText: l10n.auth_passwordRule,
                   ),
                 ],
               ),
@@ -74,7 +75,7 @@ class SignUpTab extends StatelessWidget {
         ),
         SizedBox(height: 16.h),
         ContainerButton(
-          label: 'Sign up',
+          label: l10n.auth_signupButton,
           containerColor: context.primary300,
           textColor: context.neutral100,
           fontSize: 20,
@@ -97,23 +98,23 @@ class SignUpTab extends StatelessWidget {
         SizedBox(height: 24.h),
         RichText(
           text: TextSpan(
-            text: 'By continuing, you agree to our ',
+            text: l10n.auth_agreePrefix,
             style: context.body3.copyWith(
               color: const Color.fromARGB(255, 0, 0, 0),
             ),
             children: <TextSpan>[
               TextSpan(
-                text: 'Terms & Conditions ',
+                text: l10n.auth_termsAndConditions,
                 style: context.body3.copyWith(color: context.primary300),
               ),
               TextSpan(
-                text: 'and ',
+                text: l10n.auth_agreeAnd,
                 style: context.body3.copyWith(
                   color: const Color.fromARGB(255, 0, 0, 0),
                 ),
               ),
               TextSpan(
-                text: 'Privacy Policy',
+                text: l10n.auth_privacyPolicy,
                 style: context.body3.copyWith(color: context.primary300),
               ),
               TextSpan(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/features/auth/domain/use_cases/auth_use_case.dart';
 import 'package:rifq_v2/features/auth/presentation/cubit/auth_cubit.dart';
@@ -23,6 +24,7 @@ class WelcomeScreen extends StatelessWidget {
       child: Builder(
         builder: (context) {
           final _ = context.read<AuthCubit>();
+          final l10n = AppLocalizations.of(context)!;
 
           return BlocListener<AuthCubit, AuthState>(
             listener: (context, state) {
@@ -59,13 +61,13 @@ class WelcomeScreen extends StatelessWidget {
                           crossAxisAlignment: .start,
                           children: [
                             Text(
-                              'Welcome to Rifq',
+                              l10n.welcome_title,
                               style: context.h3.copyWith(
                                 color: context.primary300,
                               ),
                             ),
                             Text(
-                              'Your trusted space for pet care and services.',
+                              l10n.welcome_subtitle,
                               style: context.bodyLarge.copyWith(
                                 color: context.neutral700,
                               ),
@@ -80,7 +82,7 @@ class WelcomeScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(
-                              'Sign in to continue caring with ease.',
+                              l10n.welcome_signInPrompt,
                               style: context.bodyMedium.copyWith(
                                 color: context.neutral900,
                                 fontSize: 18.sp,
@@ -88,7 +90,7 @@ class WelcomeScreen extends StatelessWidget {
                             ),
                             SizedBox(height: 24.h),
                             ContainerButton(
-                              label: 'Sign in',
+                              label: l10n.welcome_signIn,
                               containerColor: context.primary300,
                               textColor: context.neutral100,
                               fontSize: 20,
@@ -115,7 +117,7 @@ class WelcomeScreen extends StatelessWidget {
                                 context.replaceRoute(const NavWrapperRoute());
                                 // context.go(Routes.navbar);
                               },
-                              label: 'Continue as Guest',
+                              label: l10n.welcome_continueGuest,
                               containerColor: context.neutral100,
                               textColor: context.primary300,
                               fontSize: 20,
