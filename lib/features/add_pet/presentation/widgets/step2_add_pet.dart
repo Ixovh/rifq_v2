@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/widgets/app_pickers.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
@@ -27,18 +28,20 @@ class AddPetStepTwo extends StatelessWidget {
         selectedSpecies != 'dog';
   }
 
-  String get _dropdownLabel {
+  String _dropdownLabel(BuildContext context) {
     for (final option in otherSpecies) {
-      if (option.value == selectedSpecies) return option.label;
+      if (option.value == selectedSpecies) {
+        return speciesLabel(context, option.value);
+      }
     }
-    return 'Other';
+    return AppLocalizations.of(context)!.species_other;
   }
 
   Future<void> _pickDate(BuildContext context) async {
     final picked = await showAppDatePicker(
       context: context,
       selectedDate: selectedBirthdate,
-      title: 'Choose date of birth',
+      title: AppLocalizations.of(context)!.common_chooseDateOfBirth,
     );
     if (picked != null) onBirthdateSelected(picked);
   }
@@ -53,6 +56,7 @@ class AddPetStepTwo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       color: context.background,
       child: SingleChildScrollView(
@@ -61,7 +65,7 @@ class AddPetStepTwo extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
-            Text("What's your pet's age ?", style: context.body1),
+            Text(l10n.addPet_ageQuestion, style: context.body1),
             const SizedBox(height: 10),
             _InputTile(
               onTap: () => _pickDate(context),
@@ -73,19 +77,19 @@ class AddPetStepTwo extends StatelessWidget {
                     : context.neutral600,
               ),
               label: selectedBirthdate == null
-                  ? 'Choose Date'
+                  ? l10n.common_chooseDate
                   : DateFormat('dd/MM/yyyy').format(selectedBirthdate!),
               isPlaceholder: selectedBirthdate == null,
             ),
             if (selectedBirthdate != null) ...[
               const SizedBox(height: 8),
               Text(
-                'Age: ${_ageLabel(selectedBirthdate!)}',
+                l10n.addPet_ageValue(_ageLabel(context, selectedBirthdate!)),
                 style: context.body2.copyWith(color: context.neutral600),
               ),
             ],
             const SizedBox(height: 30),
-            Text('What type of pet do you have ?', style: context.body1),
+            Text(l10n.addPet_typeQuestion, style: context.body1),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -93,14 +97,14 @@ class AddPetStepTwo extends StatelessWidget {
                 _buildSpeciesBox(
                   context,
                   img: 'assets/images/Frame 1984077842.png',
-                  label: 'Cat',
+                  label: l10n.species_cat,
                   selected: selectedSpecies == 'cat',
                   onTap: () => onSpeciesSelected('cat'),
                 ),
                 _buildSpeciesBox(
                   context,
                   img: 'assets/images/Frame 1984077843.png',
-                  label: 'Dog',
+                  label: l10n.species_dog,
                   selected: selectedSpecies == 'dog',
                   onTap: () => onSpeciesSelected('dog'),
                 ),
@@ -110,7 +114,7 @@ class AddPetStepTwo extends StatelessWidget {
             _InputTile(
               onTap: () => _pickSpecies(context),
               isActive: _isDropdownSpecies,
-              label: _dropdownLabel,
+              label: _dropdownLabel(context),
               trailing: Icon(
                 CupertinoIcons.chevron_down,
                 color: _isDropdownSpecies
@@ -119,7 +123,7 @@ class AddPetStepTwo extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30),
-            Text("What's your pet's breed ?", style: context.body1),
+            Text(l10n.addPet_breedQuestion, style: context.body1),
             const SizedBox(height: 20),
             Container(
               decoration: BoxDecoration(
@@ -131,7 +135,7 @@ class AddPetStepTwo extends StatelessWidget {
                 controller: breedCtrl,
                 style: context.body2,
                 decoration: InputDecoration(
-                  hintText: 'Husky',
+                  hintText: l10n.addPet_breedHint,
                   hintStyle: context.body2.copyWith(color: context.neutral500),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(
@@ -183,7 +187,8 @@ class AddPetStepTwo extends StatelessWidget {
   }
 
   /// Matches pet profile age formatting (months when under 1 year).
-  String _ageLabel(DateTime birthdate) {
+  String _ageLabel(BuildContext context, DateTime birthdate) {
+    final l10n = AppLocalizations.of(context)!;
     final now = DateTime.now();
     var months =
         (now.year - birthdate.year) * 12 + now.month - birthdate.month;
@@ -192,11 +197,10 @@ class AddPetStepTwo extends StatelessWidget {
 
     if (months < 12) {
       final display = months < 1 ? 1 : months;
-      return display == 1 ? '1 month' : '$display month';
+      return l10n.pet_ageMonths(display);
     }
 
-    final years = months ~/ 12;
-    return years == 1 ? '1 Year' : '$years Years';
+    return l10n.pet_ageYears(months ~/ 12);
   }
 }
 

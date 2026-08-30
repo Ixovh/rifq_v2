@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
 class AddPetStepOne extends StatelessWidget {
@@ -30,6 +31,7 @@ class AddPetStepOne extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       color: context.background,
       width: double.infinity,
@@ -42,7 +44,7 @@ class AddPetStepOne extends StatelessWidget {
 
             ///-------------input photo-------------------------
             Center(
-              child: Text("Upload your pet's photo", style: context.body1),
+              child: Text(l10n.addPet_uploadPhoto, style: context.body1),
             ),
             SizedBox(height: 24),
 
@@ -120,7 +122,7 @@ class AddPetStepOne extends StatelessWidget {
             SizedBox(height: 40),
 
             ///-------------input name-------------------------
-            Text("What's your pet's Name ?", style: context.body1),
+            Text(l10n.addPet_nameQuestion, style: context.body1),
             SizedBox(height: 12),
 
             Container(
@@ -133,7 +135,7 @@ class AddPetStepOne extends StatelessWidget {
                 controller: nameCtrl,
                 style: context.body2,
                 decoration: InputDecoration(
-                  hintText: "Mila",
+                  hintText: l10n.addPet_nameHint,
                   hintStyle: context.body2.copyWith(color: context.neutral500),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(
@@ -161,14 +163,14 @@ class AddPetStepOne extends StatelessWidget {
             SizedBox(height: 32),
 
             ///-------------input gender-------------------------
-            Text("What's your pet's Gender ?", style: context.body1),
+            Text(l10n.addPet_genderQuestion, style: context.body1),
             SizedBox(height: 16),
 
             Row(
               children: [
                 Expanded(
                   child: _GenderOption(
-                    title: "Male",
+                    title: l10n.common_genderMale,
                     icon: Icons.male,
                     isSelected: selectedGender.toLowerCase() == "male",
                     onTap: () => onGenderSelected("male"),
@@ -177,7 +179,7 @@ class AddPetStepOne extends StatelessWidget {
                 SizedBox(width: 16),
                 Expanded(
                   child: _GenderOption(
-                    title: "Female",
+                    title: l10n.common_genderFemale,
                     icon: Icons.female,
                     isSelected: selectedGender.toLowerCase() == "female",
                     onTap: () => onGenderSelected("female"),

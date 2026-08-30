@@ -3,6 +3,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/presentation/widgets/custome_button_widgets.dart';
@@ -57,6 +58,7 @@ class AddPetScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _ = Supabase.instance.client;
+    final l10n = AppLocalizations.of(context)!;
 
     Future<String?> getOwnerId() async {
       // profiles.id matches auth.users.id
@@ -69,7 +71,7 @@ class AddPetScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is AddPetLoading) {
           } else if (state is AddPetSuccess) {
-            context.showSuccessToast('Pet added successfully');
+            context.showSuccessToast(l10n.addPet_success);
             Navigator.pop(context, true);
           } else if (state is AddPetFailure) {
             context.showErrorToast(state.error);
@@ -79,7 +81,7 @@ class AddPetScreen extends StatelessWidget {
           backgroundColor: context.background,
           appBar: AppBar(
             backgroundColor: context.background,
-            title: Text("Add Your Pet", style: context.body1),
+            title: Text(l10n.addPet_title, style: context.body1),
             centerTitle: true,
             leading: IconButton(
               icon: Icon(CupertinoIcons.back, color: context.neutral1000),
@@ -161,7 +163,7 @@ class AddPetScreen extends StatelessWidget {
                     return BlocBuilder<AddPetCubit, AddPetState>(
                       builder: (context, state) {
                         return CustomeButtonWidgets(
-                          titel: step == 1 ? "Save" : "Next",
+                          titel: step == 1 ? l10n.common_save : l10n.common_next,
                           isLoading: state is AddPetLoading,
                           onPressed: () async {
                             final form = formState.value;
@@ -181,9 +183,7 @@ class AddPetScreen extends StatelessWidget {
                                 form.gender.isEmpty ||
                                 form.species.isEmpty ||
                                 form.birthdate == null) {
-                              context.showWarningToast(
-                                'Please complete all fields',
-                              );
+                              context.showWarningToast(l10n.addPet_completeAllFields);
                               return;
                             }
 
@@ -191,7 +191,7 @@ class AddPetScreen extends StatelessWidget {
 
                             if (ownerId == null) {
                               if (!context.mounted) return;
-                              context.showErrorToast('User profile not found');
+                              context.showErrorToast(l10n.addPet_profileNotFound);
                               return;
                             }
 
