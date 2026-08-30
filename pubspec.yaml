@@ -15,9 +15,10 @@ dependencies:
   dart_mappable: ^4.8.0
   device_info_plus: ^13.1.0
   dio: ^5.9.2
-  easy_localization: ^3.0.8
   equatable: ^2.0.8
   flutter:
+    sdk: flutter
+  flutter_localizations:
     sdk: flutter
   flutter_animate: ^4.5.2
   flutter_bloc: ^9.1.1
@@ -71,6 +72,7 @@ flutter_launcher_icons:
   adaptive_icon_foreground_inset: 0
 
 flutter:
+  generate: true
   assets:
     - assets/icon/
     - assets/images/
@@ -78,7 +80,6 @@ flutter:
     # - assets/images/home/clinic_visit.png
     # - assets/images/home/pet_hotel.png
     # - assets/images/home/adopt.png
-    - assets/translations/
     - .env
     - assets/splash/
     - assets/lottie/
