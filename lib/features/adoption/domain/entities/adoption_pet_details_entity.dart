@@ -20,6 +20,7 @@ class AdoptionPetDetailsEntity extends Equatable {
   final String? ownerId;
   final String? ownerName;
   final String? ownerAvatarUrl;
+    final String? ownerPhone;
 
   const AdoptionPetDetailsEntity({
     required this.adoptionPostId,
@@ -36,6 +37,7 @@ class AdoptionPetDetailsEntity extends Equatable {
     this.ownerId,
     this.ownerName,
     this.ownerAvatarUrl,
+    this.ownerPhone
   });
 
   @override

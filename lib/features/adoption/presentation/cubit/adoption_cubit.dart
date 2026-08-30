@@ -27,17 +27,25 @@ class AdoptionCubit extends Cubit<AdoptionState> {
   // =========================
 
   void changeTab(int index) {
-    emit(
-      state.copyWith(
-        selectedTabIndex: index,
-      ),
-    );
+    emit(state.copyWith(selectedTabIndex: index));
   }
 
+  // void selectCategory(String category) {
+  //   emit(
+  //     state.copyWith(
+  //       selectedCategory: category,
+  //     ),
+  //   );
+  // }
   void selectCategory(String category) {
+    final filteredPets = state.allAdoptionPetCards.where((pet) {
+      return pet.species?.toLowerCase() == category.toLowerCase();
+    }).toList();
+
     emit(
       state.copyWith(
         selectedCategory: category,
+        adoptionPetCards: filteredPets,
       ),
     );
   }
@@ -47,28 +55,66 @@ class AdoptionCubit extends Cubit<AdoptionState> {
   // =========================
 
   Future<void> getAdoptionPetCards() async {
-    emit(
-      state.copyWith(
-        isLoadingPosts: true,
-        errorMessage: null,
-      ),
-    );
+    emit(state.copyWith(isLoadingPosts: true, errorMessage: null));
 
     final result = await _fetchAdoptionPetCardsUseCase();
 
     result.when(
+      // (cards) {
+      //   emit(
+      //     state.copyWith(
+      //       isLoadingPosts: false,
+      //       adoptionPetCards: cards,
+      //     ),
+      //   );
+      // },
       (cards) {
+        final filteredPets = cards.where((pet) {
+          return pet.species?.toLowerCase() ==
+              state.selectedCategory.toLowerCase();
+        }).toList();
+
         emit(
           state.copyWith(
             isLoadingPosts: false,
-            adoptionPetCards: cards,
+            allAdoptionPetCards: cards,
+            adoptionPetCards: filteredPets,
+          ),
+        );
+      },
+      (error) {
+        emit(
+          state.copyWith(isLoadingPosts: false, errorMessage: error.toString()),
+        );
+      },
+    );
+  }
+
+  // =========================
+  // Get Adoption Pet Details
+  // =========================
+
+  Future<void> getAdoptionPetDetails({required String adoptionPostId}) async {
+    emit(state.copyWith(isLoadingPetDetails: true, errorMessage: null));
+
+    final result = await _fetchAdoptionPetDetailsUseCase(
+      adoptionPostId: adoptionPostId,
+    );
+
+    result.when(
+      (details) {
+        emit(
+          state.copyWith(
+            isLoadingPetDetails: false,
+            petDetails: details,
+            errorMessage: null,
           ),
         );
       },
       (error) {
         emit(
           state.copyWith(
-            isLoadingPosts: false,
+            isLoadingPetDetails: false,
             errorMessage: error.toString(),
           ),
         );
@@ -76,86 +122,41 @@ class AdoptionCubit extends Cubit<AdoptionState> {
     );
   }
 
-
-  // =========================
-// Get Adoption Pet Details
-// =========================
-
-Future<void> getAdoptionPetDetails({
-  required String adoptionPostId,
-}) async {
-  emit(
-    state.copyWith(
-      isLoadingPetDetails: true,
-      errorMessage: null,
-    ),
-  );
-
-  final result = await _fetchAdoptionPetDetailsUseCase(
-    adoptionPostId: adoptionPostId,
-  );
-
-  result.when(
-    (details) {
-      emit(
-        state.copyWith(
-          isLoadingPetDetails: false,
-          petDetails: details,
-          errorMessage: null,
-        ),
-      );
-    },
-    (error) {
-      emit(
-        state.copyWith(
-          isLoadingPetDetails: false,
-          errorMessage: error.toString(),
-        ),
-      );
-    },
-  );
-}
-
   // =========================
   // Create Adoption Post
   // =========================
-Future<void> createAdoptionPost({
-  required AdoptionPostEntity adoptionPost,
-}) async {
-  emit(
-    state.copyWith(
-      isCreatingPost: true,
-      errorMessage: null,
-      isPostCreated: false,
-    ),
-  );
+  Future<void> createAdoptionPost({
+    required AdoptionPostEntity adoptionPost,
+  }) async {
+    emit(
+      state.copyWith(
+        isCreatingPost: true,
+        errorMessage: null,
+        isPostCreated: false,
+      ),
+    );
 
-  final result = await _createAdoptionPostUseCase(
-    adoptionPost: adoptionPost,
-  );
+    final result = await _createAdoptionPostUseCase(adoptionPost: adoptionPost);
 
-  result.when(
-    (post) {
-      emit(
-        state.copyWith(
-          isCreatingPost: false,
-          isPostCreated: true,
-          createdPost: post,
-        ),
-      );
+    result.when(
+      (post) {
+        emit(
+          state.copyWith(
+            isCreatingPost: false,
+            isPostCreated: true,
+            createdPost: post,
+          ),
+        );
 
-      // لا نحط getAdoptionPetCards هنا
-    },
-    (error) {
-      emit(
-        state.copyWith(
-          isCreatingPost: false,
-          errorMessage: error.toString(),
-        ),
-      );
-    },
-  );
-}
+        // لا نحط getAdoptionPetCards هنا
+      },
+      (error) {
+        emit(
+          state.copyWith(isCreatingPost: false, errorMessage: error.toString()),
+        );
+      },
+    );
+  }
   // Future<void> createAdoptionPost({
   //   required AdoptionPostEntity adoptionPost,
   // }) async {

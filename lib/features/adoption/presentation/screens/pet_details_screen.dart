@@ -161,6 +161,19 @@ class _PetDetailsView extends StatelessWidget {
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
+
+                              if (details.ownerPhone != null &&
+                                  details.ownerPhone!.isNotEmpty) ...[
+                                SizedBox(height: 4.h),
+
+                                Text(
+                                  details.ownerPhone!,
+                                  style: TextStyle(
+                                    color: Colors.grey.shade500,
+                                    fontSize: 14.sp,
+                                  ),
+                                ),
+                              ],
                             ],
                           ),
                         ],

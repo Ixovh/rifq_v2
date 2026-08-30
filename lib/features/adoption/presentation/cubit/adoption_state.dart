@@ -10,7 +10,7 @@ class AdoptionState extends Equatable {
 
   final bool isLoadingPosts;
   final List<AdoptionPetCardEntity> adoptionPetCards;
-
+  final List<AdoptionPetCardEntity> allAdoptionPetCards;
   // =========================
   // Create Adoption Post
   // =========================
@@ -24,10 +24,10 @@ class AdoptionState extends Equatable {
   const AdoptionState({
     this.selectedTabIndex = 0,
     this.selectedCategory = 'Cat',
-
+    this.allAdoptionPetCards = const [],
+    this.adoptionPetCards = const [],
     // Get adoption pet cards
     this.isLoadingPosts = false,
-    this.adoptionPetCards = const [],
 
     // Get adoption pet details
     this.isLoadingPetDetails = false,
@@ -58,6 +58,7 @@ class AdoptionState extends Equatable {
     AdoptionPetDetailsEntity? petDetails,
 
     String? errorMessage,
+    List<AdoptionPetCardEntity>? allAdoptionPetCards,
   }) {
     return AdoptionState(
       selectedTabIndex: selectedTabIndex ?? this.selectedTabIndex,
@@ -82,6 +83,7 @@ class AdoptionState extends Equatable {
       createdPost: createdPost ?? this.createdPost,
 
       errorMessage: errorMessage,
+      allAdoptionPetCards: allAdoptionPetCards ?? this.allAdoptionPetCards,
     );
   }
 
@@ -107,5 +109,7 @@ class AdoptionState extends Equatable {
     createdPost,
 
     errorMessage,
+    allAdoptionPetCards,
+    adoptionPetCards,
   ];
 }

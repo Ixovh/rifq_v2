@@ -76,7 +76,8 @@ Future<Map<String, dynamic>> getAdoptionPetDetails(
         owner:profiles (
           id,
           full_name,
-          avatar_url
+          avatar_url,
+          phone_number
         )
       ''')
       .eq('id', adoptionPostId)

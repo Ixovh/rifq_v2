@@ -7,7 +7,9 @@ class AdoptionPetCardModel extends AdoptionPetCardEntity {
     required super.name,
     required super.birthdate,
     required super.location,
+
     super.imageUrl,
+     super.species,
   });
 
   factory AdoptionPetCardModel.fromJson(Map<String, dynamic> json) {
@@ -18,6 +20,7 @@ class AdoptionPetCardModel extends AdoptionPetCardEntity {
       birthdate: DateTime.parse(json['birthdate'] as String),
       location: json['location'] as String? ?? '',
       imageUrl: json['image_url'] as String?,
+       species: json['species'] as String?,
     );
   }
 }

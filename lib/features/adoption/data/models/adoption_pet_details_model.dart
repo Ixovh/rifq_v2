@@ -16,6 +16,7 @@ class AdoptionPetDetailsModel extends AdoptionPetDetailsEntity {
     super.ownerId,
     super.ownerName,
     super.ownerAvatarUrl,
+     super.ownerPhone,
   });
 
   factory AdoptionPetDetailsModel.fromJson(
@@ -80,6 +81,7 @@ class AdoptionPetDetailsModel extends AdoptionPetDetailsEntity {
       ownerId: owner?['id'] as String?,
       ownerName: owner?['full_name'] as String?,
       ownerAvatarUrl: owner?['avatar_url'] as String?,
+      ownerPhone: owner?['phone_number'] as String?,
     );
   }
 }
