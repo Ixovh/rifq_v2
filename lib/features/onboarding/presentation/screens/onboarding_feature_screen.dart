@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/router/routers.dart';
 import 'package:rifq_v2/shared/presentation/widgets/custome_button_widgets.dart';
@@ -98,15 +99,16 @@ class OnbordingScreen extends StatelessWidget {
       ],
     ];
 
+    final l10n = AppLocalizations.of(context)!;
     final List<String> title = [
-      'Welcome to Rifq!',
-      'Track Your Pet’s \n Health Easily',
-      'Smart Care, Anytime',
+      l10n.onboarding_title1,
+      l10n.onboarding_title2,
+      l10n.onboarding_title3,
     ];
     final List<String> subTitle = [
-      'Your all-in-one app for caring, tracking,\n and supporting every moment of your \n pet’s life.',
-      'Keep all medical records, vaccinations,\n and check-ups organized in one smart \n health card.',
-      'Use AI to check symptoms,\n find nearby clinics, home services, \n hotels,and everything your pet needs.',
+      l10n.onboarding_subtitle1,
+      l10n.onboarding_subtitle2,
+      l10n.onboarding_subtitle3,
     ];
 
     return Container(
@@ -159,7 +161,9 @@ class OnbordingScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         CustomeButtonWidgets(
-                          titel: state == 2 ? "Get started" : "Next",
+                          titel: state == 2
+                              ? l10n.onboarding_getStarted
+                              : l10n.common_next,
                           onPressed: () {
                             if (state < 2) {
                               controller.nextPage(
@@ -185,7 +189,7 @@ class OnbordingScreen extends StatelessWidget {
                               controller.jumpToPage(2);
                             },
                             child: Text(
-                              "Skip",
+                              l10n.onboarding_skip,
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 18.sp,
