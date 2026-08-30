@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_pet_card_entity.dart';
 import 'package:rifq_v2/features/adoption/presentation/cubit/adoption_cubit.dart';
+import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/service_locator/service_locator.dart';
 
 @RoutePage()
@@ -200,9 +201,9 @@ class _PetDetailsView extends StatelessWidget {
                         width: double.infinity,
                         height: 58.h,
                         child: ElevatedButton(
-                          onPressed: () {
-                            // Adoption request لاحقًا
-                          },
+                         onPressed: () {
+  context.router.push(const AdoptionFormRoute());
+},
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF36B8AB),
                             elevation: 0,

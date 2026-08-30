@@ -114,6 +114,22 @@ class AdoptionFeatureRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [AdoptionFormScreen]
+class AdoptionFormRoute extends PageRouteInfo<void> {
+  const AdoptionFormRoute({List<PageRouteInfo>? children})
+    : super(AdoptionFormRoute.name, initialChildren: children);
+
+  static const String name = 'AdoptionFormRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AdoptionFormScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [AuthScreen]
 class AuthRoute extends PageRouteInfo<AuthRouteArgs> {
   AuthRoute({Key? key, required String role, List<PageRouteInfo>? children})

@@ -7,6 +7,7 @@ import 'package:rifq_v2/features/account/presentation/screens/pet_profile_screen
 import 'package:rifq_v2/features/add_pet/presentation/screens/add_pet_screen.dart';
 import 'package:rifq_v2/features/adoption/data/models/adoption_pet_card_model.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_pet_card_entity.dart';
+import 'package:rifq_v2/features/adoption/presentation/widgets/adoption_form_widget.dart';
 import 'package:rifq_v2/features/edit_pet/presentation/screens/edit_pet_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/auth_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/check_email_screen.dart';
@@ -48,5 +49,10 @@ class AppRouter extends RootStackRouter {
   page: PetDetailsRoute.page,
   path: '/pet-details',
 ),
+AutoRoute(
+  page: AdoptionFormRoute.page,
+  path: '/adoption-form',
+),
+
   ];
 }
