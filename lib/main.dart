@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'l10n/cubit/locale_cubit.dart';
+import 'l10n/generated/app_localizations.dart';
 import 'shared/setup.dart';
 import 'shared/service_locator/service_locator.dart';
 import 'shared/presentation/router/app_router.dart';
@@ -22,14 +25,28 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(402, 874),
-      builder: (_, _) {
-        return MaterialApp.router(
-          routerConfig: _appRouter.config(),
-          debugShowCheckedModeBanner: true,
-        );
-      },
+    return BlocProvider<LocaleCubit>(
+      create: (_) => getIt<LocaleCubit>(),
+      child: ScreenUtilInit(
+        designSize: const Size(402, 874),
+        builder: (_, _) {
+          // Rebuilds MaterialApp with a new locale: whenever the language is
+          // switched, so every AppLocalizations.of(context) below re-resolves
+          // live — no restart.
+          return BlocBuilder<LocaleCubit, LocaleState>(
+            builder: (context, localeState) {
+              return MaterialApp.router(
+                routerConfig: _appRouter.config(),
+                localizationsDelegates:
+                    AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
+                locale: localeState.locale,
+                debugShowCheckedModeBanner: true,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

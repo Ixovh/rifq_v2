@@ -107,6 +107,7 @@ import '../../features/hotel/presentation/cubit/hotel_detail_cubit.dart'
     as _i419;
 import '../../features/hotel/presentation/cubit/hotel_list_cubit.dart' as _i302;
 import '../../features/search/presentation/cubit/search_cubit.dart' as _i341;
+import '../../l10n/cubit/locale_cubit.dart' as _i368;
 import '../networking/dio_client.dart' as _i201;
 import '../storage_service/local_keys_service.dart' as _i261;
 import 'shared/main_dependencies.dart' as _i1014;
@@ -121,6 +122,7 @@ extension GetItInjectableX on _i174.GetIt {
     final thirdPartyModule = _$ThirdPartyModule();
     gh.singleton<_i792.GetStorage>(() => thirdPartyModule.storage);
     gh.singleton<_i454.SupabaseClient>(() => thirdPartyModule.supabaseClient);
+    gh.singleton<_i368.LocaleCubit>(() => thirdPartyModule.localeCubit);
     gh.lazySingleton<_i201.DioClient>(() => _i201.DioClient());
     gh.lazySingleton<_i956.AdoptionRemoteDataSource>(
       () => _i956.AdoptionRemoteDataSourceImpl(gh<_i454.SupabaseClient>()),
