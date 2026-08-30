@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
 class AddPetCircleWidget extends StatelessWidget {
@@ -32,7 +33,7 @@ class AddPetCircleWidget extends StatelessWidget {
             if (showLabel) ...[
               SizedBox(height: 4.h),
               Text(
-                'Add Pet',
+                AppLocalizations.of(context)!.home_addPet,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
