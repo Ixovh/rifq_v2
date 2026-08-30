@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/features/account/domain/entities/account_entity.dart';
 import 'package:rifq_v2/features/account/presentation/cubit/account_cubit.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/account_avatar.dart';
@@ -71,7 +72,7 @@ class _AccountView extends StatelessWidget {
           body: Center(
             child: TextButton(
               onPressed: () => context.read<AccountCubit>().loadAccount(),
-              child: const Text('Retry'),
+              child: Text(AppLocalizations.of(context)!.common_retry),
             ),
           ),
         );
@@ -107,17 +108,17 @@ class _GuestAccountBody extends StatelessWidget {
               SizedBox(height: 28.h),
               AccountMenuTile(
                 icon: Icons.privacy_tip_outlined,
-                label: 'Security & Privacy',
+                label: AppLocalizations.of(context)!.account_securityPrivacy,
                 onTap: () {},
               ),
               AccountMenuTile(
                 icon: Icons.language,
-                label: 'Language',
+                label: AppLocalizations.of(context)!.account_language,
                 onTap: () {},
               ),
               AccountMenuTile(
                 icon: Icons.logout,
-                label: 'Log out',
+                label: AppLocalizations.of(context)!.account_logout,
                 labelColor: context.red10,
                 onTap: () => _confirmLogout(context),
               ),
@@ -199,11 +200,11 @@ class _SignedAccountBody extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
                 AccountInfoRow(
-                  label: 'Email',
+                  label: AppLocalizations.of(context)!.common_email,
                   value: data.email.isEmpty ? '-' : data.email,
                 ),
                 AccountInfoRow(
-                  label: 'Phone number',
+                  label: AppLocalizations.of(context)!.common_phoneNumber,
                   value: (profile.phoneNumber?.isNotEmpty ?? false)
                       ? profile.phoneNumber!
                       : '-',
@@ -211,8 +212,8 @@ class _SignedAccountBody extends StatelessWidget {
                 if (data.pets.isNotEmpty) ...[
                   SizedBox(height: 20.h),
                   AccountSectionHeader(
-                    title: 'Your Pets',
-                    actionLabel: 'See all',
+                    title: AppLocalizations.of(context)!.common_yourPets,
+                    actionLabel: AppLocalizations.of(context)!.common_seeAll,
                     onAction: () => context.pushRoute(AccountPetsRoute()),
                   ),
                   SizedBox(height: 12.h),
@@ -249,17 +250,17 @@ class _SignedAccountBody extends StatelessWidget {
                 SizedBox(height: 28.h),
                 AccountMenuTile(
                   icon: Icons.privacy_tip_outlined,
-                  label: 'Security & Privacy',
+                  label: AppLocalizations.of(context)!.account_securityPrivacy,
                   onTap: () {},
                 ),
                 AccountMenuTile(
                   icon: Icons.language,
-                  label: 'Language',
+                  label: AppLocalizations.of(context)!.account_language,
                   onTap: () {},
                 ),
                 AccountMenuTile(
                   icon: Icons.logout,
-                  label: 'Log out',
+                  label: AppLocalizations.of(context)!.account_logout,
                   labelColor: context.red10,
                   onTap: () => _confirmLogout(context),
                 ),
@@ -274,11 +275,12 @@ class _SignedAccountBody extends StatelessWidget {
 }
 
 Future<void> _confirmLogout(BuildContext context) async {
+  final l10n = AppLocalizations.of(context)!;
   final confirmed = await showAppConfirmSheet(
     context: context,
-    title: 'Log out',
-    message: 'Are you sure you want to log out?',
-    confirmLabel: 'Log out',
+    title: l10n.account_logout,
+    message: l10n.account_logoutConfirmMessage,
+    confirmLabel: l10n.account_logout,
     icon: Icons.logout_rounded,
     isDestructive: true,
   );

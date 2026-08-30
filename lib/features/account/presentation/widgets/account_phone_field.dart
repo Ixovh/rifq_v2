@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:phone_text_field/helper/countries.dart';
 import 'package:phone_text_field/phone_text_field.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
 class AccountPhoneField extends StatefulWidget {
@@ -94,10 +95,12 @@ class _AccountPhoneFieldState extends State<AccountPhoneField> {
       validator: (value) {
         final text = value?.trim() ?? '';
         if (text.isEmpty) {
-          return widget.isRequired ? 'Phone number is required' : null;
+          return widget.isRequired
+              ? AppLocalizations.of(context)!.account_phoneRequired
+              : null;
         }
         if (text.length != 9) {
-          return 'Enter a valid 9-digit phone number';
+          return AppLocalizations.of(context)!.account_phoneInvalid9;
         }
         return null;
       },
@@ -196,7 +199,7 @@ class _AccountPhoneFieldState extends State<AccountPhoneField> {
                     color: context.neutral100,
                     padding: EdgeInsets.symmetric(horizontal: 4.w),
                     child: Text(
-                      'Phone number',
+                      AppLocalizations.of(context)!.common_phoneNumber,
                       style: context.body2.copyWith(
                         color: context.neutral700,
                         fontWeight: FontWeight.w400,
@@ -325,7 +328,7 @@ class _AccountCountryPickerSheetState extends State<_AccountCountryPickerSheet> 
                 children: [
                   Expanded(
                     child: Text(
-                      'Select country',
+                      AppLocalizations.of(context)!.account_selectCountry,
                       style: context.h5.copyWith(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.w600,
@@ -354,7 +357,7 @@ class _AccountCountryPickerSheetState extends State<_AccountCountryPickerSheet> 
                   fontWeight: FontWeight.w500,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'Search by name or code',
+                  hintText: AppLocalizations.of(context)!.account_searchCountry,
                   hintStyle: context.body2.copyWith(color: context.neutral500),
                   prefixIcon: Icon(
                     Icons.search_rounded,
@@ -390,7 +393,7 @@ class _AccountCountryPickerSheetState extends State<_AccountCountryPickerSheet> 
               child: _filtered.isEmpty
                   ? Center(
                       child: Text(
-                        'No countries found',
+                        AppLocalizations.of(context)!.account_noCountriesFound,
                         style: context.body2.copyWith(color: context.neutral700),
                       ),
                     )

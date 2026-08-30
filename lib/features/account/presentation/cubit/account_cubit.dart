@@ -58,7 +58,15 @@ class AccountCubit extends Cubit<AccountState> {
     phoneController.text = data.profile.phoneNumber ?? '';
   }
 
-  Future<void> saveProfile({File? imageFile, bool removeImage = false}) async {
+  Future<void> saveProfile({
+    File? imageFile,
+    bool removeImage = false,
+    // Localized validation copy, passed from the screen so the cubit stays
+    // free of a BuildContext.
+    required String firstNameRequiredMessage,
+    required String emailRequiredMessage,
+    required String invalidEmailMessage,
+  }) async {
     final current = state;
     if (current is! AccountLoadedState) return;
 
@@ -72,20 +80,20 @@ class AccountCubit extends Cubit<AccountState> {
     ].where((part) => part.isNotEmpty).join(' ');
 
     if (fullName.isEmpty) {
-      emit(const AccountErrorState(msg: 'First name is required'));
+      emit(AccountErrorState(msg: firstNameRequiredMessage));
       emit(current);
       return;
     }
 
     if (email.isEmpty) {
-      emit(const AccountErrorState(msg: 'Email is required'));
+      emit(AccountErrorState(msg: emailRequiredMessage));
       emit(current);
       return;
     }
 
     final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
     if (!emailRegex.hasMatch(email)) {
-      emit(const AccountErrorState(msg: 'Enter a valid email address'));
+      emit(AccountErrorState(msg: invalidEmailMessage));
       emit(current);
       return;
     }
