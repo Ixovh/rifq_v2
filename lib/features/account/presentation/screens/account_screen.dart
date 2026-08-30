@@ -11,6 +11,7 @@ import 'package:rifq_v2/features/account/presentation/widgets/account_info_row.d
 import 'package:rifq_v2/features/account/presentation/widgets/account_menu_tile.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/account_pet_card.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/account_section_header.dart';
+import 'package:rifq_v2/features/account/presentation/widgets/language_picker_sheet.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/widgets/app_confirm_sheet.dart';
@@ -114,7 +115,7 @@ class _GuestAccountBody extends StatelessWidget {
               AccountMenuTile(
                 icon: Icons.language,
                 label: AppLocalizations.of(context)!.account_language,
-                onTap: () {},
+                onTap: () => showLanguagePickerSheet(context),
               ),
               AccountMenuTile(
                 icon: Icons.logout,
@@ -256,7 +257,7 @@ class _SignedAccountBody extends StatelessWidget {
                 AccountMenuTile(
                   icon: Icons.language,
                   label: AppLocalizations.of(context)!.account_language,
-                  onTap: () {},
+                  onTap: () => showLanguagePickerSheet(context),
                 ),
                 AccountMenuTile(
                   icon: Icons.logout,
