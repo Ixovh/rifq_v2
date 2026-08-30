@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/features/home_boarding/domain/entities/home_boarding_entity.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
 class SitterCard extends StatelessWidget {
@@ -12,6 +13,7 @@ class SitterCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final radius = BorderRadius.circular(20.r);
+    final l10n = AppLocalizations.of(context)!;
 
     return Material(
       color: Colors.white,
@@ -85,7 +87,7 @@ class SitterCard extends StatelessWidget {
                         ),
                         SizedBox(width: 4.w),
                         Text(
-                          '(${sitter.reviewCount} reviews)',
+                          l10n.common_reviewsCount(sitter.reviewCount),
                           style: context.body3.copyWith(
                             color: context.neutral600,
                           ),
@@ -101,8 +103,8 @@ class SitterCard extends StatelessWidget {
                     _IconLine(
                       icon: Icons.payments_outlined,
                       text:
-                          'SAR ${sitter.pricePerNight.toStringAsFixed(0)}/night'
-                          ' · ${sitter.yearsExperience} yrs exp.',
+                          '${l10n.common_pricePerNightSar(sitter.pricePerNight.toStringAsFixed(0))}'
+                          ' · ${l10n.common_yearsExpShort(sitter.yearsExperience)}',
                     ),
                   ],
                 ),

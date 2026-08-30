@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/features/home_boarding/presentation/cubit/boarding_request_cubit.dart';
 import 'package:rifq_v2/features/home_boarding/presentation/cubit/sitter_detail_cubit.dart';
 import 'package:rifq_v2/features/hotel/presentation/widgets/book_now_button_widget.dart';
@@ -50,12 +51,13 @@ class _SitterDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocListener<BoardingRequestCubit, BoardingRequestState>(
       listener: (context, state) {
         if (state is BoardingRequestSent) {
           context.router.push(const RequestSentRoute());
         } else if (state is BoardingRequestError) {
-          context.showErrorToast(state.msg);
+          context.showErrorToast(l10n.homeBoarding_errorSending);
         }
       },
       child: Scaffold(
@@ -70,7 +72,7 @@ class _SitterDetailView extends StatelessWidget {
 
               if (state is SitterDetailError) {
                 return _ErrorView(
-                  message: state.msg,
+                  message: l10n.homeBoarding_errorLoadingSitter,
                   onRetry: () => context
                       .read<SitterDetailCubit>()
                       .loadSitterDetail(sitterId),
@@ -136,7 +138,7 @@ class _SitterDetailView extends StatelessWidget {
                               ),
                               SizedBox(width: 6.w),
                               Text(
-                                '(${detail.reviewCount} reviews)',
+                                l10n.common_reviewsCount(detail.reviewCount),
                                 style: context.body3.copyWith(
                                   color: context.neutral600,
                                 ),
@@ -155,11 +157,13 @@ class _SitterDetailView extends StatelessWidget {
                             _InfoChip(
                               icon: Icons.payments_outlined,
                               label:
-                                  'SAR ${detail.pricePerNight.toStringAsFixed(0)}/night',
+                                  l10n.common_pricePerNightSar(
+                                  detail.pricePerNight.toStringAsFixed(0),
+                                ),
                             ),
                             _InfoChip(
                               icon: Icons.work_history_outlined,
-                              label: '${detail.yearsExperience} yrs exp.',
+                              label: l10n.common_yearsExpShort(detail.yearsExperience),
                             ),
                           ],
                         ),
@@ -182,7 +186,7 @@ class _SitterDetailView extends StatelessWidget {
                               color: context.primary300,
                             ),
                             label: Text(
-                              'Contact',
+                              l10n.homeBoarding_contact,
                               style: context.body2.copyWith(
                                 color: context.primary300,
                                 fontWeight: FontWeight.w600,
@@ -193,7 +197,7 @@ class _SitterDetailView extends StatelessWidget {
                         if ((detail.bio ?? '').isNotEmpty) ...[
                           SizedBox(height: 20.h),
                           Text(
-                            'About',
+                            l10n.homeBoarding_about,
                             style: context.body1.copyWith(
                               color: context.neutral1000,
                               fontWeight: FontWeight.w600,
@@ -210,7 +214,7 @@ class _SitterDetailView extends StatelessWidget {
                         if (detail.skills.isNotEmpty) ...[
                           SizedBox(height: 20.h),
                           Text(
-                            'Skills',
+                            l10n.homeBoarding_skills,
                             style: context.body1.copyWith(
                               color: context.neutral1000,
                               fontWeight: FontWeight.w600,
@@ -234,8 +238,8 @@ class _SitterDetailView extends StatelessWidget {
                                 requestState is BoardingRequestSending;
                             return BookNowButton(
                               label: alreadyPending
-                                  ? 'Request Pending'
-                                  : 'Send Request',
+                                  ? l10n.homeBoarding_requestPending
+                                  : l10n.homeBoarding_sendRequest,
                               isLoading: sending,
                               onPressed: alreadyPending
                                   ? null
@@ -371,7 +375,10 @@ class _ErrorView extends StatelessWidget {
                     style: context.body2.copyWith(color: context.neutral700),
                   ),
                   SizedBox(height: 12.h),
-                  TextButton(onPressed: onRetry, child: const Text('Retry')),
+                  TextButton(
+                    onPressed: onRetry,
+                    child: Text(AppLocalizations.of(context)!.common_retry),
+                  ),
                 ],
               ),
             ),
