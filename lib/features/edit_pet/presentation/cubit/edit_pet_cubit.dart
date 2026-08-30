@@ -50,7 +50,14 @@ class EditPetCubit extends Cubit<EditPetState> {
     );
   }
 
-  Future<void> savePet({required String petId, File? photoFile}) async {
+  Future<void> savePet({
+    required String petId,
+    File? photoFile,
+    // Passed in from the screen so validation copy stays localized without
+    // pulling a BuildContext into the cubit.
+    required String ageRequiredMessage,
+    required String invalidWeightMessage,
+  }) async {
     final current = state;
     if (current is! EditPetLoaded) return;
 
@@ -61,7 +68,7 @@ class EditPetCubit extends Cubit<EditPetState> {
     final birthdate = _birthdate;
 
     if (birthdate == null) {
-      emit(const EditPetError(message: 'Pet age is required'));
+      emit(EditPetError(message: ageRequiredMessage));
       emit(current);
       return;
     }
@@ -71,7 +78,7 @@ class EditPetCubit extends Cubit<EditPetState> {
     if (weightText.isNotEmpty) {
       weight = double.tryParse(weightText.replaceAll(',', '.'));
       if (weight == null || weight <= 0) {
-        emit(const EditPetError(message: 'Enter a valid weight'));
+        emit(EditPetError(message: invalidWeightMessage));
         emit(current);
         return;
       }
