@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/features/hotel/domain/entities/hotel_detail_entity.dart';
 import 'package:rifq_v2/features/hotel/presentation/cubit/hotel_detail_cubit.dart';
 import 'package:rifq_v2/features/hotel/presentation/widgets/book_now_button_widget.dart';
@@ -130,7 +131,10 @@ class _HotelDetailViewState extends State<_HotelDetailView>
                     fontWeight: FontWeight.w600,
                   ),
                   unselectedLabelStyle: context.body2,
-                  tabs: const [Tab(text: 'Rooms'), Tab(text: 'Hotel Info')],
+                  tabs: [
+                    Tab(text: AppLocalizations.of(context)!.hotel_tabRooms),
+                    Tab(text: AppLocalizations.of(context)!.hotel_tabInfo),
+                  ],
                 ),
                 Expanded(
                   child: TabBarView(
@@ -173,7 +177,7 @@ class _RoomsTab extends StatelessWidget {
     if (detail.rooms.isEmpty && detail.services.isEmpty) {
       return Center(
         child: Text(
-          'No rooms listed for this hotel yet.',
+          AppLocalizations.of(context)!.hotel_noRooms,
           style: context.body2.copyWith(color: context.neutral600),
         ),
       );
@@ -189,7 +193,7 @@ class _RoomsTab extends StatelessWidget {
         if (detail.services.isNotEmpty) ...[
           SizedBox(height: 8.h),
           Text(
-            'Other Services',
+            AppLocalizations.of(context)!.hotel_otherServices,
             style: context.body1.copyWith(
               color: context.neutral1000,
               fontWeight: FontWeight.w600,
@@ -227,7 +231,7 @@ class _HotelInfoTab extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(18.w, 12.h, 18.w, 24.h),
       children: [
         Text(
-          'About the Hotel',
+          AppLocalizations.of(context)!.hotel_aboutTitle,
           style: context.body1.copyWith(
             color: context.neutral1000,
             fontWeight: FontWeight.w600,
@@ -236,14 +240,14 @@ class _HotelInfoTab extends StatelessWidget {
         SizedBox(height: 6.h),
         Text(
           (detail.description ?? '').isEmpty
-              ? 'No description available yet.'
+              ? AppLocalizations.of(context)!.hotel_noDescription
               : detail.description!,
           style: context.body3.copyWith(color: context.neutral700),
         ),
         if (detail.facilities.isNotEmpty) ...[
           SizedBox(height: 20.h),
           Text(
-            'Facilities',
+            AppLocalizations.of(context)!.hotel_facilities,
             style: context.body1.copyWith(
               color: context.neutral1000,
               fontWeight: FontWeight.w600,
@@ -263,7 +267,7 @@ class _HotelInfoTab extends StatelessWidget {
         if (rules.isNotEmpty) ...[
           SizedBox(height: 20.h),
           Text(
-            'Rules & Requirements',
+            AppLocalizations.of(context)!.hotel_rulesTitle,
             style: context.body1.copyWith(
               color: context.neutral1000,
               fontWeight: FontWeight.w600,
@@ -301,7 +305,7 @@ class _HotelInfoTab extends StatelessWidget {
             ),
             icon: Icon(Icons.location_on_outlined, color: context.primary300),
             label: Text(
-              'Location',
+              AppLocalizations.of(context)!.hotel_location,
               style: context.body2.copyWith(
                 color: context.primary300,
                 fontWeight: FontWeight.w600,
@@ -348,7 +352,10 @@ class _ErrorView extends StatelessWidget {
                     style: context.body2.copyWith(color: context.neutral700),
                   ),
                   SizedBox(height: 12.h),
-                  TextButton(onPressed: onRetry, child: const Text('Retry')),
+                  TextButton(
+                    onPressed: onRetry,
+                    child: Text(AppLocalizations.of(context)!.common_retry),
+                  ),
                 ],
               ),
             ),

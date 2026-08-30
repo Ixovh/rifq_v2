@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/constants/app_enums.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
+
+String sortOptionLabel(BuildContext context, SortOption option) {
+  final l10n = AppLocalizations.of(context)!;
+  return switch (option) {
+    SortOption.recommended => l10n.sortOption_recommended,
+    SortOption.nearest => l10n.sortOption_nearest,
+    SortOption.topRated => l10n.sortOption_topRated,
+    SortOption.lowestPrice => l10n.sortOption_lowestPrice,
+    SortOption.mostExperienced => l10n.sortOption_mostExperienced,
+  };
+}
 
 /// Nearest only makes sense for Hotels (no lat/long on home_boarding_profiles)
 /// and Most Experienced only for Home Boarding — each is left out of the
@@ -67,7 +79,7 @@ class _SortFilterSheet extends StatelessWidget {
             ),
             SizedBox(height: 16.h),
             Text(
-              'Sort & Filter',
+              AppLocalizations.of(context)!.hotel_sortFilterTitle,
               style: context.body1.copyWith(fontWeight: FontWeight.w600),
             ),
             SizedBox(height: 8.h),
@@ -104,7 +116,7 @@ class _OptionTile extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    option.label,
+                    sortOptionLabel(context, option),
                     style: context.body2.copyWith(
                       color: selected
                           ? context.primary400

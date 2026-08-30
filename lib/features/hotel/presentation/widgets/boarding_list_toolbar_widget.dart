@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/constants/app_enums.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
@@ -23,6 +24,7 @@ class BoardingListToolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         Container(
@@ -35,14 +37,14 @@ class BoardingListToolbar extends StatelessWidget {
             children: [
               Expanded(
                 child: _Segment(
-                  label: 'Hotels',
+                  label: l10n.hotel_tabHotels,
                   selected: activeTab == BoardingTab.hotels,
                   onTap: () => onTabChanged(BoardingTab.hotels),
                 ),
               ),
               Expanded(
                 child: _Segment(
-                  label: 'Home Boarding',
+                  label: l10n.hotel_tabHomeBoarding,
                   selected: activeTab == BoardingTab.homeBoarding,
                   onTap: () => onTabChanged(BoardingTab.homeBoarding),
                 ),
@@ -78,7 +80,7 @@ class BoardingListToolbar extends StatelessWidget {
                         ),
                         SizedBox(width: 8.w),
                         Text(
-                          'Search...',
+                          l10n.common_searchHint,
                           style: context.body2.copyWith(
                             color: context.neutral500,
                           ),

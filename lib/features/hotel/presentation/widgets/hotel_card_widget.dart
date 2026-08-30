@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/features/hotel/domain/entities/hotel_entity.dart';
 import 'package:rifq_v2/features/hotel/presentation/widgets/hotel_image_placeholder_widget.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
 class HotelCard extends StatelessWidget {
@@ -13,6 +14,7 @@ class HotelCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final radius = BorderRadius.circular(20.r);
+    final l10n = AppLocalizations.of(context)!;
 
     return Material(
       color: Colors.white,
@@ -80,7 +82,7 @@ class HotelCard extends StatelessWidget {
                         ),
                         SizedBox(width: 4.w),
                         Text(
-                          '(${hotel.reviewCount} reviews)',
+                          l10n.common_reviewsCount(hotel.reviewCount),
                           style: context.body3.copyWith(
                             color: context.neutral600,
                           ),
@@ -92,14 +94,19 @@ class HotelCard extends StatelessWidget {
                       icon: Icons.location_on_outlined,
                       text: hotel.distanceKm == null
                           ? hotel.locationText
-                          : '${hotel.locationText} – ${hotel.distanceKm!.toStringAsFixed(1)} km',
+                          : l10n.hotel_locationDistance(
+                              hotel.locationText,
+                              hotel.distanceKm!.toStringAsFixed(1),
+                            ),
                     ),
                     SizedBox(height: 2.h),
                     _IconLine(
                       icon: Icons.payments_outlined,
                       text: hotel.startingPrice == null
-                          ? 'Price unavailable'
-                          : 'Start from ${hotel.startingPrice!.toStringAsFixed(0)} SAR/night',
+                          ? l10n.hotel_priceUnavailable
+                          : l10n.hotel_startingPrice(
+                              hotel.startingPrice!.toStringAsFixed(0),
+                            ),
                     ),
                     if (hotel.servicesSummary.isNotEmpty) ...[
                       SizedBox(height: 4.h),
@@ -107,7 +114,7 @@ class HotelCard extends StatelessWidget {
                         TextSpan(
                           children: [
                             TextSpan(
-                              text: 'Services : ',
+                              text: l10n.hotel_servicesLabel,
                               style: context.body3.copyWith(
                                 color: context.neutral1000,
                                 fontWeight: FontWeight.w600,

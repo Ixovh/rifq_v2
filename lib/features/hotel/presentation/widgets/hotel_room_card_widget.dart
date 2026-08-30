@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/features/hotel/domain/entities/hotel_detail_entity.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
 class HotelRoomCard extends StatelessWidget {
@@ -10,6 +11,7 @@ class HotelRoomCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(14.w),
@@ -34,7 +36,9 @@ class HotelRoomCard extends StatelessWidget {
               ),
               _Pill(
                 icon: Icons.payments_outlined,
-                text: 'SAR ${room.pricePerNight.toStringAsFixed(0)} / night',
+                text: l10n.common_pricePerNightSar(
+                  room.pricePerNight.toStringAsFixed(0),
+                ),
               ),
               if (room.sizeText != null) ...[
                 SizedBox(width: 6.w),
@@ -45,7 +49,7 @@ class HotelRoomCard extends StatelessWidget {
           if (room.includes.isNotEmpty) ...[
             SizedBox(height: 10.h),
             Text(
-              'Includes :',
+              l10n.hotel_includesLabel,
               style: context.body3.copyWith(
                 color: context.neutral1000,
                 fontWeight: FontWeight.w600,
@@ -68,7 +72,7 @@ class HotelRoomCard extends StatelessWidget {
           if (room.totalRooms != null) ...[
             SizedBox(height: 8.h),
             Text(
-              '${room.totalRooms} rooms total',
+              l10n.hotel_roomsTotal(room.totalRooms!),
               style: context.body3.copyWith(
                 color: context.success,
                 fontWeight: FontWeight.w600,

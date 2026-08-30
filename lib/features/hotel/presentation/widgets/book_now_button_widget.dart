@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
 /// Shared full-width pill CTA for the Hotel booking and Home Boarding
@@ -8,17 +9,18 @@ import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.d
 class BookNowButton extends StatelessWidget {
   const BookNowButton({
     super.key,
-    this.label = 'Book Now',
+    this.label,
     this.onPressed,
     this.isLoading = false,
   });
 
-  final String label;
+  final String? label;
   final VoidCallback? onPressed;
   final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
+    final label = this.label ?? AppLocalizations.of(context)!.hotel_bookNow;
     return SizedBox(
       width: double.infinity,
       height: 52.h,

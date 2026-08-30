@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/features/home_boarding/presentation/cubit/home_boarding_list_cubit.dart';
 import 'package:rifq_v2/features/home_boarding/presentation/widgets/sitter_card_widget.dart';
 import 'package:rifq_v2/features/hotel/presentation/cubit/hotel_list_cubit.dart';
@@ -75,7 +76,7 @@ class _HotelListViewState extends State<_HotelListView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.background,
-      appBar: const CustomAppBar(title: 'Hotel'),
+      appBar: CustomAppBar(title: AppLocalizations.of(context)!.hotel_screenTitle),
       body: SafeArea(
         top: false,
         child: Padding(
@@ -123,14 +124,14 @@ class _HotelsTabBody extends StatelessWidget {
 
         if (state is HotelListError) {
           return _MessageView(
-            message: state.msg,
+            message: AppLocalizations.of(context)!.hotel_errorLoadingHotels,
             onRetry: () => context.read<HotelListCubit>().loadHotels(),
           );
         }
 
         if (state is HotelListEmpty) {
-          return const _MessageView(
-            message: 'No hotels available right now — check back soon.',
+          return _MessageView(
+            message: AppLocalizations.of(context)!.hotel_emptyHotels,
           );
         }
 
@@ -175,15 +176,15 @@ class _HomeBoardingTabBody extends StatelessWidget {
 
         if (state is HomeBoardingListError) {
           return _MessageView(
-            message: state.msg,
+            message: AppLocalizations.of(context)!.homeBoarding_errorLoadingSitters,
             onRetry: () =>
                 context.read<HomeBoardingListCubit>().loadSitters(),
           );
         }
 
         if (state is HomeBoardingListEmpty) {
-          return const _MessageView(
-            message: 'No sitters available right now — check back soon.',
+          return _MessageView(
+            message: AppLocalizations.of(context)!.hotel_emptySitters,
           );
         }
 
@@ -237,7 +238,10 @@ class _MessageView extends StatelessWidget {
           ),
           if (onRetry != null) ...[
             SizedBox(height: 12.h),
-            TextButton(onPressed: onRetry, child: const Text('Retry')),
+            TextButton(
+              onPressed: onRetry,
+              child: Text(AppLocalizations.of(context)!.common_retry),
+            ),
           ],
         ],
       ),

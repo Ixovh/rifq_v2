@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/features/hotel/domain/entities/hotel_detail_entity.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
 class HotelServiceRow extends StatelessWidget {
@@ -21,8 +22,13 @@ class HotelServiceRow extends StatelessWidget {
           Expanded(
             child: Text(
               hasPrice
-                  ? '${service.name} : SAR ${service.price!.toStringAsFixed(0)}'
-                        '${service.priceUnit != null ? ' / ${service.priceUnit}' : ''}'
+                  ? AppLocalizations.of(context)!.hotel_servicePrice(
+                          service.name,
+                          service.price!.toStringAsFixed(0),
+                        ) +
+                        (service.priceUnit != null
+                            ? ' / ${service.priceUnit}'
+                            : '')
                   : service.name,
               style: context.body3.copyWith(color: context.neutral700),
             ),
