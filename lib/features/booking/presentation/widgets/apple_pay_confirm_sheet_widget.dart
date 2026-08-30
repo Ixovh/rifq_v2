@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
 /// Cosmetic-only bottom sheet styled after the native Apple Pay confirm UI.
@@ -26,6 +27,7 @@ class _ApplePayConfirmSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -50,7 +52,7 @@ class _ApplePayConfirmSheet extends StatelessWidget {
                       Icon(Icons.apple, size: 20.sp, color: Colors.black),
                       SizedBox(width: 2.w),
                       Text(
-                        'Pay',
+                        l10n.applePay_payWordmark,
                         style: TextStyle(
                           fontSize: 18.sp,
                           fontWeight: FontWeight.w700,
@@ -72,10 +74,13 @@ class _ApplePayConfirmSheet extends StatelessWidget {
                         Icons.credit_card,
                         color: Colors.black87,
                       ),
-                      title: 'Apple Card •••• 1234',
+                      title: l10n.applePay_cardName,
                     ),
                     Divider(height: 1, color: context.neutral200),
-                    _SheetInfoRow(title: 'Price', trailingText: priceLabel),
+                    _SheetInfoRow(
+                      title: l10n.booking_priceTitle,
+                      trailingText: priceLabel,
+                    ),
                   ],
                 ),
               ),
@@ -102,7 +107,7 @@ class _ApplePayConfirmSheet extends StatelessWidget {
                       ),
                       SizedBox(height: 8.h),
                       Text(
-                        'Confirm with Side Button',
+                        l10n.applePay_confirmSideButton,
                         style: TextStyle(
                           fontSize: 13.sp,
                           color: Colors.black54,

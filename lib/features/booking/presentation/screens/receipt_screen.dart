@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:printing/printing.dart';
 import 'package:rifq_v2/features/booking/domain/entities/hotel_booking_entity.dart';
 import 'package:rifq_v2/features/booking/presentation/utils/receipt_pdf_builder.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/features/booking/presentation/widgets/booking_barcode_widget.dart';
 import 'package:rifq_v2/features/booking/presentation/widgets/hotel_summary_card_widget.dart';
 import 'package:rifq_v2/features/booking/presentation/widgets/price_details_widget.dart';
@@ -19,7 +20,10 @@ class ReceiptScreen extends StatelessWidget {
 
   Future<void> _downloadPdf(BuildContext context) async {
     try {
-      final bytes = await buildReceiptPdf(confirmation);
+      final bytes = await buildReceiptPdf(
+        confirmation,
+        AppLocalizations.of(context)!,
+      );
       await Printing.sharePdf(
         bytes: bytes,
         filename: '${confirmation.booking.bookingReference}.pdf',
@@ -28,7 +32,7 @@ class ReceiptScreen extends StatelessWidget {
       debugPrint('ReceiptScreen._downloadPdf failed: $e');
       if (context.mounted) {
         context.showErrorToast(
-          'Something went wrong generating the receipt. Please try again.',
+          AppLocalizations.of(context)!.booking_receiptError,
         );
       }
     }
@@ -51,7 +55,7 @@ class ReceiptScreen extends StatelessWidget {
           icon: Icon(Icons.arrow_back_ios_new, color: context.neutral1000),
         ),
         title: Text(
-          'Receipt',
+          AppLocalizations.of(context)!.booking_receiptTitle,
           style: context.body1.copyWith(
             color: context.neutral1000,
             fontWeight: FontWeight.w600,
@@ -75,7 +79,7 @@ class ReceiptScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Date',
+                            AppLocalizations.of(context)!.common_date,
                             style: context.body3.copyWith(
                               color: context.neutral600,
                             ),
@@ -94,7 +98,7 @@ class ReceiptScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Status',
+                            AppLocalizations.of(context)!.booking_status,
                             style: context.body3.copyWith(
                               color: context.neutral600,
                             ),
@@ -112,7 +116,7 @@ class ReceiptScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 18.h),
                   PriceDetailsWidget(
-                    title: 'Price',
+                    title: AppLocalizations.of(context)!.booking_priceTitle,
                     roomPriceTotal: booking.roomPriceTotal,
                     addonPriceTotal: booking.addonPriceTotal,
                     appServiceFee: booking.appServiceFee,
@@ -139,7 +143,7 @@ class ReceiptScreen extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    'Download PDF',
+                    AppLocalizations.of(context)!.booking_downloadPdf,
                     style: context.body1.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,

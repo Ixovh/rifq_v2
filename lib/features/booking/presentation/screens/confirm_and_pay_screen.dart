@@ -10,10 +10,20 @@ import 'package:rifq_v2/features/booking/presentation/widgets/apple_pay_confirm_
 import 'package:rifq_v2/features/booking/presentation/widgets/hotel_summary_card_widget.dart';
 import 'package:rifq_v2/features/booking/presentation/widgets/price_details_widget.dart';
 import 'package:rifq_v2/features/hotel/presentation/widgets/book_now_button_widget.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/constants/app_enums.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
+
+String paymentMethodLabel(BuildContext context, PaymentMethodOption method) {
+  final l10n = AppLocalizations.of(context)!;
+  return switch (method) {
+    PaymentMethodOption.applePay => l10n.paymentMethod_applePay,
+    PaymentMethodOption.visa => l10n.paymentMethod_visa,
+    PaymentMethodOption.mastercard => l10n.paymentMethod_mastercard,
+  };
+}
 
 @RoutePage()
 class ConfirmAndPayScreen extends StatefulWidget {
@@ -31,7 +41,9 @@ class _ConfirmAndPayScreenState extends State<ConfirmAndPayScreen> {
   Future<void> _onConfirmAndPay(BuildContext context) async {
     final confirmed = await showApplePayConfirmSheet(
       context: context,
-      priceLabel: '${widget.draft.totalPrice.toStringAsFixed(0)} SAR',
+      priceLabel: AppLocalizations.of(
+        context,
+      )!.booking_amountSar(widget.draft.totalPrice.toStringAsFixed(0)),
     );
     if (confirmed == true && context.mounted) {
       context.read<BookingCreateCubit>().confirmAndPay(
@@ -41,7 +53,7 @@ class _ConfirmAndPayScreenState extends State<ConfirmAndPayScreen> {
     }
   }
 
-  String get _dateRangeLabel {
+  String _dateRangeLabel(AppLocalizations l10n) {
     final draft = widget.draft;
     if (draft.nights <= 1) {
       return DateFormat('EEE, d MMM yyyy').format(draft.checkInDate);
@@ -49,12 +61,13 @@ class _ConfirmAndPayScreenState extends State<ConfirmAndPayScreen> {
     final start = DateFormat('EEE d MMM').format(draft.checkInDate);
     final end = DateFormat('EEE d MMM').format(draft.checkOutDate);
     final year = DateFormat('yyyy').format(draft.checkOutDate);
-    return '$start - $end, $year · ${draft.nights} nights';
+    return '$start - $end, $year · ${l10n.booking_nightsCount(draft.nights)}';
   }
 
   @override
   Widget build(BuildContext context) {
     final draft = widget.draft;
+    final l10n = AppLocalizations.of(context)!;
 
     return BlocProvider(
       create: (_) => GetIt.I<BookingCreateCubit>(),
@@ -65,7 +78,9 @@ class _ConfirmAndPayScreenState extends State<ConfirmAndPayScreen> {
               PaymentSuccessRoute(confirmation: state.confirmation),
             );
           } else if (state is BookingCreateError) {
-            context.showErrorToast(state.msg);
+            context.showErrorToast(
+              AppLocalizations.of(context)!.booking_errorCreating,
+            );
           }
         },
         builder: (context, state) {
@@ -84,7 +99,7 @@ class _ConfirmAndPayScreenState extends State<ConfirmAndPayScreen> {
                 ),
               ),
               title: Text(
-                'Confirm and Pay',
+                l10n.booking_confirmPayTitle,
                 style: context.body1.copyWith(
                   color: context.neutral1000,
                   fontWeight: FontWeight.w600,
@@ -101,9 +116,9 @@ class _ConfirmAndPayScreenState extends State<ConfirmAndPayScreen> {
                       children: [
                         HotelSummaryCard(hotel: draft.hotelDetail),
                         SizedBox(height: 18.h),
-                        _SectionTitle('Your Order'),
+                        _SectionTitle(l10n.booking_yourOrder),
                         _OrderRow(
-                          label: 'Package / Room Type',
+                          label: l10n.booking_roomType,
                           value: draft.selectedRooms.isEmpty
                               ? '-'
                               : draft.selectedRooms
@@ -112,35 +127,35 @@ class _ConfirmAndPayScreenState extends State<ConfirmAndPayScreen> {
                         ),
                         if (draft.selectedServices.isNotEmpty)
                           _OrderRow(
-                            label: 'Services Selected',
+                            label: l10n.booking_servicesSelected,
                             value: draft.selectedServices
-                                .map(
-                                  (s) => '${s.quantity} × ${s.serviceName}',
-                                )
+                                .map((s) => '${s.quantity} × ${s.serviceName}')
                                 .join(', '),
                           ),
                         _OrderRow(
-                          label: 'Number of Pets',
-                          value: '${draft.numberOfPets} Pets',
+                          label: l10n.booking_numberOfPetsOrder,
+                          value: l10n.booking_petsCount(draft.numberOfPets),
                         ),
                         SizedBox(height: 18.h),
-                        _SectionTitle('Stay Duration / Booking Date'),
+                        _SectionTitle(l10n.booking_stayDuration),
                         Text(
-                          _dateRangeLabel,
+                          _dateRangeLabel(l10n),
                           style: context.body2.copyWith(
                             color: context.neutral1000,
                           ),
                         ),
                         SizedBox(height: 2.h),
                         Text(
-                          'Drop-off: ${DateFormat('h:mm a').format(draft.dropOffTime)}',
+                          l10n.booking_dropOffTimeValue(
+                            DateFormat('h:mm a').format(draft.dropOffTime),
+                          ),
                           style: context.body3.copyWith(
                             color: context.neutral600,
                           ),
                         ),
                         Text(
-                          'Pick-up: ${DateFormat('h:mm a').format(draft.pickUpTime)}'
-                          '${draft.nights <= 1 ? ' (Next day)' : ''}',
+                          '${l10n.booking_pickUpTimeValue(DateFormat('h:mm a').format(draft.pickUpTime))}'
+                          '${draft.nights <= 1 ? l10n.booking_nextDaySuffix : ''}',
                           style: context.body3.copyWith(
                             color: context.neutral600,
                           ),
@@ -153,7 +168,7 @@ class _ConfirmAndPayScreenState extends State<ConfirmAndPayScreen> {
                           totalPrice: draft.totalPrice,
                         ),
                         SizedBox(height: 18.h),
-                        _SectionTitle('Payment Method'),
+                        _SectionTitle(l10n.booking_paymentMethod),
                         SizedBox(height: 8.h),
                         Row(
                           children: [
@@ -175,7 +190,7 @@ class _ConfirmAndPayScreenState extends State<ConfirmAndPayScreen> {
                   Padding(
                     padding: EdgeInsets.all(18.w),
                     child: BookNowButton(
-                      label: 'Confirm and Pay',
+                      label: l10n.booking_confirmPayTitle,
                       isLoading: isCreating,
                       onPressed: () => _onConfirmAndPay(context),
                     ),
@@ -283,7 +298,7 @@ class _PaymentMethodIcon extends StatelessWidget {
             ),
             SizedBox(width: 6.w),
             Text(
-              method.label,
+              paymentMethodLabel(context, method),
               style: context.body3.copyWith(
                 color: selected ? context.primary400 : context.neutral700,
                 fontWeight: selected ? FontWeight.w600 : FontWeight.w400,

@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/features/booking/domain/entities/hotel_booking_entity.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/widgets/success_check_icon_widget.dart';
@@ -33,7 +34,9 @@ class PaymentSuccessScreen extends StatelessWidget {
                         const SuccessCheckIcon(),
                         SizedBox(height: 24.h),
                         Text(
-                          'Payment Successful',
+                          AppLocalizations.of(
+                            context,
+                          )!.booking_paymentSuccessTitle,
                           style: context.h3.copyWith(
                             color: context.neutral1000,
                             fontWeight: FontWeight.w700,
@@ -57,7 +60,7 @@ class PaymentSuccessScreen extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      'See Details',
+                      AppLocalizations.of(context)!.booking_seeDetails,
                       style: context.body1.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,

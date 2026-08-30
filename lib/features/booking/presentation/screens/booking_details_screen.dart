@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/account_phone_field.dart';
 import 'package:rifq_v2/features/booking/domain/entities/booking_draft_entity.dart';
 import 'package:rifq_v2/features/booking/presentation/cubit/booking_details_cubit.dart';
@@ -110,15 +111,21 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
     if (!_hasSelectedRooms) {
-      context.showWarningToast('Select at least one room.');
+      context.showWarningToast(
+        AppLocalizations.of(context)!.booking_selectRoom,
+      );
       return;
     }
     if (_checkInDate == null || _checkOutDate == null) {
-      context.showWarningToast('Choose your stay dates.');
+      context.showWarningToast(
+        AppLocalizations.of(context)!.booking_chooseDates,
+      );
       return;
     }
     if (_dropOffTime == null || _pickUpTime == null) {
-      context.showWarningToast('Choose drop-off and pick-up times.');
+      context.showWarningToast(
+        AppLocalizations.of(context)!.booking_chooseTimes,
+      );
       return;
     }
 
@@ -169,7 +176,7 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
       context: context,
       initialStart: _checkInDate,
       initialEnd: _checkOutDate,
-      title: 'Choose dates',
+      title: AppLocalizations.of(context)!.booking_chooseDatesTitle,
     );
     if (picked == null || !mounted) return;
     setState(() {
@@ -182,7 +189,7 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
     final picked = await showAppTimePicker(
       context: context,
       initial: _dropOffTime,
-      title: 'Drop off time',
+      title: AppLocalizations.of(context)!.booking_dropOffTime,
     );
     if (picked == null || !mounted) return;
     setState(() => _dropOffTime = picked);
@@ -192,7 +199,7 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
     final picked = await showAppTimePicker(
       context: context,
       initial: _pickUpTime,
-      title: 'Pick up time',
+      title: AppLocalizations.of(context)!.booking_pickUpTime,
     );
     if (picked == null || !mounted) return;
     setState(() => _pickUpTime = picked);
@@ -207,11 +214,14 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
         } else if (state is BookingDetailsBlocked) {
           final issue = state.issues.first;
           context.showWarningToast(
-            'Only ${issue.availableQuantity} ${issue.roomName} left for '
-            'these dates.',
+            AppLocalizations.of(
+              context,
+            )!.booking_roomsLeft(issue.availableQuantity, issue.roomName),
           );
         } else if (state is BookingDetailsError) {
-          context.showErrorToast(state.msg);
+          context.showErrorToast(
+            AppLocalizations.of(context)!.booking_errorAvailability,
+          );
         }
       },
       child: Scaffold(
@@ -224,7 +234,7 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
             icon: Icon(Icons.arrow_back_ios_new, color: context.neutral1000),
           ),
           title: Text(
-            'Booking Details',
+            AppLocalizations.of(context)!.booking_detailsTitle,
             style: context.body1.copyWith(
               color: context.neutral1000,
               fontWeight: FontWeight.w600,
@@ -241,16 +251,18 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
                   child: ListView(
                     padding: EdgeInsets.fromLTRB(18.w, 8.h, 18.w, 24.h),
                     children: [
-                      _FieldLabel('Name'),
+                      _FieldLabel(AppLocalizations.of(context)!.common_name),
                       TextFormField(
                         controller: _nameController,
                         decoration: _inputDecoration(context),
                         validator: (value) => (value?.trim().isEmpty ?? true)
-                            ? 'Name is required'
+                            ? AppLocalizations.of(context)!.common_nameRequired
                             : null,
                       ),
                       SizedBox(height: 16.h),
-                      _FieldLabel('Phone Number'),
+                      _FieldLabel(
+                        AppLocalizations.of(context)!.common_phoneNumber,
+                      ),
                       AccountPhoneField(
                         key: ValueKey(_initialPhoneDigits),
                         initialValue: _initialPhoneDigits,
@@ -264,22 +276,28 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _FieldLabel('Number of pets', bottomPadding: 0),
+                          _FieldLabel(
+                            AppLocalizations.of(context)!.booking_numberOfPets,
+                            bottomPadding: 0,
+                          ),
                           QuantityStepper(
                             value: _numberOfPets,
                             min: 1,
-                            onChanged: (v) =>
-                                setState(() => _numberOfPets = v),
+                            onChanged: (v) => setState(() => _numberOfPets = v),
                           ),
                         ],
                       ),
                       SizedBox(height: 16.h),
-                      _FieldLabel('Services:'),
+                      _FieldLabel(
+                        AppLocalizations.of(context)!.booking_servicesLabel,
+                      ),
                       for (final room in widget.hotel.rooms)
                         RoomServiceQuantityRow(
                           label: room.name,
-                          priceCaption:
-                              'SAR ${room.pricePerNight.toStringAsFixed(0)}/night',
+                          priceCaption: AppLocalizations.of(context)!
+                              .common_pricePerNightSar(
+                                room.pricePerNight.toStringAsFixed(0),
+                              ),
                           value: _roomQuantities[room.id] ?? 0,
                           onChanged: (v) =>
                               setState(() => _roomQuantities[room.id] = v),
@@ -288,16 +306,22 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
                         RoomServiceQuantityRow(
                           label: service.name,
                           priceCaption: service.price == null
-                              ? 'Price on request'
-                              : 'SAR ${service.price!.toStringAsFixed(0)}'
-                                    '${service.priceUnit != null ? ' / ${service.priceUnit}' : ''}',
+                              ? AppLocalizations.of(
+                                  context,
+                                )!.booking_priceOnRequest
+                              : AppLocalizations.of(context)!.booking_priceSar(
+                                      service.price!.toStringAsFixed(0),
+                                    ) +
+                                    (service.priceUnit != null
+                                        ? ' / ${service.priceUnit}'
+                                        : ''),
                           value: _serviceQuantities[service.id] ?? 0,
                           onChanged: (v) => setState(
                             () => _serviceQuantities[service.id] = v,
                           ),
                         ),
                       SizedBox(height: 16.h),
-                      _FieldLabel('Date'),
+                      _FieldLabel(AppLocalizations.of(context)!.common_date),
                       InkWell(
                         onTap: _pickDateRange,
                         borderRadius: BorderRadius.circular(18.r),
@@ -313,7 +337,9 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
                               SizedBox(width: 8.w),
                               Text(
                                 _checkInDate == null || _checkOutDate == null
-                                    ? 'Choose a date'
+                                    ? AppLocalizations.of(
+                                        context,
+                                      )!.booking_chooseADate
                                     : '${DateFormat('d MMM').format(_checkInDate!)} - '
                                           '${DateFormat('d MMM yyyy').format(_checkOutDate!)}',
                                 style: context.body2.copyWith(
@@ -327,12 +353,18 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
                         ),
                       ),
                       SizedBox(height: 16.h),
-                      _FieldLabel('Drop off time & Pick up time'),
+                      _FieldLabel(
+                        AppLocalizations.of(
+                          context,
+                        )!.booking_dropOffPickUpLabel,
+                      ),
                       Row(
                         children: [
                           Expanded(
                             child: _TimeTile(
-                              label: 'Drop off',
+                              label: AppLocalizations.of(
+                                context,
+                              )!.booking_dropOff,
                               time: _dropOffTime,
                               onTap: _pickDropOffTime,
                             ),
@@ -340,7 +372,9 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
                           SizedBox(width: 12.w),
                           Expanded(
                             child: _TimeTile(
-                              label: 'Pick up',
+                              label: AppLocalizations.of(
+                                context,
+                              )!.booking_pickUp,
                               time: _pickUpTime,
                               onTap: _pickPickUpTime,
                             ),
@@ -364,7 +398,7 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
                         ),
                       ),
                       child: Text(
-                        'Continue',
+                        AppLocalizations.of(context)!.common_continue,
                         style: context.body1.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
@@ -428,7 +462,11 @@ class _FieldLabel extends StatelessWidget {
 }
 
 class _TimeTile extends StatelessWidget {
-  const _TimeTile({required this.label, required this.time, required this.onTap});
+  const _TimeTile({
+    required this.label,
+    required this.time,
+    required this.onTap,
+  });
 
   final String label;
   final DateTime? time;

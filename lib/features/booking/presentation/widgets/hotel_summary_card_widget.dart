@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:rifq_v2/features/hotel/domain/entities/hotel_detail_entity.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
 class HotelSummaryCard extends StatefulWidget {
@@ -69,10 +70,11 @@ class _HotelSummaryCardState extends State<HotelSummaryCard> {
 
   String? get _primaryImageUrl {
     if (widget.hotel.images.isEmpty) return null;
-    final sorted = [...widget.hotel.images]..sort((a, b) {
-      if (a.isPrimary != b.isPrimary) return a.isPrimary ? -1 : 1;
-      return a.displayOrder.compareTo(b.displayOrder);
-    });
+    final sorted = [...widget.hotel.images]
+      ..sort((a, b) {
+        if (a.isPrimary != b.isPrimary) return a.isPrimary ? -1 : 1;
+        return a.displayOrder.compareTo(b.displayOrder);
+      });
     return sorted.first.imageUrl;
   }
 
@@ -133,8 +135,12 @@ class _HotelSummaryCardState extends State<HotelSummaryCard> {
                       child: Text(
                         _distanceKm == null
                             ? widget.hotel.locationText
-                            : '${widget.hotel.locationText} — '
-                                  '${_distanceKm!.toStringAsFixed(1)} km',
+                            : AppLocalizations.of(
+                                context,
+                              )!.common_locationDistance(
+                                widget.hotel.locationText,
+                                _distanceKm!.toStringAsFixed(1),
+                              ),
                         style: context.body3.copyWith(
                           color: context.neutral600,
                         ),

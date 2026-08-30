@@ -5,8 +5,12 @@ import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:rifq_v2/features/booking/domain/entities/hotel_booking_entity.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 
-Future<Uint8List> buildReceiptPdf(BookingConfirmationEntity confirmation) async {
+Future<Uint8List> buildReceiptPdf(
+  BookingConfirmationEntity confirmation,
+  AppLocalizations l10n,
+) async {
   final hotel = confirmation.draft.hotelDetail;
   final booking = confirmation.booking;
   final doc = pw.Document();
@@ -21,7 +25,7 @@ Future<Uint8List> buildReceiptPdf(BookingConfirmationEntity confirmation) async 
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
               pw.Text(
-                'Receipt',
+                l10n.booking_receiptTitle,
                 style: pw.TextStyle(
                   fontSize: 22,
                   fontWeight: pw.FontWeight.bold,
@@ -35,7 +39,10 @@ Future<Uint8List> buildReceiptPdf(BookingConfirmationEntity confirmation) async 
                   fontWeight: pw.FontWeight.bold,
                 ),
               ),
-              pw.Text(hotel.locationText, style: const pw.TextStyle(fontSize: 11)),
+              pw.Text(
+                hotel.locationText,
+                style: const pw.TextStyle(fontSize: 11),
+              ),
               pw.SizedBox(height: 18),
               pw.Row(
                 mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -44,7 +51,7 @@ Future<Uint8List> buildReceiptPdf(BookingConfirmationEntity confirmation) async 
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
                       pw.Text(
-                        'Date',
+                        l10n.common_date,
                         style: const pw.TextStyle(
                           fontSize: 10,
                           color: PdfColors.grey700,
@@ -59,7 +66,7 @@ Future<Uint8List> buildReceiptPdf(BookingConfirmationEntity confirmation) async 
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
                       pw.Text(
-                        'Status',
+                        l10n.booking_status,
                         style: const pw.TextStyle(
                           fontSize: 10,
                           color: PdfColors.grey700,
@@ -76,17 +83,31 @@ Future<Uint8List> buildReceiptPdf(BookingConfirmationEntity confirmation) async 
               pw.SizedBox(height: 18),
               pw.Divider(),
               pw.SizedBox(height: 6),
-              _priceRow('Room Price', booking.roomPriceTotal),
-              _priceRow('Add-on Services', booking.addonPriceTotal),
+              _priceRow(l10n, l10n.booking_roomPrice, booking.roomPriceTotal),
               _priceRow(
-                'Total Before Fees',
+                l10n,
+                l10n.booking_addonServices,
+                booking.addonPriceTotal,
+              ),
+              _priceRow(
+                l10n,
+                l10n.booking_totalBeforeFees,
                 booking.roomPriceTotal + booking.addonPriceTotal,
               ),
-              _priceRow('App Service Fee', booking.appServiceFee),
+              _priceRow(
+                l10n,
+                l10n.booking_appServiceFee,
+                booking.appServiceFee,
+              ),
               pw.SizedBox(height: 6),
               pw.Divider(),
               pw.SizedBox(height: 6),
-              _priceRow('Total Price', booking.totalPrice, bold: true),
+              _priceRow(
+                l10n,
+                l10n.booking_totalPrice,
+                booking.totalPrice,
+                bold: true,
+              ),
               pw.SizedBox(height: 28),
               pw.Center(
                 child: pw.Column(
@@ -113,7 +134,12 @@ Future<Uint8List> buildReceiptPdf(BookingConfirmationEntity confirmation) async 
   return doc.save();
 }
 
-pw.Widget _priceRow(String label, double value, {bool bold = false}) {
+pw.Widget _priceRow(
+  AppLocalizations l10n,
+  String label,
+  double value, {
+  bool bold = false,
+}) {
   final style = pw.TextStyle(
     fontSize: bold ? 13 : 11,
     fontWeight: bold ? pw.FontWeight.bold : pw.FontWeight.normal,
@@ -124,7 +150,7 @@ pw.Widget _priceRow(String label, double value, {bool bold = false}) {
       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
       children: [
         pw.Text(label, style: style),
-        pw.Text('${value.toStringAsFixed(0)} SAR', style: style),
+        pw.Text(l10n.booking_amountSar(value.toStringAsFixed(0)), style: style),
       ],
     ),
   );

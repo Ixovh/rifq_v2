@@ -103,8 +103,11 @@ class BookingDataSource implements BaseBookingDataSource {
     }
   }
 
-  String _dateOnlyIso(DateTime date) =>
-      DateTime(date.year, date.month, date.day).toIso8601String().split('T').first;
+  String _dateOnlyIso(DateTime date) => DateTime(
+    date.year,
+    date.month,
+    date.day,
+  ).toIso8601String().split('T').first;
 
   @override
   Future<Result<HotelBookingEntity, Object>> createHotelBooking({
@@ -112,14 +115,12 @@ class BookingDataSource implements BaseBookingDataSource {
     required PaymentMethodOption paymentMethod,
   }) async {
     try {
-      final userId =
-          AuthHelper.getUserId() ?? _supabase.auth.currentUser?.id;
+      final userId = AuthHelper.getUserId() ?? _supabase.auth.currentUser?.id;
       if (userId == null) {
         return const Error('User not found');
       }
 
-      final bookingReference =
-          'PC${100000000 + Random().nextInt(900000000)}';
+      final bookingReference = 'PC${100000000 + Random().nextInt(900000000)}';
 
       final bookingRow = await _supabase
           .from('hotel_bookings')

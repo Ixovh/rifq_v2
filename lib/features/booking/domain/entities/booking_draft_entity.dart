@@ -81,7 +81,8 @@ class BookingDraftEntity extends Equatable {
   double get addonPriceTotal => selectedServices.fold(
     0,
     (sum, service) =>
-        sum + (service.price * service.quantity * (service.isPerDay ? nights : 1)),
+        sum +
+        (service.price * service.quantity * (service.isPerDay ? nights : 1)),
   );
 
   double get appServiceFee => BookingConstants.appServiceFeeSar;
