@@ -28,6 +28,12 @@ class HotelListItemModelMapper extends ClassMapperBase<HotelListItemModel> {
 
   static String _$id(HotelListItemModel v) => v.id;
   static const Field<HotelListItemModel, String> _f$id = Field('id', _$id);
+  static String? _$name(HotelListItemModel v) => v.name;
+  static const Field<HotelListItemModel, String> _f$name = Field(
+    'name',
+    _$name,
+    opt: true,
+  );
   static double _$rating(HotelListItemModel v) => v.rating;
   static const Field<HotelListItemModel, double> _f$rating = Field(
     'rating',
@@ -84,6 +90,7 @@ class HotelListItemModelMapper extends ClassMapperBase<HotelListItemModel> {
   @override
   final MappableFields<HotelListItemModel> fields = const {
     #id: _f$id,
+    #name: _f$name,
     #rating: _f$rating,
     #reviewCount: _f$reviewCount,
     #locationText: _f$locationText,
@@ -98,6 +105,7 @@ class HotelListItemModelMapper extends ClassMapperBase<HotelListItemModel> {
   static HotelListItemModel _instantiate(DecodingData data) {
     return HotelListItemModel(
       id: data.dec(_f$id),
+      name: data.dec(_f$name),
       rating: data.dec(_f$rating),
       reviewCount: data.dec(_f$reviewCount),
       locationText: data.dec(_f$locationText),
@@ -207,6 +215,7 @@ abstract class HotelListItemModelCopyWith<
   get services;
   $R call({
     String? id,
+    String? name,
     double? rating,
     int? reviewCount,
     String? locationText,
@@ -273,6 +282,7 @@ class _HotelListItemModelCopyWithImpl<$R, $Out>
   @override
   $R call({
     String? id,
+    Object? name = $none,
     double? rating,
     int? reviewCount,
     String? locationText,
@@ -285,6 +295,7 @@ class _HotelListItemModelCopyWithImpl<$R, $Out>
   }) => $apply(
     FieldCopyWithData({
       if (id != null) #id: id,
+      if (name != $none) #name: name,
       if (rating != null) #rating: rating,
       if (reviewCount != null) #reviewCount: reviewCount,
       if (locationText != null) #locationText: locationText,
@@ -299,6 +310,7 @@ class _HotelListItemModelCopyWithImpl<$R, $Out>
   @override
   HotelListItemModel $make(CopyWithData data) => HotelListItemModel(
     id: data.get(#id, or: $value.id),
+    name: data.get(#name, or: $value.name),
     rating: data.get(#rating, or: $value.rating),
     reviewCount: data.get(#reviewCount, or: $value.reviewCount),
     locationText: data.get(#locationText, or: $value.locationText),

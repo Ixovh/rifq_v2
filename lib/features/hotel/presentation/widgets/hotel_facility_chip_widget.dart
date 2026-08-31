@@ -15,29 +15,38 @@ class HotelFacilityChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+      width: 78.w,
+      padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 8.h),
       decoration: BoxDecoration(
-        color: context.primary100.withValues(alpha: 0.3),
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: context.primary100),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8.r),
+        border: Border.all(color: const Color(0xFFF5F5F5)),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             name,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: context.body3.copyWith(
-              color: context.primary400,
-              fontWeight: FontWeight.w600,
+              color: context.primary300,
+              fontWeight: FontWeight.w500,
+              fontSize: 11.sp,
+              height: 1.15,
             ),
           ),
           SizedBox(height: 2.h),
           Text(
             category,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: context.body3.copyWith(
-              color: context.neutral600,
-              fontSize: 11.sp,
+              color: const Color(0xFFB4AEAE),
+              fontSize: 9.sp,
             ),
           ),
         ],

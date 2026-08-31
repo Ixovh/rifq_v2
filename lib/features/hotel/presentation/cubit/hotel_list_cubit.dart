@@ -26,7 +26,9 @@ class HotelListCubit extends Cubit<HotelListState> {
 
     (await _hotelUseCase.getHotels(sortOption: sortOption)).when(
       (hotels) => emit(
-        hotels.isEmpty ? const HotelListEmpty() : HotelListLoaded(hotels: hotels),
+        hotels.isEmpty
+            ? const HotelListEmpty()
+            : HotelListLoaded(hotels: hotels),
       ),
       (error) {
         debugPrint(

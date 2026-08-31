@@ -51,6 +51,7 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
   String? _initialPhoneDigits;
 
   int _numberOfPets = 1;
+  int _ownedPetCount = 1;
   late final Map<String, int> _roomQuantities;
   late final Map<String, int> _serviceQuantities;
 
@@ -71,6 +72,44 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
   void dispose() {
     _nameController.dispose();
     super.dispose();
+  }
+
+  int get _totalRoomQuantity =>
+      _roomQuantities.values.fold<int>(0, (sum, q) => sum + q);
+
+  int _maxForRoom(String roomId) {
+    final current = _roomQuantities[roomId] ?? 0;
+    return _numberOfPets - (_totalRoomQuantity - current);
+  }
+
+  void _setNumberOfPets(int value) {
+    final capped = value.clamp(1, _ownedPetCount);
+    setState(() {
+      _numberOfPets = capped;
+      // Keep reserved rooms within the new pet count.
+      if (_totalRoomQuantity > _numberOfPets) {
+        var overflow = _totalRoomQuantity - _numberOfPets;
+        for (final id in _roomQuantities.keys.toList().reversed) {
+          if (overflow <= 0) break;
+          final q = _roomQuantities[id]!;
+          if (q <= 0) continue;
+          final reduce = q < overflow ? q : overflow;
+          _roomQuantities[id] = q - reduce;
+          overflow -= reduce;
+        }
+      }
+    });
+  }
+
+  void _setRoomQuantity(String roomId, int value) {
+    final maxAllowed = _maxForRoom(roomId);
+    final next = value.clamp(0, maxAllowed);
+    if (value > maxAllowed) {
+      context.showWarningToast(
+        AppLocalizations.of(context)!.booking_roomsExceedPets,
+      );
+    }
+    setState(() => _roomQuantities[roomId] = next);
   }
 
   Future<void> _prefillFromProfile() async {
@@ -94,6 +133,7 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
     final profile = UserDataStore.profileOf(snapshot);
     final fullName = (profile['full_name'] as String?)?.trim() ?? '';
     final phoneNumber = (profile['phone_number'] as String?)?.trim() ?? '';
+    final ownedPets = UserDataStore.petsOf(snapshot).length;
 
     setState(() {
       if (_nameController.text.trim().isEmpty && fullName.isNotEmpty) {
@@ -101,6 +141,11 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
       }
       if (_initialPhoneDigits == null && phoneNumber.isNotEmpty) {
         _initialPhoneDigits = phoneNumber;
+      }
+      // Cap pets at how many the user actually has registered.
+      _ownedPetCount = ownedPets > 0 ? ownedPets : 1;
+      if (_numberOfPets > _ownedPetCount) {
+        _numberOfPets = _ownedPetCount;
       }
     });
   }
@@ -113,6 +158,18 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
     if (!_hasSelectedRooms) {
       context.showWarningToast(
         AppLocalizations.of(context)!.booking_selectRoom,
+      );
+      return;
+    }
+    if (_totalRoomQuantity > _numberOfPets) {
+      context.showWarningToast(
+        AppLocalizations.of(context)!.booking_roomsExceedPets,
+      );
+      return;
+    }
+    if (_numberOfPets > _ownedPetCount) {
+      context.showWarningToast(
+        AppLocalizations.of(context)!.booking_petsExceedOwned,
       );
       return;
     }
@@ -283,7 +340,8 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
                           QuantityStepper(
                             value: _numberOfPets,
                             min: 1,
-                            onChanged: (v) => setState(() => _numberOfPets = v),
+                            max: _ownedPetCount,
+                            onChanged: _setNumberOfPets,
                           ),
                         ],
                       ),
@@ -299,8 +357,8 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
                                 room.pricePerNight.toStringAsFixed(0),
                               ),
                           value: _roomQuantities[room.id] ?? 0,
-                          onChanged: (v) =>
-                              setState(() => _roomQuantities[room.id] = v),
+                          max: _maxForRoom(room.id),
+                          onChanged: (v) => _setRoomQuantity(room.id, v),
                         ),
                       for (final service in widget.hotel.services)
                         RoomServiceQuantityRow(

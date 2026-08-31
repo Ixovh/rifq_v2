@@ -27,6 +27,7 @@ class HotelListItemEntity extends Equatable {
   final double? startingPrice;
   final String servicesSummary;
   final String? imageUrl;
+  final bool isAvailable;
 
   const HotelListItemEntity({
     required this.id,
@@ -38,7 +39,13 @@ class HotelListItemEntity extends Equatable {
     this.startingPrice,
     required this.servicesSummary,
     this.imageUrl,
+    this.isAvailable = true,
   });
+
+  String get locationLine {
+    if (distanceKm == null) return locationText;
+    return '$locationText – ${distanceKm!.toStringAsFixed(1)} km';
+  }
 
   @override
   List<Object?> get props => [
@@ -51,5 +58,6 @@ class HotelListItemEntity extends Equatable {
     startingPrice,
     servicesSummary,
     imageUrl,
+    isAvailable,
   ];
 }

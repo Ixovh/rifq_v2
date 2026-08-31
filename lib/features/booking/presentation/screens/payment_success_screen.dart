@@ -17,6 +17,8 @@ class PaymentSuccessScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -34,9 +36,7 @@ class PaymentSuccessScreen extends StatelessWidget {
                         const SuccessCheckIcon(),
                         SizedBox(height: 24.h),
                         Text(
-                          AppLocalizations.of(
-                            context,
-                          )!.booking_paymentSuccessTitle,
+                          l10n.booking_paymentSuccessTitle,
                           style: context.h3.copyWith(
                             color: context.neutral1000,
                             fontWeight: FontWeight.w700,
@@ -49,10 +49,33 @@ class PaymentSuccessScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   height: 52.h,
-                  child: ElevatedButton(
-                    onPressed: () => context.router.replace(
+                  child: OutlinedButton(
+                    onPressed: () => context.router.push(
                       ReceiptRoute(confirmation: confirmation),
                     ),
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: context.primary300, width: 1.5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.r),
+                      ),
+                    ),
+                    child: Text(
+                      l10n.booking_downloadReceipt,
+                      style: context.body1.copyWith(
+                        color: context.primary300,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 12.h),
+                SizedBox(
+                  width: double.infinity,
+                  height: 52.h,
+                  child: ElevatedButton(
+                    onPressed: () => context.router.replaceAll([
+                      const NavWrapperRoute(),
+                    ]),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: context.primary300,
                       shape: RoundedRectangleBorder(
@@ -60,7 +83,7 @@ class PaymentSuccessScreen extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      AppLocalizations.of(context)!.booking_seeDetails,
+                      l10n.homeBoarding_backToHome,
                       style: context.body1.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,

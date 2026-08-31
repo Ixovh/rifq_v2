@@ -281,6 +281,14 @@
       "count": { "type": "int" }
     }
   },
+  "hotel_available": "Available",
+  "hotel_availabilityLabel": "Availability : ",
+  "hotel_roomsAvailable": "{count, plural, one{1 room available} other{{count} rooms available}}",
+  "@hotel_roomsAvailable": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
 
   "sortOption_recommended": "Recommended",
   "sortOption_nearest": "Nearest",
@@ -337,6 +345,7 @@
   "booking_priceTitle": "Price",
   "booking_priceDetailsTitle": "Price Details",
   "booking_downloadPdf": "Download PDF",
+  "booking_downloadReceipt": "Download Receipt",
   "booking_roomPrice": "Room Price",
   "booking_addonServices": "Add-on Services",
   "booking_totalBeforeFees": "Total Before Fees",
@@ -387,6 +396,8 @@
       "roomName": { "type": "String" }
     }
   },
+  "booking_roomsExceedPets": "You can't reserve more rooms than the number of pets.",
+  "booking_petsExceedOwned": "You can't select more pets than you have registered.",
 
   "paymentMethod_applePay": "Apple Pay",
   "paymentMethod_visa": "Visa",

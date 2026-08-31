@@ -1,4 +1,5 @@
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:rifq_v2/features/hotel/data/models/hotel_json_coercion.dart';
 import 'package:rifq_v2/features/hotel/data/models/hotel_facility_model.dart';
 import 'package:rifq_v2/features/hotel/data/models/hotel_image_model.dart';
 import 'package:rifq_v2/features/hotel/data/models/hotel_owner_profile_model.dart';
@@ -12,6 +13,7 @@ part 'hotel_detail_model.mapper.dart';
 @MappableClass()
 class HotelDetailModel with HotelDetailModelMappable {
   final String id;
+  final String? name;
 
   @MappableField(key: 'location_text')
   final String locationText;
@@ -40,6 +42,7 @@ class HotelDetailModel with HotelDetailModelMappable {
 
   const HotelDetailModel({
     required this.id,
+    this.name,
     required this.locationText,
     this.latitude,
     this.longitude,
@@ -53,24 +56,32 @@ class HotelDetailModel with HotelDetailModelMappable {
   });
 
   factory HotelDetailModel.fromJson(Map<String, dynamic> json) =>
-      HotelDetailModelMapper.fromMap(json);
+      HotelDetailModelMapper.fromMap(coerceHotelJson(json));
 
-  HotelDetailEntity toEntity() {
+  HotelDetailEntity toEntity({double? distanceKm}) {
     final sortedImages = [...images]
+      ..sort((a, b) => a.displayOrder.compareTo(b.displayOrder));
+    final sortedRooms = [...rooms]
+      ..sort((a, b) => a.pricePerNight.compareTo(b.pricePerNight));
+    final listingName = name?.trim();
+    final sortedRules = [...rules]
       ..sort((a, b) => a.displayOrder.compareTo(b.displayOrder));
 
     return HotelDetailEntity(
       id: id,
-      name: profile?.fullName ?? 'Hotel',
+      name: (listingName != null && listingName.isNotEmpty)
+          ? listingName
+          : (profile?.fullName ?? 'Hotel'),
       locationText: locationText,
       latitude: latitude,
       longitude: longitude,
+      distanceKm: distanceKm,
       description: description,
       images: sortedImages,
-      rooms: rooms,
+      rooms: sortedRooms,
       services: services,
       facilities: facilities,
-      rules: rules,
+      rules: sortedRules,
     );
   }
 }

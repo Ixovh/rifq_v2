@@ -38,12 +38,12 @@ class HomeBoardingDataSource implements BaseHomeBoardingDataSource {
   final SupabaseClient _supabase;
 
   static const _sitterListSelect =
-      'id, specialty, rating, review_count, area_text, price_per_night, '
-      'years_experience, profiles(full_name, image_url, phone_number)';
+      'id, name, specialty, rating, review_count, area_text, price_per_night, '
+      'years_experience, profiles!owner_id(full_name, image_url, phone_number)';
 
   static const _sitterDetailSelect =
-      'id, specialty, rating, review_count, area_text, price_per_night, '
-      'years_experience, bio, profiles(full_name, image_url, phone_number), '
+      'id, name, specialty, rating, review_count, area_text, price_per_night, '
+      'years_experience, bio, profiles!owner_id(full_name, image_url, phone_number), '
       'home_boarding_skills(id, skill_label)';
 
   @override

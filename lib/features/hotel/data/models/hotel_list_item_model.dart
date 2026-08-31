@@ -1,4 +1,5 @@
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:rifq_v2/features/hotel/data/models/hotel_json_coercion.dart';
 import 'package:rifq_v2/features/hotel/data/models/hotel_image_model.dart';
 import 'package:rifq_v2/features/hotel/data/models/hotel_owner_profile_model.dart';
 import 'package:rifq_v2/features/hotel/data/models/hotel_room_model.dart';
@@ -10,6 +11,7 @@ part 'hotel_list_item_model.mapper.dart';
 @MappableClass()
 class HotelListItemModel with HotelListItemModelMappable {
   final String id;
+  final String? name;
   final double rating;
 
   @MappableField(key: 'review_count')
@@ -35,6 +37,7 @@ class HotelListItemModel with HotelListItemModelMappable {
 
   const HotelListItemModel({
     required this.id,
+    this.name,
     required this.rating,
     required this.reviewCount,
     required this.locationText,
@@ -47,13 +50,14 @@ class HotelListItemModel with HotelListItemModelMappable {
   });
 
   factory HotelListItemModel.fromJson(Map<String, dynamic> json) =>
-      HotelListItemModelMapper.fromMap(json);
+      HotelListItemModelMapper.fromMap(coerceHotelJson(json));
 
   HotelListItemEntity toEntity({double? distanceKm}) {
-    final sortedImages = [...images]..sort((a, b) {
-      if (a.isPrimary != b.isPrimary) return a.isPrimary ? -1 : 1;
-      return a.displayOrder.compareTo(b.displayOrder);
-    });
+    final sortedImages = [...images]
+      ..sort((a, b) {
+        if (a.isPrimary != b.isPrimary) return a.isPrimary ? -1 : 1;
+        return a.displayOrder.compareTo(b.displayOrder);
+      });
 
     final prices = rooms.map((r) => r.pricePerNight).toList();
     double? startingPrice;
@@ -61,9 +65,16 @@ class HotelListItemModel with HotelListItemModelMappable {
       if (startingPrice == null || price < startingPrice) startingPrice = price;
     }
 
+    final listingName = name?.trim();
+    final isAvailable = rooms.any(
+      (room) => room.totalRooms == null || room.totalRooms! > 0,
+    );
+
     return HotelListItemEntity(
       id: id,
-      name: profile?.fullName ?? 'Hotel',
+      name: (listingName != null && listingName.isNotEmpty)
+          ? listingName
+          : (profile?.fullName ?? 'Hotel'),
       rating: rating,
       reviewCount: reviewCount,
       locationText: locationText,
@@ -71,6 +82,7 @@ class HotelListItemModel with HotelListItemModelMappable {
       startingPrice: startingPrice,
       servicesSummary: services.map((s) => s.name).join(' / '),
       imageUrl: sortedImages.isEmpty ? null : sortedImages.first.imageUrl,
+      isAvailable: isAvailable || rooms.isEmpty,
     );
   }
 }

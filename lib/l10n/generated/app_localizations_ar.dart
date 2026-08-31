@@ -684,6 +684,27 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get hotel_available => 'متاح';
+
+  @override
+  String get hotel_availabilityLabel => 'التوفر : ';
+
+  @override
+  String hotel_roomsAvailable(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count غرفة متاحة',
+      many: '$count غرفة متاحة',
+      few: '$count غرف متاحة',
+      two: 'غرفتان متاحتان',
+      one: 'غرفة واحدة متاحة',
+      zero: 'لا توجد غرف متاحة',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get sortOption_recommended => 'موصى به';
 
   @override
@@ -846,6 +867,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get booking_downloadPdf => 'تنزيل PDF';
 
   @override
+  String get booking_downloadReceipt => 'تنزيل الإيصال';
+
+  @override
   String get booking_roomPrice => 'سعر الغرفة';
 
   @override
@@ -932,6 +956,14 @@ class AppLocalizationsAr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get booking_roomsExceedPets =>
+      'لا يمكنك حجز غرف أكثر من عدد الحيوانات الأليفة.';
+
+  @override
+  String get booking_petsExceedOwned =>
+      'لا يمكنك اختيار حيوانات أليفة أكثر مما لديك مسجّلًا.';
 
   @override
   String get paymentMethod_applePay => 'Apple Pay';

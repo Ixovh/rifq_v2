@@ -30,6 +30,12 @@ class HotelDetailModelMapper extends ClassMapperBase<HotelDetailModel> {
 
   static String _$id(HotelDetailModel v) => v.id;
   static const Field<HotelDetailModel, String> _f$id = Field('id', _$id);
+  static String? _$name(HotelDetailModel v) => v.name;
+  static const Field<HotelDetailModel, String> _f$name = Field(
+    'name',
+    _$name,
+    opt: true,
+  );
   static String _$locationText(HotelDetailModel v) => v.locationText;
   static const Field<HotelDetailModel, String> _f$locationText = Field(
     'locationText',
@@ -104,6 +110,7 @@ class HotelDetailModelMapper extends ClassMapperBase<HotelDetailModel> {
   @override
   final MappableFields<HotelDetailModel> fields = const {
     #id: _f$id,
+    #name: _f$name,
     #locationText: _f$locationText,
     #latitude: _f$latitude,
     #longitude: _f$longitude,
@@ -119,6 +126,7 @@ class HotelDetailModelMapper extends ClassMapperBase<HotelDetailModel> {
   static HotelDetailModel _instantiate(DecodingData data) {
     return HotelDetailModel(
       id: data.dec(_f$id),
+      name: data.dec(_f$name),
       locationText: data.dec(_f$locationText),
       latitude: data.dec(_f$latitude),
       longitude: data.dec(_f$longitude),
@@ -232,6 +240,7 @@ abstract class HotelDetailModelCopyWith<$R, $In extends HotelDetailModel, $Out>
   get rules;
   $R call({
     String? id,
+    String? name,
     String? locationText,
     double? latitude,
     double? longitude,
@@ -321,6 +330,7 @@ class _HotelDetailModelCopyWithImpl<$R, $Out>
   @override
   $R call({
     String? id,
+    Object? name = $none,
     String? locationText,
     Object? latitude = $none,
     Object? longitude = $none,
@@ -334,6 +344,7 @@ class _HotelDetailModelCopyWithImpl<$R, $Out>
   }) => $apply(
     FieldCopyWithData({
       if (id != null) #id: id,
+      if (name != $none) #name: name,
       if (locationText != null) #locationText: locationText,
       if (latitude != $none) #latitude: latitude,
       if (longitude != $none) #longitude: longitude,
@@ -349,6 +360,7 @@ class _HotelDetailModelCopyWithImpl<$R, $Out>
   @override
   HotelDetailModel $make(CopyWithData data) => HotelDetailModel(
     id: data.get(#id, or: $value.id),
+    name: data.get(#name, or: $value.name),
     locationText: data.get(#locationText, or: $value.locationText),
     latitude: data.get(#latitude, or: $value.latitude),
     longitude: data.get(#longitude, or: $value.longitude),

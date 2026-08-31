@@ -1,4 +1,5 @@
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:rifq_v2/features/hotel/data/models/hotel_json_coercion.dart';
 import 'package:rifq_v2/features/home_boarding/data/models/home_boarding_skill_model.dart';
 import 'package:rifq_v2/features/home_boarding/data/models/sitter_profile_ref_model.dart';
 import 'package:rifq_v2/features/home_boarding/domain/entities/home_boarding_detail_entity.dart';
@@ -44,7 +45,22 @@ class HomeBoardingDetailModel with HomeBoardingDetailModelMappable {
   });
 
   factory HomeBoardingDetailModel.fromJson(Map<String, dynamic> json) =>
-      HomeBoardingDetailModelMapper.fromMap(json);
+      HomeBoardingDetailModelMapper.fromMap(_coerce(json));
+
+  static Map<String, dynamic> _coerce(Map<String, dynamic> json) {
+    final copy = Map<String, dynamic>.from(json);
+    copy['rating'] = toDouble(copy['rating']) ?? 0;
+    copy['price_per_night'] = toDouble(copy['price_per_night']) ?? 0;
+    final listingName = (copy['name'] as String?)?.trim();
+    if (listingName != null && listingName.isNotEmpty) {
+      final profile = copy['profiles'] is Map
+          ? Map<String, dynamic>.from(copy['profiles'] as Map)
+          : <String, dynamic>{};
+      profile['full_name'] = listingName;
+      copy['profiles'] = profile;
+    }
+    return copy;
+  }
 
   HomeBoardingDetailEntity toEntity() => HomeBoardingDetailEntity(
     id: id,

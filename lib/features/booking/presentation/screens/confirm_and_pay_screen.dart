@@ -172,16 +172,23 @@ class _ConfirmAndPayScreenState extends State<ConfirmAndPayScreen> {
                         SizedBox(height: 8.h),
                         Row(
                           children: [
-                            for (final method in PaymentMethodOption.values)
-                              Padding(
-                                padding: EdgeInsetsDirectional.only(end: 12.w),
+                            for (var i = 0;
+                                i < PaymentMethodOption.values.length;
+                                i++) ...[
+                              if (i > 0) SizedBox(width: 8.w),
+                              Expanded(
                                 child: _PaymentMethodIcon(
-                                  method: method,
-                                  selected: _selectedMethod == method,
-                                  onTap: () =>
-                                      setState(() => _selectedMethod = method),
+                                  method: PaymentMethodOption.values[i],
+                                  selected:
+                                      _selectedMethod ==
+                                      PaymentMethodOption.values[i],
+                                  onTap: () => setState(
+                                    () => _selectedMethod =
+                                        PaymentMethodOption.values[i],
+                                  ),
                                 ),
                               ),
+                            ],
                           ],
                         ),
                       ],
@@ -235,16 +242,19 @@ class _OrderRow extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            width: 140.w,
+          Flexible(
+            flex: 4,
             child: Text(
               label,
               style: context.body3.copyWith(color: context.neutral600),
             ),
           ),
+          SizedBox(width: 12.w),
           Expanded(
+            flex: 5,
             child: Text(
               value,
+              textAlign: TextAlign.end,
               style: context.body2.copyWith(color: context.neutral1000),
             ),
           ),
@@ -277,7 +287,8 @@ class _PaymentMethodIcon extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(14.r),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 10.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14.r),
           border: Border.all(
@@ -289,19 +300,24 @@ class _PaymentMethodIcon extends StatelessWidget {
               : context.neutral100,
         ),
         child: Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               _icon,
-              size: 18.sp,
+              size: 16.sp,
               color: selected ? context.primary400 : context.neutral600,
             ),
-            SizedBox(width: 6.w),
-            Text(
-              paymentMethodLabel(context, method),
-              style: context.body3.copyWith(
-                color: selected ? context.primary400 : context.neutral700,
-                fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+            SizedBox(width: 4.w),
+            Flexible(
+              child: Text(
+                paymentMethodLabel(context, method),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: context.body3.copyWith(
+                  color: selected ? context.primary400 : context.neutral700,
+                  fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+                  fontSize: 11.sp,
+                ),
               ),
             ),
           ],

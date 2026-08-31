@@ -144,11 +144,16 @@ class _SheetInfoRow extends StatelessWidget {
             child: Text(title, style: const TextStyle(color: Colors.black87)),
           ),
           if (trailingText != null)
-            Text(
-              trailingText!,
-              style: const TextStyle(
-                color: Colors.black87,
-                fontWeight: FontWeight.w600,
+            Flexible(
+              child: Text(
+                trailingText!,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.end,
+                style: const TextStyle(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           SizedBox(width: 4.w),

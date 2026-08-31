@@ -117,6 +117,8 @@ class _HotelSummaryCardState extends State<HotelSummaryCard> {
               children: [
                 Text(
                   widget.hotel.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: context.body1.copyWith(
                     color: context.neutral1000,
                     fontWeight: FontWeight.w600,

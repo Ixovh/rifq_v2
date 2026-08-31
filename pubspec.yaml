@@ -92,4 +92,9 @@ flutter:
           weight: 500
         - asset: assets/fonts/Poppins-Bold.ttf
           weight: 700
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo-Regular.ttf
+        - asset: assets/fonts/Cairo-Bold.ttf
+          weight: 700
   uses-material-design: true

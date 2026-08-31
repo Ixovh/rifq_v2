@@ -1268,6 +1268,24 @@ abstract class AppLocalizations {
   /// **'{count, plural, one{1 room total} other{{count} rooms total}}'**
   String hotel_roomsTotal(int count);
 
+  /// No description provided for @hotel_available.
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get hotel_available;
+
+  /// No description provided for @hotel_availabilityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Availability : '**
+  String get hotel_availabilityLabel;
+
+  /// No description provided for @hotel_roomsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 room available} other{{count} rooms available}}'**
+  String hotel_roomsAvailable(int count);
+
   /// No description provided for @sortOption_recommended.
   ///
   /// In en, this message translates to:
@@ -1580,6 +1598,12 @@ abstract class AppLocalizations {
   /// **'Download PDF'**
   String get booking_downloadPdf;
 
+  /// No description provided for @booking_downloadReceipt.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Receipt'**
+  String get booking_downloadReceipt;
+
   /// No description provided for @booking_roomPrice.
   ///
   /// In en, this message translates to:
@@ -1663,6 +1687,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, one{Only 1 {roomName} left for these dates.} other{Only {count} {roomName} left for these dates.}}'**
   String booking_roomsLeft(int count, String roomName);
+
+  /// No description provided for @booking_roomsExceedPets.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t reserve more rooms than the number of pets.'**
+  String get booking_roomsExceedPets;
+
+  /// No description provided for @booking_petsExceedOwned.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t select more pets than you have registered.'**
+  String get booking_petsExceedOwned;
 
   /// No description provided for @paymentMethod_applePay.
   ///

@@ -11,26 +11,31 @@ class HotelServiceRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final hasPrice = service.price != null;
+    final label = hasPrice
+        ? l10n.hotel_servicePrice(
+                service.name,
+                service.price!.toStringAsFixed(0),
+              ) +
+              (service.priceUnit != null && service.priceUnit!.isNotEmpty
+                  ? ' / ${service.priceUnit}'
+                  : '')
+        : service.name;
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4.h),
+      padding: EdgeInsets.symmetric(vertical: 2.h),
       child: Row(
         children: [
-          Icon(Icons.circle, size: 5.sp, color: context.neutral600),
+          Icon(Icons.circle, size: 4.sp, color: context.neutral600),
           SizedBox(width: 8.w),
           Expanded(
             child: Text(
-              hasPrice
-                  ? AppLocalizations.of(context)!.hotel_servicePrice(
-                          service.name,
-                          service.price!.toStringAsFixed(0),
-                        ) +
-                        (service.priceUnit != null
-                            ? ' / ${service.priceUnit}'
-                            : '')
-                  : service.name,
-              style: context.body3.copyWith(color: context.neutral700),
+              label,
+              style: context.body3.copyWith(
+                color: context.neutral700,
+                fontSize: 9.sp,
+              ),
             ),
           ),
         ],

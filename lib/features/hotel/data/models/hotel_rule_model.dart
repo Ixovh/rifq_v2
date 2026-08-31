@@ -8,6 +8,7 @@ class HotelRuleModel extends HotelRuleEntity with HotelRuleModelMappable {
   const HotelRuleModel({
     required super.id,
     @MappableField(key: 'rule_text') required super.ruleText,
+    @MappableField(key: 'display_order') super.displayOrder = 0,
   });
 
   factory HotelRuleModel.fromJson(Map<String, dynamic> json) =>

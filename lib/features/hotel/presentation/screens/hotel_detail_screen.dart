@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
-import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/features/hotel/domain/entities/hotel_detail_entity.dart';
 import 'package:rifq_v2/features/hotel/presentation/cubit/hotel_detail_cubit.dart';
 import 'package:rifq_v2/features/hotel/presentation/widgets/book_now_button_widget.dart';
@@ -12,6 +11,7 @@ import 'package:rifq_v2/features/hotel/presentation/widgets/hotel_image_carousel
 import 'package:rifq_v2/features/hotel/presentation/widgets/hotel_room_card_widget.dart';
 import 'package:rifq_v2/features/hotel/presentation/widgets/hotel_rule_item_widget.dart';
 import 'package:rifq_v2/features/hotel/presentation/widgets/hotel_service_row_widget.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/widgets/lottie_loding.dart';
@@ -59,6 +59,8 @@ class _HotelDetailViewState extends State<_HotelDetailView>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: context.background,
       body: BlocBuilder<HotelDetailCubit, HotelDetailState>(
@@ -79,87 +81,102 @@ class _HotelDetailViewState extends State<_HotelDetailView>
           }
 
           final detail = (state as HotelDetailLoaded).detail;
+          final locationText = detail.distanceKm == null
+              ? detail.locationText
+              : l10n.hotel_locationDistance(
+                  detail.locationText,
+                  detail.distanceKm!.toStringAsFixed(1),
+                );
 
-          return SafeArea(
-            bottom: false,
-            child: Column(
-              children: [
-                HotelImageCarousel(
-                  images: detail.images,
-                  onBack: () => context.router.maybePop(),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(18.w, 14.h, 18.w, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        detail.name,
-                        style: context.h4.copyWith(
-                          color: context.neutral1000,
-                          fontWeight: FontWeight.w600,
-                        ),
+          return Column(
+            children: [
+              HotelImageCarousel(
+                images: detail.images,
+                title: detail.name,
+                onBack: () => context.router.maybePop(),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(28.w, 14.h, 28.w, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      detail.name,
+                      style: context.h4.copyWith(
+                        color: context.neutral1000,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 22.sp,
                       ),
-                      SizedBox(height: 4.h),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.location_on_outlined,
-                            size: 16.sp,
-                            color: context.neutral600,
-                          ),
-                          SizedBox(width: 4.w),
-                          Text(
-                            detail.locationText,
-                            style: context.body3.copyWith(
+                    ),
+                    SizedBox(height: 6.h),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on_outlined,
+                          size: 18.sp,
+                          color: context.neutral600,
+                        ),
+                        SizedBox(width: 5.w),
+                        Expanded(
+                          child: Text(
+                            locationText,
+                            style: context.body2.copyWith(
                               color: context.neutral600,
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 8.h),
-                TabBar(
-                  controller: _tabController,
-                  labelColor: context.primary300,
-                  unselectedLabelColor: context.neutral600,
-                  indicatorColor: context.primary300,
-                  indicatorWeight: 3,
-                  labelStyle: context.body2.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  unselectedLabelStyle: context.body2,
-                  tabs: [
-                    Tab(text: AppLocalizations.of(context)!.hotel_tabRooms),
-                    Tab(text: AppLocalizations.of(context)!.hotel_tabInfo),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-                Expanded(
-                  child: TabBarView(
-                    controller: _tabController,
-                    children: [
-                      _RoomsTab(detail: detail),
-                      _HotelInfoTab(detail: detail),
-                    ],
-                  ),
+              ),
+              SizedBox(height: 12.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 28.w),
+                child: TabBar(
+                  controller: _tabController,
+                  labelColor: context.primary300,
+                  unselectedLabelColor: context.neutral300,
+                  indicatorColor: context.primary300,
+                  indicatorWeight: 3,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  dividerColor: context.neutral200,
+                  labelStyle: context.body2,
+                  unselectedLabelStyle: context.body2,
+                  tabs: [
+                    Tab(text: l10n.hotel_tabRooms),
+                    Tab(text: l10n.hotel_tabInfo),
+                  ],
                 ),
-                SafeArea(
-                  top: false,
-                  child: Padding(
-                    padding: EdgeInsets.all(18.w),
-                    child: BookNowButton(
-                      onPressed: detail.rooms.isEmpty
-                          ? null
-                          : () => context.router.push(
-                              BookingDetailsRoute(hotel: detail),
-                            ),
+              ),
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _RoomsTab(detail: detail),
+                    _HotelInfoTab(detail: detail),
+                  ],
+                ),
+              ),
+              SafeArea(
+                top: false,
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(18.w, 8.h, 18.w, 12.h),
+                  child: Center(
+                    child: SizedBox(
+                      width: 280.w,
+                      child: BookNowButton(
+                        onPressed: detail.rooms.isEmpty
+                            ? null
+                            : () => context.router.push(
+                                BookingDetailsRoute(hotel: detail),
+                              ),
+                      ),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           );
         },
       ),
@@ -174,32 +191,35 @@ class _RoomsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (detail.rooms.isEmpty && detail.services.isEmpty) {
       return Center(
         child: Text(
-          AppLocalizations.of(context)!.hotel_noRooms,
+          l10n.hotel_noRooms,
           style: context.body2.copyWith(color: context.neutral600),
         ),
       );
     }
 
     return ListView(
-      padding: EdgeInsets.fromLTRB(18.w, 12.h, 18.w, 24.h),
+      padding: EdgeInsetsDirectional.fromSTEB(30.w, 16.h, 30.w, 24.h),
       children: [
-        for (final room in detail.rooms) ...[
-          HotelRoomCard(room: room),
-          SizedBox(height: 12.h),
-        ],
+        for (var i = 0; i < detail.rooms.length; i++)
+          HotelRoomCard(
+            room: detail.rooms[i],
+            showDivider:
+                i != detail.rooms.length - 1 || detail.services.isNotEmpty,
+          ),
         if (detail.services.isNotEmpty) ...[
-          SizedBox(height: 8.h),
           Text(
-            AppLocalizations.of(context)!.hotel_otherServices,
-            style: context.body1.copyWith(
-              color: context.neutral1000,
-              fontWeight: FontWeight.w600,
+            l10n.hotel_otherServices,
+            style: context.body2.copyWith(
+              color: context.neutral900,
+              fontWeight: FontWeight.w500,
             ),
           ),
-          SizedBox(height: 6.h),
+          SizedBox(height: 4.h),
           for (final service in detail.services)
             HotelServiceRow(service: service),
         ],
@@ -225,38 +245,39 @@ class _HotelInfoTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final rules = detail.rules;
 
     return ListView(
-      padding: EdgeInsets.fromLTRB(18.w, 12.h, 18.w, 24.h),
+      padding: EdgeInsetsDirectional.fromSTEB(25.w, 16.h, 25.w, 24.h),
       children: [
         Text(
-          AppLocalizations.of(context)!.hotel_aboutTitle,
-          style: context.body1.copyWith(
+          l10n.hotel_aboutTitle,
+          style: context.body2.copyWith(
             color: context.neutral1000,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w500,
           ),
         ),
         SizedBox(height: 6.h),
         Text(
           (detail.description ?? '').isEmpty
-              ? AppLocalizations.of(context)!.hotel_noDescription
+              ? l10n.hotel_noDescription
               : detail.description!,
           style: context.body3.copyWith(color: context.neutral700),
         ),
         if (detail.facilities.isNotEmpty) ...[
-          SizedBox(height: 20.h),
+          SizedBox(height: 16.h),
           Text(
-            AppLocalizations.of(context)!.hotel_facilities,
-            style: context.body1.copyWith(
+            l10n.hotel_facilities,
+            style: context.body2.copyWith(
               color: context.neutral1000,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w500,
             ),
           ),
           SizedBox(height: 8.h),
           Wrap(
-            spacing: 10.w,
-            runSpacing: 10.h,
+            spacing: 12.w,
+            runSpacing: 8.h,
             children: detail.facilities
                 .map(
                   (f) => HotelFacilityChip(name: f.name, category: f.category),
@@ -265,18 +286,18 @@ class _HotelInfoTab extends StatelessWidget {
           ),
         ],
         if (rules.isNotEmpty) ...[
-          SizedBox(height: 20.h),
+          SizedBox(height: 16.h),
           Text(
-            AppLocalizations.of(context)!.hotel_rulesTitle,
-            style: context.body1.copyWith(
+            l10n.hotel_rulesTitle,
+            style: context.body2.copyWith(
               color: context.neutral1000,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w500,
             ),
           ),
-          SizedBox(height: 10.h),
+          SizedBox(height: 8.h),
           for (var i = 0; i < rules.length; i += 2)
             Padding(
-              padding: EdgeInsets.only(bottom: 10.h),
+              padding: EdgeInsets.only(bottom: 6.h),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -291,25 +312,37 @@ class _HotelInfoTab extends StatelessWidget {
               ),
             ),
         ],
-        SizedBox(height: 12.h),
+        SizedBox(height: 16.h),
         SizedBox(
           width: double.infinity,
-          child: OutlinedButton.icon(
+          child: OutlinedButton(
             onPressed: detail.hasLocation ? _openLocation : null,
             style: OutlinedButton.styleFrom(
-              padding: EdgeInsets.symmetric(vertical: 12.h),
+              minimumSize: Size.fromHeight(36.h),
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
               side: BorderSide(color: context.primary300),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.r),
+                borderRadius: BorderRadius.circular(8.r),
               ),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
-            icon: Icon(Icons.location_on_outlined, color: context.primary300),
-            label: Text(
-              AppLocalizations.of(context)!.hotel_location,
-              style: context.body2.copyWith(
-                color: context.primary300,
-                fontWeight: FontWeight.w600,
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  l10n.hotel_location,
+                  style: context.body3.copyWith(
+                    color: context.neutral1000,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(width: 8.w),
+                Icon(
+                  Icons.near_me_outlined,
+                  size: 14.sp,
+                  color: context.primary300,
+                ),
+              ],
             ),
           ),
         ),
@@ -334,7 +367,10 @@ class _ErrorView extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: () => context.router.maybePop(),
-                icon: Icon(Icons.arrow_back_ios_new, color: context.neutral1000),
+                icon: Icon(
+                  Icons.arrow_back_ios_new,
+                  color: context.neutral1000,
+                ),
               ),
             ],
           ),

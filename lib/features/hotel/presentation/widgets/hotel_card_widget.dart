@@ -13,7 +13,7 @@ class HotelCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final radius = BorderRadius.circular(20.r);
+    final radius = BorderRadius.circular(26.r);
     final l10n = AppLocalizations.of(context)!;
 
     return Material(
@@ -23,14 +23,14 @@ class HotelCard extends StatelessWidget {
         borderRadius: radius,
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.all(12.w),
+          padding: EdgeInsetsDirectional.fromSTEB(16.w, 16.h, 16.w, 12.h),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: radius,
             boxShadow: [
               BoxShadow(
-                color: Colors.black12,
-                blurRadius: 10,
+                color: Colors.black.withValues(alpha: 0.15),
+                blurRadius: 20,
                 offset: const Offset(0, 4),
               ),
             ],
@@ -38,22 +38,45 @@ class HotelCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(14.r),
-                child: SizedBox(
-                  width: 84.w,
-                  height: 84.w,
-                  child: hotel.imageUrl == null
-                      ? HotelImagePlaceholder(iconSize: 28.sp)
-                      : Image.network(
-                          hotel.imageUrl!,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, _, _) =>
-                              HotelImagePlaceholder(iconSize: 28.sp),
+              Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10.r),
+                    child: SizedBox(
+                      width: 105.w,
+                      height: 107.h,
+                      child: hotel.imageUrl == null
+                          ? HotelImagePlaceholder(iconSize: 28.sp)
+                          : Image.network(
+                              hotel.imageUrl!,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, _, _) =>
+                                  HotelImagePlaceholder(iconSize: 28.sp),
+                            ),
+                    ),
+                  ),
+                  if (hotel.isAvailable) ...[
+                    SizedBox(height: 8.h),
+                    Container(
+                      width: 67.w,
+                      padding: EdgeInsets.symmetric(vertical: 2.h),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFEFFEFB),
+                        borderRadius: BorderRadius.circular(14.r),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        l10n.hotel_available,
+                        style: context.body3.copyWith(
+                          color: const Color(0xFF56CBB5),
+                          fontSize: 12.sp,
                         ),
-                ),
+                      ),
+                    ),
+                  ],
+                ],
               ),
-              SizedBox(width: 12.w),
+              SizedBox(width: 16.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,14 +85,23 @@ class HotelCard extends StatelessWidget {
                       hotel.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: context.body1.copyWith(
+                      style: context.h4.copyWith(
                         color: context.neutral1000,
                         fontWeight: FontWeight.w600,
+                        fontSize: 20.sp,
                       ),
                     ),
                     SizedBox(height: 4.h),
                     Row(
                       children: [
+                        Text(
+                          hotel.rating.toStringAsFixed(1),
+                          style: context.body3.copyWith(
+                            color: context.neutral1000,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(width: 4.w),
                         ...List.generate(
                           5,
                           (i) => Icon(
@@ -81,15 +113,19 @@ class HotelCard extends StatelessWidget {
                           ),
                         ),
                         SizedBox(width: 4.w),
-                        Text(
-                          l10n.common_reviewsCount(hotel.reviewCount),
-                          style: context.body3.copyWith(
-                            color: context.neutral600,
+                        Flexible(
+                          child: Text(
+                            l10n.common_reviewsCount(hotel.reviewCount),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: context.body3.copyWith(
+                              color: context.neutral600,
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 4.h),
+                    SizedBox(height: 6.h),
                     _IconLine(
                       icon: Icons.location_on_outlined,
                       text: hotel.distanceKm == null
@@ -99,9 +135,9 @@ class HotelCard extends StatelessWidget {
                               hotel.distanceKm!.toStringAsFixed(1),
                             ),
                     ),
-                    SizedBox(height: 2.h),
+                    SizedBox(height: 4.h),
                     _IconLine(
-                      icon: Icons.payments_outlined,
+                      icon: Icons.monetization_on_outlined,
                       text: hotel.startingPrice == null
                           ? l10n.hotel_priceUnavailable
                           : l10n.hotel_startingPrice(
@@ -109,7 +145,7 @@ class HotelCard extends StatelessWidget {
                             ),
                     ),
                     if (hotel.servicesSummary.isNotEmpty) ...[
-                      SizedBox(height: 4.h),
+                      SizedBox(height: 6.h),
                       Text.rich(
                         TextSpan(
                           children: [
@@ -117,13 +153,15 @@ class HotelCard extends StatelessWidget {
                               text: l10n.hotel_servicesLabel,
                               style: context.body3.copyWith(
                                 color: context.neutral1000,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 10.sp,
                               ),
                             ),
                             TextSpan(
                               text: hotel.servicesSummary,
                               style: context.body3.copyWith(
-                                color: context.neutral700,
+                                color: context.neutral600,
+                                fontSize: 10.sp,
                               ),
                             ),
                           ],
@@ -153,14 +191,17 @@ class _IconLine extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 14.sp, color: context.neutral600),
+        Icon(icon, size: 12.sp, color: context.neutral500),
         SizedBox(width: 4.w),
         Expanded(
           child: Text(
             text,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: context.body3.copyWith(color: context.neutral700),
+            style: context.body3.copyWith(
+              color: context.neutral500,
+              fontSize: 10.sp,
+            ),
           ),
         ),
       ],

@@ -10,12 +10,16 @@ class RoomServiceQuantityRow extends StatelessWidget {
     required this.priceCaption,
     required this.value,
     required this.onChanged,
+    this.min = 0,
+    this.max = 20,
   });
 
   final String label;
   final String priceCaption;
   final int value;
   final ValueChanged<int> onChanged;
+  final int min;
+  final int max;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +42,12 @@ class RoomServiceQuantityRow extends StatelessWidget {
               ],
             ),
           ),
-          QuantityStepper(value: value, onChanged: onChanged),
+          QuantityStepper(
+            value: value,
+            min: min,
+            max: max,
+            onChanged: onChanged,
+          ),
         ],
       ),
     );

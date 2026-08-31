@@ -12,12 +12,21 @@ class HotelRuleItem extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(Icons.check_box, size: 18.sp, color: context.primary300),
+        Image.asset(
+          'assets/images/mdi_checkbox-outline.png',
+          width: 14.w,
+          height: 14.w,
+          errorBuilder: (_, _, _) => Icon(
+            Icons.check_box_outlined,
+            size: 14.sp,
+            color: context.red100,
+          ),
+        ),
         SizedBox(width: 6.w),
         Expanded(
           child: Text(
             ruleText,
-            style: context.body3.copyWith(color: context.neutral700),
+            style: context.body3.copyWith(color: context.neutral600),
           ),
         ),
       ],

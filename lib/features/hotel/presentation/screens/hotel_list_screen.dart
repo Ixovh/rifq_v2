@@ -80,7 +80,7 @@ class _HotelListViewState extends State<_HotelListView> {
       body: SafeArea(
         top: false,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 18.w),
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -176,9 +176,10 @@ class _HomeBoardingTabBody extends StatelessWidget {
 
         if (state is HomeBoardingListError) {
           return _MessageView(
-            message: AppLocalizations.of(context)!.homeBoarding_errorLoadingSitters,
-            onRetry: () =>
-                context.read<HomeBoardingListCubit>().loadSitters(),
+            message: AppLocalizations.of(
+              context,
+            )!.homeBoarding_errorLoadingSitters,
+            onRetry: () => context.read<HomeBoardingListCubit>().loadSitters(),
           );
         }
 

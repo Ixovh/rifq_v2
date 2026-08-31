@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' hide TextDirection;
 import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -19,6 +19,42 @@ const otherSpecies = <({String value, String label, IconData icon})>[
   (value: 'horse', label: 'Horse', icon: Icons.agriculture_outlined),
   (value: 'other', label: 'Other', icon: Icons.more_horiz),
 ];
+
+String _dateLocale(BuildContext context) =>
+    Localizations.localeOf(context).toLanguageTag();
+
+bool _isRtl(BuildContext context) =>
+    Directionality.of(context) == TextDirection.rtl;
+
+/// Saudi/Arabic calendars start the week on Saturday; others on Sunday.
+StartingDayOfWeek _startingDayOfWeek(BuildContext context) {
+  final code = Localizations.localeOf(context).languageCode;
+  return code == 'ar'
+      ? StartingDayOfWeek.saturday
+      : StartingDayOfWeek.sunday;
+}
+
+HeaderStyle _calendarHeaderStyle(BuildContext context) {
+  final rtl = _isRtl(context);
+  return HeaderStyle(
+    titleCentered: true,
+    formatButtonVisible: false,
+    headerPadding: EdgeInsets.symmetric(vertical: 8.h),
+    titleTextStyle: context.body1.copyWith(color: context.neutral1000),
+    // TableCalendar's header Row mirrors under RTL Directionality, so swap
+    // the chevron glyphs so they still point outward.
+    leftChevronIcon: Icon(
+      rtl ? CupertinoIcons.chevron_right : CupertinoIcons.chevron_left,
+      size: 18.sp,
+      color: context.primary300,
+    ),
+    rightChevronIcon: Icon(
+      rtl ? CupertinoIcons.chevron_left : CupertinoIcons.chevron_right,
+      size: 18.sp,
+      color: context.primary300,
+    ),
+  );
+}
 
 /// Localized display name for a stored pet-species value (`'cat'`, `'dog'`,
 /// or one of [otherSpecies]). Falls back to the raw value for anything
@@ -300,9 +336,11 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = _dateLocale(context);
+
     return _SheetChrome(
       child: Padding(
-        padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 24.h),
+        padding: EdgeInsetsDirectional.fromSTEB(16.w, 16.h, 16.w, 24.h),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -317,8 +355,12 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
               _pickingMonthYear
                   ? DateFormat(
                       'MMMM yyyy',
+                      locale,
                     ).format(DateTime(_pickerYear, _pickerMonth))
-                  : DateFormat('EEEE, d MMMM yyyy').format(_selectedDay),
+                  : DateFormat(
+                      'EEEE, d MMMM yyyy',
+                      locale,
+                    ).format(_selectedDay),
               style: context.body3.copyWith(color: context.primary300),
             ),
             SizedBox(height: 8.h),
@@ -372,8 +414,12 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
   }
 
   Widget _buildCalendar(BuildContext context) {
+    final locale = _dateLocale(context);
+
     return TableCalendar(
-      key: ValueKey('cal_${_focusedDay.year}_${_focusedDay.month}'),
+      key: ValueKey('cal_${_focusedDay.year}_${_focusedDay.month}_$locale'),
+      locale: locale,
+      startingDayOfWeek: _startingDayOfWeek(context),
       firstDay: widget.firstDay,
       lastDay: widget.lastDay,
       focusedDay: _focusedDay,
@@ -384,22 +430,7 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
       },
       calendarFormat: CalendarFormat.month,
       availableGestures: AvailableGestures.horizontalSwipe,
-      headerStyle: HeaderStyle(
-        titleCentered: true,
-        formatButtonVisible: false,
-        headerPadding: EdgeInsets.symmetric(vertical: 8.h),
-        titleTextStyle: context.body1.copyWith(color: context.neutral1000),
-        leftChevronIcon: Icon(
-          CupertinoIcons.chevron_left,
-          size: 18.sp,
-          color: context.primary300,
-        ),
-        rightChevronIcon: Icon(
-          CupertinoIcons.chevron_right,
-          size: 18.sp,
-          color: context.primary300,
-        ),
-      ),
+      headerStyle: _calendarHeaderStyle(context),
       calendarBuilders: CalendarBuilders(
         headerTitleBuilder: (context, day) {
           // Custom titles replace TableCalendar's default GestureDetector,
@@ -414,7 +445,7 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    DateFormat('MMMM yyyy').format(day),
+                    DateFormat('MMMM yyyy', locale).format(day),
                     style: context.body1.copyWith(color: context.neutral1000),
                   ),
                   SizedBox(width: 4.w),
@@ -468,6 +499,7 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
 
   Widget _buildMonthYearPicker(BuildContext context) {
     final months = _monthsForYear(_pickerYear);
+    final locale = _dateLocale(context);
 
     return SizedBox(
       height: 220.h,
@@ -488,7 +520,7 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
                 for (final m in months)
                   Center(
                     child: Text(
-                      DateFormat('MMMM').format(DateTime(2000, m)),
+                      DateFormat('MMMM', locale).format(DateTime(2000, m)),
                       style: context.body2,
                     ),
                   ),
@@ -558,9 +590,11 @@ class _AppDateRangePickerSheetState extends State<_AppDateRangePickerSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = _dateLocale(context);
+
     return _SheetChrome(
       child: Padding(
-        padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 24.h),
+        padding: EdgeInsetsDirectional.fromSTEB(16.w, 16.h, 16.w, 24.h),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -570,13 +604,15 @@ class _AppDateRangePickerSheetState extends State<_AppDateRangePickerSheet> {
               _rangeStart == null
                   ? AppLocalizations.of(context)!.pickers_selectDateRange
                   : _rangeEnd == null
-                  ? DateFormat('EEE, d MMM').format(_rangeStart!)
-                  : '${DateFormat('EEE, d MMM').format(_rangeStart!)} - '
-                        '${DateFormat('EEE, d MMM yyyy').format(_rangeEnd!)}',
+                  ? DateFormat('EEE, d MMM', locale).format(_rangeStart!)
+                  : '${DateFormat('EEE, d MMM', locale).format(_rangeStart!)} - '
+                        '${DateFormat('EEE, d MMM yyyy', locale).format(_rangeEnd!)}',
               style: context.body3.copyWith(color: context.primary300),
             ),
             SizedBox(height: 8.h),
             TableCalendar(
+              locale: locale,
+              startingDayOfWeek: _startingDayOfWeek(context),
               firstDay: widget.firstDay,
               lastDay: widget.lastDay,
               focusedDay: _focusedDay,
@@ -585,24 +621,7 @@ class _AppDateRangePickerSheetState extends State<_AppDateRangePickerSheet> {
               rangeSelectionMode: RangeSelectionMode.toggledOn,
               calendarFormat: CalendarFormat.month,
               availableGestures: AvailableGestures.horizontalSwipe,
-              headerStyle: HeaderStyle(
-                titleCentered: true,
-                formatButtonVisible: false,
-                headerPadding: EdgeInsets.symmetric(vertical: 8.h),
-                titleTextStyle: context.body1.copyWith(
-                  color: context.neutral1000,
-                ),
-                leftChevronIcon: Icon(
-                  CupertinoIcons.chevron_left,
-                  size: 18.sp,
-                  color: context.primary300,
-                ),
-                rightChevronIcon: Icon(
-                  CupertinoIcons.chevron_right,
-                  size: 18.sp,
-                  color: context.primary300,
-                ),
-              ),
+              headerStyle: _calendarHeaderStyle(context),
               daysOfWeekStyle: DaysOfWeekStyle(
                 weekdayStyle: context.body3.copyWith(color: context.neutral600),
                 weekendStyle: context.body3.copyWith(color: context.neutral600),
@@ -731,7 +750,7 @@ class _AppTimePickerSheetState extends State<_AppTimePickerSheet> {
   Widget build(BuildContext context) {
     return _SheetChrome(
       child: Padding(
-        padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 24.h),
+        padding: EdgeInsetsDirectional.fromSTEB(16.w, 16.h, 16.w, 24.h),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -739,11 +758,15 @@ class _AppTimePickerSheetState extends State<_AppTimePickerSheet> {
             SizedBox(height: 12.h),
             SizedBox(
               height: 200.h,
-              child: CupertinoDatePicker(
-                mode: CupertinoDatePickerMode.time,
-                initialDateTime: _selected,
-                use24hFormat: false,
-                onDateTimeChanged: (value) => _selected = value,
+              child: Localizations.override(
+                context: context,
+                locale: Localizations.localeOf(context),
+                child: CupertinoDatePicker(
+                  mode: CupertinoDatePickerMode.time,
+                  initialDateTime: _selected,
+                  use24hFormat: false,
+                  onDateTimeChanged: (value) => _selected = value,
+                ),
               ),
             ),
             SizedBox(height: 16.h),

@@ -64,11 +64,16 @@ class HotelFacilityEntity extends Equatable {
 class HotelRuleEntity extends Equatable {
   final String id;
   final String ruleText;
+  final int displayOrder;
 
-  const HotelRuleEntity({required this.id, required this.ruleText});
+  const HotelRuleEntity({
+    required this.id,
+    required this.ruleText,
+    this.displayOrder = 0,
+  });
 
   @override
-  List<Object?> get props => [id, ruleText];
+  List<Object?> get props => [id, ruleText, displayOrder];
 }
 
 class HotelDetailEntity extends Equatable {
@@ -77,6 +82,7 @@ class HotelDetailEntity extends Equatable {
   final String locationText;
   final double? latitude;
   final double? longitude;
+  final double? distanceKm;
   final String? description;
   final List<HotelImageEntity> images;
   final List<HotelRoomEntity> rooms;
@@ -90,6 +96,7 @@ class HotelDetailEntity extends Equatable {
     required this.locationText,
     this.latitude,
     this.longitude,
+    this.distanceKm,
     this.description,
     required this.images,
     required this.rooms,
@@ -100,6 +107,11 @@ class HotelDetailEntity extends Equatable {
 
   bool get hasLocation => latitude != null && longitude != null;
 
+  String get locationLine {
+    if (distanceKm == null) return locationText;
+    return '$locationText – ${distanceKm!.toStringAsFixed(1)} km';
+  }
+
   @override
   List<Object?> get props => [
     id,
@@ -107,6 +119,7 @@ class HotelDetailEntity extends Equatable {
     locationText,
     latitude,
     longitude,
+    distanceKm,
     description,
     images,
     rooms,

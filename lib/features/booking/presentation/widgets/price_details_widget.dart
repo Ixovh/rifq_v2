@@ -78,7 +78,15 @@ class _PriceRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: style),
+          Flexible(
+            child: Text(
+              label,
+              style: style,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          SizedBox(width: 8.w),
           Text(
             AppLocalizations.of(
               context,

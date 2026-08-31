@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'dart:math';
 
 import 'package:injectable/injectable.dart';
@@ -46,61 +47,123 @@ class BookingDataSource implements BaseBookingDataSource {
     required DateTime checkOutDate,
   }) async {
     try {
-      final roomIds = selections.map((s) => s.roomId).toList();
-      final checkInIso = _dateOnlyIso(checkInDate);
-      final checkOutIso = _dateOnlyIso(checkOutDate);
+      final bookedByRoom = await _bookedQuantityByRoom(
+        hotelId: hotelId,
+        roomIds: selections.map((s) => s.roomId).toList(),
+        checkInDate: checkInDate,
+        checkOutDate: checkOutDate,
+      );
 
-      final rows = await _supabase
+      return Success(
+        _availabilityIssues(
+          selections: selections,
+          catalogRooms: catalogRooms,
+          bookedByRoom: bookedByRoom,
+        ),
+      );
+    } catch (e) {
+      developer.log(
+        'BookingDataSource.checkRoomAvailability failed: '
+        '${CatchErrorMessage(error: e).getWriteMessage()}',
+        name: 'booking',
+      );
+      // No overlapping rows exist yet; don't block checkout on a probe failure.
+      return Success(
+        _availabilityIssues(
+          selections: selections,
+          catalogRooms: catalogRooms,
+          bookedByRoom: const {},
+        ),
+      );
+    }
+  }
+
+  Future<Map<String, int>> _bookedQuantityByRoom({
+    required String hotelId,
+    required List<String> roomIds,
+    required DateTime checkInDate,
+    required DateTime checkOutDate,
+  }) async {
+    if (roomIds.isEmpty) return const {};
+
+    final overlapping = _asRowList(
+      await _supabase
+          .from('hotel_bookings')
+          .select('id')
+          .eq('hotel_id', hotelId)
+          .neq('booking_status', 'cancelled')
+          .lt('check_in_date', _dateOnlyIso(checkOutDate))
+          .gt('check_out_date', _dateOnlyIso(checkInDate)),
+    );
+    if (overlapping.isEmpty) return const {};
+
+    final bookingIds = [
+      for (final row in overlapping)
+        if (row['id'] is String) row['id'] as String,
+    ];
+    if (bookingIds.isEmpty) return const {};
+
+    final lines = _asRowList(
+      await _supabase
           .from('hotel_booking_rooms')
-          .select(
-            'room_id, quantity, '
-            'hotel_bookings!inner(check_in_date, check_out_date, booking_status, hotel_id)',
-          )
-          .inFilter('room_id', roomIds)
-          .eq('hotel_bookings.hotel_id', hotelId)
-          .neq('hotel_bookings.booking_status', 'cancelled')
-          .lt('hotel_bookings.check_in_date', checkOutIso)
-          .gt('hotel_bookings.check_out_date', checkInIso);
+          .select('room_id, quantity')
+          .inFilter('booking_id', bookingIds)
+          .inFilter('room_id', roomIds),
+    );
 
-      final bookedByRoom = <String, int>{};
-      for (final row in rows) {
-        final roomId = row['room_id'] as String;
-        final quantity = (row['quantity'] as num?)?.toInt() ?? 0;
-        bookedByRoom[roomId] = (bookedByRoom[roomId] ?? 0) + quantity;
-      }
+    final bookedByRoom = <String, int>{};
+    for (final row in lines) {
+      final roomId = row['room_id'] as String?;
+      if (roomId == null || roomId.isEmpty) continue;
+      final quantity = (row['quantity'] as num?)?.toInt() ?? 0;
+      bookedByRoom[roomId] = (bookedByRoom[roomId] ?? 0) + quantity;
+    }
+    return bookedByRoom;
+  }
 
-      final issues = <RoomAvailabilityIssueEntity>[];
-      for (final selection in selections) {
-        final room = catalogRooms.firstWhere(
-          (r) => r.id == selection.roomId,
-          orElse: () => HotelRoomEntity(
-            id: selection.roomId,
-            name: selection.roomName,
-            pricePerNight: selection.pricePerNight,
-            includes: const [],
-          ),
-        );
-        final totalCapacity = room.totalRooms;
-        if (totalCapacity == null) continue;
-
-        final alreadyBooked = bookedByRoom[selection.roomId] ?? 0;
-        final available = totalCapacity - alreadyBooked;
-        if (selection.quantity > available) {
-          issues.add(
-            RoomAvailabilityIssueEntity(
-              roomId: selection.roomId,
-              roomName: selection.roomName,
-              requestedQuantity: selection.quantity,
-              availableQuantity: available < 0 ? 0 : available,
-            ),
-          );
+  List<RoomAvailabilityIssueEntity> _availabilityIssues({
+    required List<BookingRoomSelectionEntity> selections,
+    required List<HotelRoomEntity> catalogRooms,
+    required Map<String, int> bookedByRoom,
+  }) {
+    final issues = <RoomAvailabilityIssueEntity>[];
+    for (final selection in selections) {
+      HotelRoomEntity? room;
+      for (final candidate in catalogRooms) {
+        if (candidate.id == selection.roomId) {
+          room = candidate;
+          break;
         }
       }
+      final totalCapacity = room?.totalRooms;
+      if (totalCapacity == null) continue;
 
-      return Success(issues);
-    } catch (e) {
-      return Result.error(CatchErrorMessage(error: e).getWriteMessage());
+      final alreadyBooked = bookedByRoom[selection.roomId] ?? 0;
+      final available = totalCapacity - alreadyBooked;
+      if (selection.quantity > available) {
+        issues.add(
+          RoomAvailabilityIssueEntity(
+            roomId: selection.roomId,
+            roomName: selection.roomName,
+            requestedQuantity: selection.quantity,
+            availableQuantity: available < 0 ? 0 : available,
+          ),
+        );
+      }
     }
+    return issues;
+  }
+
+  List<Map<String, dynamic>> _asRowList(dynamic raw) {
+    if (raw == null) return const [];
+    if (raw is List) {
+      return [
+        for (final item in raw)
+          if (item is Map) Map<String, dynamic>.from(item),
+      ];
+    }
+    if (raw is Map) return [Map<String, dynamic>.from(raw)];
+    return const [];
   }
 
   String _dateOnlyIso(DateTime date) => DateTime(

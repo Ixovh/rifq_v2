@@ -213,6 +213,9 @@
   "hotel_locationDistance": "{location} – {distance} كم",
   "hotel_servicePrice": "{name} : {price} ر.س",
   "hotel_roomsTotal": "{count, plural, zero{لا توجد غرف} one{غرفة واحدة إجمالاً} two{غرفتان إجمالاً} few{{count} غرف إجمالاً} many{{count} غرفة إجمالاً} other{{count} غرفة إجمالاً}}",
+  "hotel_available": "متاح",
+  "hotel_availabilityLabel": "التوفر : ",
+  "hotel_roomsAvailable": "{count, plural, zero{لا توجد غرف متاحة} one{غرفة واحدة متاحة} two{غرفتان متاحتان} few{{count} غرف متاحة} many{{count} غرفة متاحة} other{{count} غرفة متاحة}}",
 
   "sortOption_recommended": "موصى به",
   "sortOption_nearest": "الأقرب",
@@ -269,6 +272,7 @@
   "booking_priceTitle": "السعر",
   "booking_priceDetailsTitle": "تفاصيل السعر",
   "booking_downloadPdf": "تنزيل PDF",
+  "booking_downloadReceipt": "تنزيل الإيصال",
   "booking_roomPrice": "سعر الغرفة",
   "booking_addonServices": "خدمات إضافية",
   "booking_totalBeforeFees": "الإجمالي قبل الرسوم",
@@ -283,6 +287,8 @@
   "booking_nightsCount": "{count, plural, zero{{count} ليلة} one{ليلة واحدة} two{ليلتان} few{{count} ليالٍ} many{{count} ليلة} other{{count} ليلة}}",
   "booking_petsCount": "{count, plural, zero{{count} حيوان أليف} one{حيوان أليف واحد} two{حيوانان أليفان} few{{count} حيوانات أليفة} many{{count} حيوانًا أليفًا} other{{count} حيوان أليف}}",
   "booking_roomsLeft": "{count, plural, zero{لا تتوفر غرف {roomName} لهذه التواريخ.} one{تبقّت غرفة {roomName} واحدة فقط لهذه التواريخ.} two{تبقّت غرفتا {roomName} فقط لهذه التواريخ.} few{تبقّت {count} غرف {roomName} فقط لهذه التواريخ.} many{تبقّت {count} غرفة {roomName} فقط لهذه التواريخ.} other{تبقّت {count} غرفة {roomName} فقط لهذه التواريخ.}}",
+  "booking_roomsExceedPets": "لا يمكنك حجز غرف أكثر من عدد الحيوانات الأليفة.",
+  "booking_petsExceedOwned": "لا يمكنك اختيار حيوانات أليفة أكثر مما لديك مسجّلًا.",
 
   "paymentMethod_applePay": "Apple Pay",
   "paymentMethod_visa": "فيزا",

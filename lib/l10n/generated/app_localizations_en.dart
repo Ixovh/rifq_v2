@@ -662,6 +662,23 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get hotel_available => 'Available';
+
+  @override
+  String get hotel_availabilityLabel => 'Availability : ';
+
+  @override
+  String hotel_roomsAvailable(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count rooms available',
+      one: '1 room available',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get sortOption_recommended => 'Recommended';
 
   @override
@@ -825,6 +842,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get booking_downloadPdf => 'Download PDF';
 
   @override
+  String get booking_downloadReceipt => 'Download Receipt';
+
+  @override
   String get booking_roomPrice => 'Room Price';
 
   @override
@@ -899,6 +919,14 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get booking_roomsExceedPets =>
+      'You can\'t reserve more rooms than the number of pets.';
+
+  @override
+  String get booking_petsExceedOwned =>
+      'You can\'t select more pets than you have registered.';
 
   @override
   String get paymentMethod_applePay => 'Apple Pay';

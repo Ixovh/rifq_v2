@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' hide TextDirection;
 import 'package:printing/printing.dart';
 import 'package:rifq_v2/features/booking/domain/entities/hotel_booking_entity.dart';
 import 'package:rifq_v2/features/booking/presentation/utils/receipt_pdf_builder.dart';
@@ -44,6 +44,7 @@ class ReceiptScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final booking = confirmation.booking;
+    final locale = Localizations.localeOf(context).toLanguageTag();
 
     return Scaffold(
       backgroundColor: context.background,
@@ -68,7 +69,7 @@ class ReceiptScreen extends StatelessWidget {
           children: [
             Expanded(
               child: ListView(
-                padding: EdgeInsets.fromLTRB(18.w, 8.h, 18.w, 24.h),
+                padding: EdgeInsetsDirectional.fromSTEB(18.w, 8.h, 18.w, 24.h),
                 children: [
                   HotelSummaryCard(hotel: confirmation.draft.hotelDetail),
                   SizedBox(height: 18.h),
@@ -87,6 +88,7 @@ class ReceiptScreen extends StatelessWidget {
                           Text(
                             DateFormat(
                               'EEE, d MMM yyyy',
+                              locale,
                             ).format(booking.createdAt),
                             style: context.body2.copyWith(
                               color: context.neutral1000,

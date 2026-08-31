@@ -30,15 +30,28 @@ class HotelRuleModelMapper extends ClassMapperBase<HotelRuleModel> {
     _$ruleText,
     key: r'rule_text',
   );
+  static int _$displayOrder(HotelRuleModel v) => v.displayOrder;
+  static const Field<HotelRuleModel, int> _f$displayOrder = Field(
+    'displayOrder',
+    _$displayOrder,
+    key: r'display_order',
+    opt: true,
+    def: 0,
+  );
 
   @override
   final MappableFields<HotelRuleModel> fields = const {
     #id: _f$id,
     #ruleText: _f$ruleText,
+    #displayOrder: _f$displayOrder,
   };
 
   static HotelRuleModel _instantiate(DecodingData data) {
-    return HotelRuleModel(id: data.dec(_f$id), ruleText: data.dec(_f$ruleText));
+    return HotelRuleModel(
+      id: data.dec(_f$id),
+      ruleText: data.dec(_f$ruleText),
+      displayOrder: data.dec(_f$displayOrder),
+    );
   }
 
   @override
@@ -103,7 +116,7 @@ extension HotelRuleModelValueCopy<$R, $Out>
 
 abstract class HotelRuleModelCopyWith<$R, $In extends HotelRuleModel, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
-  $R call({String? id, String? ruleText});
+  $R call({String? id, String? ruleText, int? displayOrder});
   HotelRuleModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
   );
@@ -118,16 +131,18 @@ class _HotelRuleModelCopyWithImpl<$R, $Out>
   late final ClassMapperBase<HotelRuleModel> $mapper =
       HotelRuleModelMapper.ensureInitialized();
   @override
-  $R call({String? id, String? ruleText}) => $apply(
+  $R call({String? id, String? ruleText, int? displayOrder}) => $apply(
     FieldCopyWithData({
       if (id != null) #id: id,
       if (ruleText != null) #ruleText: ruleText,
+      if (displayOrder != null) #displayOrder: displayOrder,
     }),
   );
   @override
   HotelRuleModel $make(CopyWithData data) => HotelRuleModel(
     id: data.get(#id, or: $value.id),
     ruleText: data.get(#ruleText, or: $value.ruleText),
+    displayOrder: data.get(#displayOrder, or: $value.displayOrder),
   );
 
   @override

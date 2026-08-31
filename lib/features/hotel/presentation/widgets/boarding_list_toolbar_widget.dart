@@ -28,10 +28,17 @@ class BoardingListToolbar extends StatelessWidget {
     return Column(
       children: [
         Container(
+          height: 58.h,
           padding: EdgeInsets.all(4.w),
           decoration: BoxDecoration(
             color: context.neutral200,
-            borderRadius: BorderRadius.circular(30.r),
+            borderRadius: BorderRadius.circular(250.r),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.12),
+                blurRadius: 1.9,
+              ),
+            ],
           ),
           child: Row(
             children: [
@@ -59,30 +66,33 @@ class BoardingListToolbar extends StatelessWidget {
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  borderRadius: BorderRadius.circular(30.r),
+                  borderRadius: BorderRadius.circular(18.r),
                   onTap: onSearchTap,
                   child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 14.w,
-                      vertical: 12.h,
-                    ),
+                    height: 46.h,
+                    padding: EdgeInsets.symmetric(horizontal: 18.w),
                     decoration: BoxDecoration(
-                      color: context.neutral100,
-                      borderRadius: BorderRadius.circular(30.r),
-                      border: Border.all(color: context.neutral200),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(18.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.12),
+                          blurRadius: 1.9,
+                        ),
+                      ],
                     ),
                     child: Row(
                       children: [
                         Icon(
                           Icons.search,
-                          color: context.neutral500,
-                          size: 20.sp,
+                          color: const Color(0xFFA8A8A8),
+                          size: 24.sp,
                         ),
                         SizedBox(width: 8.w),
                         Text(
                           l10n.common_searchHint,
                           style: context.body2.copyWith(
-                            color: context.neutral500,
+                            color: const Color(0xFFA8A8A8),
                           ),
                         ),
                       ],
@@ -91,21 +101,30 @@ class BoardingListToolbar extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(width: 10.w),
+            SizedBox(width: 12.w),
             Material(
-              color: context.neutral100,
-              shape: const CircleBorder(),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16.r),
               child: InkWell(
-                customBorder: const CircleBorder(),
+                borderRadius: BorderRadius.circular(16.r),
                 onTap: onFilterTap,
                 child: Container(
-                  width: 44.w,
-                  height: 44.w,
+                  width: 46.w,
+                  height: 46.w,
                   decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: context.neutral200),
+                    borderRadius: BorderRadius.circular(16.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.12),
+                        blurRadius: 1.9,
+                      ),
+                    ],
                   ),
-                  child: Icon(Icons.tune, size: 18.sp, color: context.neutral500),
+                  child: Icon(
+                    Icons.tune,
+                    size: 24.sp,
+                    color: context.neutral500,
+                  ),
                 ),
               ),
             ),
@@ -131,18 +150,19 @@ class _Segment extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: selected ? Colors.white : Colors.transparent,
-      borderRadius: BorderRadius.circular(26.r),
+      borderRadius: BorderRadius.circular(250.r),
+      elevation: selected ? 1 : 0,
+      shadowColor: Colors.black26,
       child: InkWell(
-        borderRadius: BorderRadius.circular(26.r),
+        borderRadius: BorderRadius.circular(250.r),
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 10.h),
           alignment: Alignment.center,
           child: Text(
             label,
             style: context.body2.copyWith(
-              color: selected ? context.primary300 : context.neutral500,
-              fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+              color: selected ? context.primary300 : context.neutral600,
+              fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
             ),
           ),
         ),

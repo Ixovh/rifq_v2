@@ -28,20 +28,20 @@ class HotelDataSource implements BaseHotelDataSource {
   final SupabaseClient _supabase;
 
   static const _hotelListSelect =
-      'id, rating, review_count, location_text, latitude, longitude, '
-      'profiles(full_name), '
+      'id, name, rating, review_count, location_text, latitude, longitude, '
+      'profiles!owner_id(full_name), '
       'hotel_images(id, public_url, display_order, is_primary), '
       'hotel_rooms(id, room_type, price_per_night, size_label, includes, total_rooms), '
       'hotel_services(id, name, price, price_unit)';
 
   static const _hotelDetailSelect =
-      'id, location_text, latitude, longitude, description, '
-      'profiles(full_name), '
+      'id, name, location_text, latitude, longitude, description, '
+      'profiles!owner_id(full_name), '
       'hotel_images(id, public_url, display_order, is_primary), '
       'hotel_rooms(id, room_type, price_per_night, size_label, includes, total_rooms), '
       'hotel_services(id, name, price, price_unit), '
       'hotel_facilities(id, category, label), '
-      'hotel_rules(id, rule_text)';
+      'hotel_rules(id, rule_text, display_order)';
 
   @override
   Future<Result<List<HotelListItemEntity>, Object>> getHotels({
@@ -49,7 +49,10 @@ class HotelDataSource implements BaseHotelDataSource {
     String? searchQuery,
   }) async {
     try {
-      final rows = await _supabase.from('pet_hotels').select(_hotelListSelect);
+      final rows = await _supabase
+          .from('pet_hotels')
+          .select(_hotelListSelect)
+          .eq('status', 'active');
 
       final position = await _currentPositionOrNull();
 
@@ -120,9 +123,20 @@ class HotelDataSource implements BaseHotelDataSource {
           .from('pet_hotels')
           .select(_hotelDetailSelect)
           .eq('id', hotelId)
+          .eq('status', 'active')
           .single();
 
-      return Success(HotelDetailModel.fromJson(row).toEntity());
+      final model = HotelDetailModel.fromJson(row);
+      final position = await _currentPositionOrNull();
+      return Success(
+        model.toEntity(
+          distanceKm: _distanceKmOrNull(
+            from: position,
+            toLat: model.latitude,
+            toLng: model.longitude,
+          ),
+        ),
+      );
     } catch (e) {
       return Result.error(CatchErrorMessage(error: e).getWriteMessage());
     }
