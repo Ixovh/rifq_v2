@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/features/hotel/domain/entities/hotel_entity.dart';
 import 'package:rifq_v2/features/hotel/presentation/widgets/hotel_image_placeholder_widget.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_back_icon.dart';
 
 class HotelImageCarousel extends StatefulWidget {
   const HotelImageCarousel({
@@ -73,10 +74,7 @@ class _HotelImageCarouselState extends State<HotelImageCarousel> {
                   padding: EdgeInsetsDirectional.fromSTEB(18.w, 8.h, 18.w, 0),
                   child: Row(
                     children: [
-                      _CircleIconButton(
-                        icon: Icons.arrow_back_ios_new,
-                        onTap: widget.onBack,
-                      ),
+                      _CircleBackButton(onTap: widget.onBack),
                       Expanded(
                         child: Text(
                           widget.title ?? '',
@@ -133,10 +131,9 @@ class _HotelImageCarouselState extends State<HotelImageCarousel> {
   }
 }
 
-class _CircleIconButton extends StatelessWidget {
-  const _CircleIconButton({required this.icon, required this.onTap});
+class _CircleBackButton extends StatelessWidget {
+  const _CircleBackButton({required this.onTap});
 
-  final IconData icon;
   final VoidCallback onTap;
 
   @override
@@ -148,7 +145,7 @@ class _CircleIconButton extends StatelessWidget {
         onTap: onTap,
         child: Padding(
           padding: EdgeInsets.all(6.w),
-          child: Icon(icon, color: Colors.white, size: 20.sp),
+          child: AppBackIcon(color: Colors.white, size: 20.sp),
         ),
       ),
     );

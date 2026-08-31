@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rifq_v2/l10n/generated/app_localizations.dart';
@@ -13,6 +12,7 @@ import 'package:rifq_v2/features/add_pet/presentation/widgets/step1_add_pet.dart
 import 'package:rifq_v2/features/add_pet/presentation/widgets/step2_add_pet.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:rifq_v2/shared/service_locator/service_locator.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_back_icon.dart';
 
 class AddPetFormState {
   final String gender;
@@ -84,7 +84,7 @@ class AddPetScreen extends StatelessWidget {
             title: Text(l10n.addPet_title, style: context.body1),
             centerTitle: true,
             leading: IconButton(
-              icon: Icon(CupertinoIcons.back, color: context.neutral1000),
+              icon: AppBackIcon(color: context.neutral1000),
               onPressed: () {
                 if (currentStep.value == 0) {
                   Navigator.pop(context);

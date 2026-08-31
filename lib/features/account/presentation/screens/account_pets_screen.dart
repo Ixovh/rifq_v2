@@ -9,6 +9,7 @@ import 'package:rifq_v2/features/account/presentation/widgets/account_pet_card.d
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/widgets/lottie_loding.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_back_icon.dart';
 
 @RoutePage()
 class AccountPetsScreen extends StatelessWidget {
@@ -46,14 +47,10 @@ class _AccountPetsView extends StatelessWidget {
                     ),
                   ),
                   Align(
-                    alignment: Alignment.centerLeft,
+                    alignment: AlignmentDirectional.centerStart,
                     child: IconButton(
                       onPressed: () => context.router.maybePop(),
-                      icon: Icon(
-                        Icons.arrow_back_ios_new,
-                        size: 20.sp,
-                        color: context.neutral1000,
-                      ),
+                      icon: AppBackIcon(color: context.neutral1000, size: 20.sp),
                     ),
                   ),
                 ],

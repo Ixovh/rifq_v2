@@ -24,11 +24,11 @@ class AccountPetCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Container(
       width: fullWidth ? double.infinity : 256.w,
-      margin: EdgeInsets.only(
-        right: fullWidth ? 0 : 12.w,
+      margin: EdgeInsetsDirectional.only(
+        end: fullWidth ? 0 : 12.w,
         bottom: fullWidth ? 12.h : 0,
       ),
-      padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 14.h),
+      padding: EdgeInsetsDirectional.fromSTEB(16.w, 12.h, 16.w, 14.h),
       decoration: BoxDecoration(
         color: const Color(0xFFFBFCFF),
         borderRadius: BorderRadius.circular(20.r),
@@ -138,6 +138,7 @@ class AccountPetCard extends StatelessWidget {
                       Icons.chevron_right,
                       color: context.neutral1000,
                       size: 20.sp,
+                      textDirection: Directionality.of(context),
                     ),
                   ],
                 ),

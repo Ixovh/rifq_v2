@@ -18,6 +18,7 @@ import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/storage_service/auth_helper.dart';
 import 'package:rifq_v2/shared/storage_service/user_data_store.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_back_icon.dart';
 
 @RoutePage()
 class BookingDetailsScreen extends StatelessWidget {
@@ -288,7 +289,7 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
           elevation: 0,
           leading: IconButton(
             onPressed: () => context.router.maybePop(),
-            icon: Icon(Icons.arrow_back_ios_new, color: context.neutral1000),
+            icon: AppBackIcon(color: context.neutral1000),
           ),
           title: Text(
             AppLocalizations.of(context)!.booking_detailsTitle,

@@ -18,6 +18,7 @@ import 'package:rifq_v2/shared/presentation/widgets/app_confirm_sheet.dart';
 import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/presentation/widgets/guest_card_widget.dart';
 import 'package:rifq_v2/shared/presentation/widgets/lottie_loding.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_back_icon.dart';
 
 @RoutePage()
 class AccountScreen extends StatelessWidget {
@@ -98,11 +99,7 @@ class _GuestAccountBody extends StatelessWidget {
               SizedBox(height: 12.h),
               IconButton(
                 onPressed: () => context.router.maybePop(),
-                icon: Icon(
-                  Icons.arrow_back_ios_new,
-                  size: 20.sp,
-                  color: context.neutral1000,
-                ),
+                icon: AppBackIcon(color: context.neutral1000, size: 20.sp),
               ),
               SizedBox(height: 24.h),
               const GuestCard(),
@@ -156,11 +153,7 @@ class _SignedAccountBody extends StatelessWidget {
                   children: [
                     IconButton(
                       onPressed: () => context.router.maybePop(),
-                      icon: Icon(
-                        Icons.arrow_back_ios_new,
-                        size: 20.sp,
-                        color: context.neutral1000,
-                      ),
+                      icon: AppBackIcon(color: context.neutral1000, size: 20.sp),
                     ),
                     const Spacer(),
                     IconButton(

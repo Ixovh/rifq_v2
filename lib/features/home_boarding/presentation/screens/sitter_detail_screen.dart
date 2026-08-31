@@ -12,6 +12,7 @@ import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/presentation/widgets/lottie_loding.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_back_icon.dart';
 
 @RoutePage()
 class SitterDetailScreen extends StatelessWidget {
@@ -89,10 +90,7 @@ class _SitterDetailView extends StatelessWidget {
                       children: [
                         IconButton(
                           onPressed: () => context.router.maybePop(),
-                          icon: Icon(
-                            Icons.arrow_back_ios_new,
-                            color: context.neutral1000,
-                          ),
+                          icon: AppBackIcon(color: context.neutral1000),
                         ),
                       ],
                     ),
@@ -354,10 +352,7 @@ class _ErrorView extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: () => context.router.maybePop(),
-                icon: Icon(
-                  Icons.arrow_back_ios_new,
-                  color: context.neutral1000,
-                ),
+                icon: AppBackIcon(color: context.neutral1000),
               ),
             ],
           ),

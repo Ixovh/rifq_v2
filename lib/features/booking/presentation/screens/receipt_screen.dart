@@ -11,6 +11,7 @@ import 'package:rifq_v2/features/booking/presentation/widgets/hotel_summary_card
 import 'package:rifq_v2/features/booking/presentation/widgets/price_details_widget.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_back_icon.dart';
 
 @RoutePage()
 class ReceiptScreen extends StatelessWidget {
@@ -53,7 +54,7 @@ class ReceiptScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           onPressed: () => context.router.maybePop(),
-          icon: Icon(Icons.arrow_back_ios_new, color: context.neutral1000),
+          icon: AppBackIcon(color: context.neutral1000),
         ),
         title: Text(
           AppLocalizations.of(context)!.booking_receiptTitle,

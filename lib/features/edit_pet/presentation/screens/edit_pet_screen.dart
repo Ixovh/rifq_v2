@@ -18,6 +18,7 @@ import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/presentation/widgets/container_button.dart';
 import 'package:rifq_v2/shared/presentation/widgets/lottie_loding.dart';
 import 'package:rifq_v2/shared/storage_service/profile_image_cache.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_back_icon.dart';
 
 @RoutePage()
 class EditPetScreen extends StatelessWidget {
@@ -177,11 +178,7 @@ class _EditPetViewState extends State<_EditPetView> {
                       children: [
                         IconButton(
                           onPressed: () => context.router.maybePop(),
-                          icon: Icon(
-                            Icons.arrow_back_ios_new,
-                            size: 20.sp,
-                            color: context.neutral1000,
-                          ),
+                          icon: AppBackIcon(color: context.neutral1000, size: 20.sp),
                         ),
                         Expanded(
                           child: Text(

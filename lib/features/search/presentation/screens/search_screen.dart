@@ -11,6 +11,7 @@ import 'package:rifq_v2/shared/constants/app_enums.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/widgets/lottie_loding.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_back_icon.dart';
 
 @RoutePage()
 class SearchScreen extends StatelessWidget {
@@ -68,10 +69,7 @@ class _SearchViewState extends State<_SearchView> {
                 children: [
                   IconButton(
                     onPressed: () => context.router.maybePop(),
-                    icon: Icon(
-                      Icons.arrow_back_ios_new,
-                      color: context.neutral1000,
-                    ),
+                    icon: AppBackIcon(color: context.neutral1000),
                   ),
                   Expanded(
                     child: TextField(
