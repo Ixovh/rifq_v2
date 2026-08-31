@@ -62,7 +62,7 @@ class MyAdoptionListingsSection extends StatelessWidget {
             SizedBox(
               height: 390.h,
               child: ListView.separated(
-                scrollDirection: Axis.horizontal,
+                scrollDirection: Axis.vertical,
                 itemCount: state.myAdoptionPets.length,
                 separatorBuilder: (_, __) => SizedBox(width: 16.w),
                 itemBuilder: (context, index) {
