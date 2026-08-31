@@ -5,10 +5,13 @@ import 'package:rifq_v2/features/adoption/domain/entities/adoption_entity.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_pet_card_entity.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_pet_details_entity.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_request_entity.dart';
+import 'package:rifq_v2/features/adoption/domain/entities/my_adoption_pet_entity.dart';
 import 'package:rifq_v2/features/adoption/domain/use_cases/create_adoption_post_use_case.dart';
 import 'package:rifq_v2/features/adoption/domain/use_cases/create_adoption_request_use_case.dart';
+import 'package:rifq_v2/features/adoption/domain/use_cases/delete_adoption_post_use_case.dart';
 import 'package:rifq_v2/features/adoption/domain/use_cases/fetch_adoption_pet_details_use_case.dart';
 import 'package:rifq_v2/features/adoption/domain/use_cases/fetch_adoption_posts_use_case.dart';
+import 'package:rifq_v2/features/adoption/domain/use_cases/fetch_my_adoption_pet_cards_use_case.dart';
 
 part 'adoption_state.dart';
 
@@ -18,21 +21,61 @@ class AdoptionCubit extends Cubit<AdoptionState> {
   final FetchAdoptionPetCardsUseCase _fetchAdoptionPetCardsUseCase;
   final FetchAdoptionPetDetailsUseCase _fetchAdoptionPetDetailsUseCase;
   final CreateAdoptionRequestUseCase _createAdoptionRequestUseCase;
+  final FetchMyAdoptionPetCardsUseCase _fetchMyAdoptionPetCardsUseCase;
+  final DeleteAdoptionPostUseCase _deleteAdoptionPostUseCase;
 
   AdoptionCubit(
     this._createAdoptionPostUseCase,
     this._fetchAdoptionPetCardsUseCase,
     this._fetchAdoptionPetDetailsUseCase,
     this._createAdoptionRequestUseCase,
+    this._fetchMyAdoptionPetCardsUseCase,
+    this._deleteAdoptionPostUseCase,
+
   ) : super(const AdoptionState());
 
   // =========================
   // UI
   // =========================
 
-  void changeTab(int index) {
-    emit(state.copyWith(selectedTabIndex: index));
+void changeTab(int index) {
+  emit(state.copyWith(selectedTabIndex: index));
+
+  if (index == 1 && state.myAdoptionPets.isEmpty) {
+    getMyAdoptionPets();
   }
+}
+
+  Future<void> getMyAdoptionPets() async {
+  emit(
+    state.copyWith(
+      isLoadingMyAdoptionPets: true,
+      errorMessage: null,
+    ),
+  );
+
+  final result = await _fetchMyAdoptionPetCardsUseCase();
+
+  result.when(
+    (pets) {
+      emit(
+        state.copyWith(
+          isLoadingMyAdoptionPets: false,
+          myAdoptionPets: pets,
+          errorMessage: null,
+        ),
+      );
+    },
+    (error) {
+      emit(
+        state.copyWith(
+          isLoadingMyAdoptionPets: false,
+          errorMessage: error.toString(),
+        ),
+      );
+    },
+  );
+}
 
   // void selectCategory(String category) {
   //   emit(
@@ -206,4 +249,43 @@ class AdoptionCubit extends Cubit<AdoptionState> {
       ),
     );
   }
+
+Future<void> deleteAdoptionPost({
+  required String adoptionPostId,
+}) async {
+  emit(
+    state.copyWith(
+      isDeletingPost: true,
+      errorMessage: null,
+    ),
+  );
+
+  try {
+    await _deleteAdoptionPostUseCase(
+      adoptionPostId: adoptionPostId,
+    );
+
+    final updatedPets = state.myAdoptionPets
+        .where(
+          (pet) => pet.adoptionPostId != adoptionPostId,
+        )
+        .toList();
+
+    emit(
+      state.copyWith(
+        isDeletingPost: false,
+        myAdoptionPets: updatedPets,
+        errorMessage: null,
+      ),
+    );
+  } catch (error) {
+    emit(
+      state.copyWith(
+        isDeletingPost: false,
+        errorMessage: error.toString(),
+      ),
+    );
+  }
+}
+  
 }

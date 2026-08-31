@@ -8,6 +8,7 @@ import 'package:rifq_v2/features/adoption/domain/entities/adoption_entity.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_pet_card_entity.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_pet_details_entity.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_request_entity.dart';
+import 'package:rifq_v2/features/adoption/domain/entities/my_adoption_pet_entity.dart';
 import 'package:rifq_v2/features/adoption/domain/repositories/adoption_repository_domain.dart';
 
 @LazySingleton(as: AdoptionRepositoryDomain)
@@ -76,5 +77,22 @@ Future<Result<AdoptionRequestEntity, Object>> createAdoptionRequest({
     return Error(e);
   }
 }
+@override
+Future<Result<List<MyAdoptionPetEntity>, Object>>
+    getMyAdoptionPetCards() async {
+  try {
+    final result = await _remoteDataSource.getMyAdoptionPetCards();
 
+    return Success(result);
+  } catch (e) {
+    return Error(e);
+  }
+}
+
+@override
+Future<void> deleteAdoptionPost(String adoptionPostId) {
+  return _remoteDataSource.deleteAdoptionPost(
+    adoptionPostId,
+  );
+}
 }

@@ -40,10 +40,14 @@ import '../../features/adoption/domain/use_cases/create_adoption_post_use_case.d
     as _i824;
 import '../../features/adoption/domain/use_cases/create_adoption_request_use_case.dart'
     as _i374;
+import '../../features/adoption/domain/use_cases/delete_adoption_post_use_case.dart'
+    as _i813;
 import '../../features/adoption/domain/use_cases/fetch_adoption_pet_details_use_case.dart'
     as _i729;
 import '../../features/adoption/domain/use_cases/fetch_adoption_posts_use_case.dart'
     as _i425;
+import '../../features/adoption/domain/use_cases/fetch_my_adoption_pet_cards_use_case.dart'
+    as _i939;
 import '../../features/adoption/presentation/cubit/adoption_cubit.dart'
     as _i431;
 import '../../features/auth/data/datasources/auth_data_source.dart' as _i970;
@@ -184,6 +188,15 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i667.AddPetUseCase>(
       () => _i667.AddPetUseCase(gh<_i52.AddPetRepoDomain>()),
     );
+    gh.factory<_i813.DeleteAdoptionPostUseCase>(
+      () =>
+          _i813.DeleteAdoptionPostUseCase(gh<_i785.AdoptionRepositoryDomain>()),
+    );
+    gh.factory<_i939.FetchMyAdoptionPetCardsUseCase>(
+      () => _i939.FetchMyAdoptionPetCardsUseCase(
+        gh<_i785.AdoptionRepositoryDomain>(),
+      ),
+    );
     gh.factory<_i439.AccountCubit>(
       () => _i439.AccountCubit(gh<_i803.AccountUseCase>()),
     );
@@ -194,16 +207,18 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i1036.HealthRecordCubit>(
       () => _i1036.HealthRecordCubit(gh<_i653.HealthRecordUseCase>()),
     );
+    gh.factory<_i578.EditPetCubit>(
+      () => _i578.EditPetCubit(gh<_i430.EditPetUseCase>()),
+    );
     gh.factory<_i431.AdoptionCubit>(
       () => _i431.AdoptionCubit(
         gh<_i824.CreateAdoptionPostUseCase>(),
         gh<_i425.FetchAdoptionPetCardsUseCase>(),
         gh<_i729.FetchAdoptionPetDetailsUseCase>(),
         gh<_i374.CreateAdoptionRequestUseCase>(),
+        gh<_i939.FetchMyAdoptionPetCardsUseCase>(),
+        gh<_i813.DeleteAdoptionPostUseCase>(),
       ),
-    );
-    gh.factory<_i578.EditPetCubit>(
-      () => _i578.EditPetCubit(gh<_i430.EditPetUseCase>()),
     );
     gh.singleton<_i261.LocalKeysService>(() => _i261.LocalKeysService());
     return this;

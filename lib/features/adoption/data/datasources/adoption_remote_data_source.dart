@@ -2,6 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:rifq_v2/features/adoption/data/models/adoption_model.dart';
 import 'package:rifq_v2/features/adoption/data/models/adoption_pet_card_model.dart';
 import 'package:rifq_v2/features/adoption/data/models/adoption_request_model.dart';
+import 'package:rifq_v2/features/adoption/data/models/my_adoption_pet_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class AdoptionRemoteDataSource {
@@ -18,6 +19,10 @@ abstract class AdoptionRemoteDataSource {
     Future<AdoptionRequestModel> createAdoptionRequest(
     AdoptionRequestModel adoptionRequest,
   );
+
+  Future<List<MyAdoptionPetModel>> getMyAdoptionPetCards();
+
+  Future<void> deleteAdoptionPost(String adoptionPostId);
 }
 
 
@@ -104,4 +109,99 @@ Future<Map<String, dynamic>> getAdoptionPetDetails(
 
     return AdoptionRequestModel.fromJson(response);
   }
+
+  @override
+Future<List<MyAdoptionPetModel>> getMyAdoptionPetCards() async {
+  final userId = _supabase.auth.currentUser?.id;
+
+  if (userId == null) {
+    throw Exception('User not found');
+  }
+
+  // =========================
+  // 1. Get my adoption posts
+  // =========================
+
+  final postsResponse = await _supabase
+      .from('adoption_posts')
+      .select('id')
+      .eq('poster_id', userId);
+
+  final posts = List<Map<String, dynamic>>.from(postsResponse);
+
+  if (posts.isEmpty) {
+    return [];
+  }
+
+  final postIds = posts
+      .map((post) => post['id'] as String)
+      .toList();
+
+  // =========================
+  // 2. Get pets information
+  // =========================
+
+  final petsResponse = await _supabase
+      .from('adoption_pet_cards')
+      .select()
+      .inFilter('adoption_post_id', postIds);
+
+  final pets = List<Map<String, dynamic>>.from(petsResponse);
+
+  // =========================
+  // 3. Get adoption requests
+  // =========================
+
+  final requestsResponse = await _supabase
+      .from('adoption_requests')
+      .select('adoption_post_id, status')
+      .inFilter('adoption_post_id', postIds);
+
+  final requests = List<Map<String, dynamic>>.from(requestsResponse);
+
+  // =========================
+  // 4. Build My Pets cards
+  // =========================
+
+  return pets.map((pet) {
+    final adoptionPostId = pet['adoption_post_id'] as String;
+
+    final petRequests = requests.where(
+      (request) => request['adoption_post_id'] == adoptionPostId,
+    );
+
+    final statuses = petRequests
+        .map((request) => request['status'].toString().toLowerCase())
+        .toList();
+
+    String status = 'pending';
+
+    if (statuses.contains('accepted')) {
+      status = 'adopted';
+    } else if (statuses.isNotEmpty &&
+        statuses.every((status) => status == 'rejected')) {
+      status = 'cancelled';
+    }
+
+    return MyAdoptionPetModel(
+      adoptionPostId: adoptionPostId,
+      petId: pet['pet_id'] as String,
+      name: pet['name'] as String,
+      birthdate: DateTime.parse(pet['birthdate'] as String),
+      location: pet['location'] as String? ?? '',
+      imageUrl: pet['image_url'] as String?,
+      species: pet['species'] as String?,
+      status: status,
+      requestsCount: statuses.length,
+    );
+  }).toList();
+}
+
+@override
+Future<void> deleteAdoptionPost(String adoptionPostId) async {
+  await _supabase
+      .from('adoption_posts')
+      .delete()
+      .eq('id', adoptionPostId);
+}
 }

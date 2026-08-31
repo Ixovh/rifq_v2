@@ -20,6 +20,10 @@ class AdoptionState extends Equatable {
   final AdoptionPostEntity? createdPost;
 
   final String? errorMessage;
+  final bool isLoadingMyAdoptionPets;
+  final List<MyAdoptionPetEntity> myAdoptionPets;
+
+  final bool isDeletingPost;
 
   const AdoptionState({
     this.selectedTabIndex = 0,
@@ -42,6 +46,9 @@ class AdoptionState extends Equatable {
     this.isCreatingRequest = false,
     this.isRequestCreated = false,
     this.createdRequest,
+    this.isLoadingMyAdoptionPets = false,
+    this.myAdoptionPets = const [],
+    this.isDeletingPost = false,
   });
 
   AdoptionState copyWith({
@@ -66,6 +73,9 @@ class AdoptionState extends Equatable {
     bool? isCreatingRequest,
     bool? isRequestCreated,
     AdoptionRequestEntity? createdRequest,
+    bool? isLoadingMyAdoptionPets,
+    List<MyAdoptionPetEntity>? myAdoptionPets,
+    bool? isDeletingPost,
   }) {
     return AdoptionState(
       selectedTabIndex: selectedTabIndex ?? this.selectedTabIndex,
@@ -96,6 +106,11 @@ class AdoptionState extends Equatable {
       isRequestCreated: isRequestCreated ?? this.isRequestCreated,
 
       createdRequest: createdRequest ?? this.createdRequest,
+      isLoadingMyAdoptionPets:
+          isLoadingMyAdoptionPets ?? this.isLoadingMyAdoptionPets,
+
+      myAdoptionPets: myAdoptionPets ?? this.myAdoptionPets,
+      isDeletingPost: isDeletingPost ?? this.isDeletingPost,
     );
   }
 
@@ -131,5 +146,8 @@ class AdoptionState extends Equatable {
     isCreatingRequest,
     isRequestCreated,
     createdRequest,
+    isLoadingMyAdoptionPets,
+    myAdoptionPets,
+    isDeletingPost,
   ];
 }
