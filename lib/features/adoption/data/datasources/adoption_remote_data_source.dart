@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:rifq_v2/features/adoption/data/models/adoption_model.dart';
 import 'package:rifq_v2/features/adoption/data/models/adoption_pet_card_model.dart';
+import 'package:rifq_v2/features/adoption/data/models/adoption_request_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class AdoptionRemoteDataSource {
@@ -13,7 +14,12 @@ abstract class AdoptionRemoteDataSource {
    Future<Map<String, dynamic>> getAdoptionPetDetails(
     String adoptionPostId,
   );
+
+    Future<AdoptionRequestModel> createAdoptionRequest(
+    AdoptionRequestModel adoptionRequest,
+  );
 }
+
 
 @LazySingleton(as: AdoptionRemoteDataSource)
 class AdoptionRemoteDataSourceImpl implements AdoptionRemoteDataSource {
@@ -85,4 +91,17 @@ Future<Map<String, dynamic>> getAdoptionPetDetails(
 
   return response;
 }
+
+    @override
+  Future<AdoptionRequestModel> createAdoptionRequest(
+    AdoptionRequestModel adoptionRequest,
+  ) async {
+    final response = await _supabase
+        .from('adoption_requests')
+        .insert(adoptionRequest.toJson())
+        .select()
+        .single();
+
+    return AdoptionRequestModel.fromJson(response);
+  }
 }

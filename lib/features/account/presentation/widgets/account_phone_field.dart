@@ -12,12 +12,14 @@ class AccountPhoneField extends StatefulWidget {
     this.initialValue,
     this.initialCountryCode = 'SA',
     this.isRequired = false,
+    this.borderColor,
   });
 
   final ValueChanged<PhoneNumber> onChanged;
   final String? initialValue;
   final String initialCountryCode;
   final bool isRequired;
+  final Color? borderColor;
 
   @override
   State<AccountPhoneField> createState() => _AccountPhoneFieldState();
@@ -69,10 +71,10 @@ class _AccountPhoneFieldState extends State<AccountPhoneField> {
   }
 
   PhoneNumber get _phoneNumber => PhoneNumber(
-        countryISOCode: _country.code,
-        countryCode: '+${_country.fullCountryCode}',
-        number: _controller.text.trim(),
-      );
+    countryISOCode: _country.code,
+    countryCode: '+${_country.fullCountryCode}',
+    number: _controller.text.trim(),
+  );
 
   void _emit() => widget.onChanged(_phoneNumber);
 
@@ -115,10 +117,15 @@ class _AccountPhoneFieldState extends State<AccountPhoneField> {
                   decoration: BoxDecoration(
                     color: context.neutral100,
                     borderRadius: BorderRadius.circular(18.r),
+                    // border: Border.all(
+                    //   color: field.hasError
+                    //       ? context.error
+                    //       : context.neutral200,
+                    // ),
                     border: Border.all(
                       color: field.hasError
                           ? context.error
-                          : context.neutral200,
+                          : widget.borderColor ?? context.neutral200,
                     ),
                   ),
                   child: Row(
@@ -231,10 +238,8 @@ Future<Country?> showAccountCountryPickerSheet({
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     barrierColor: Colors.black.withValues(alpha: 0.35),
-    builder: (_) => _AccountCountryPickerSheet(
-      countries: countries,
-      selected: selected,
-    ),
+    builder: (_) =>
+        _AccountCountryPickerSheet(countries: countries, selected: selected),
   );
 }
 
@@ -252,7 +257,8 @@ class _AccountCountryPickerSheet extends StatefulWidget {
       _AccountCountryPickerSheetState();
 }
 
-class _AccountCountryPickerSheetState extends State<_AccountCountryPickerSheet> {
+class _AccountCountryPickerSheetState
+    extends State<_AccountCountryPickerSheet> {
   late final TextEditingController _searchController;
   late List<Country> _filtered;
 
@@ -391,7 +397,9 @@ class _AccountCountryPickerSheetState extends State<_AccountCountryPickerSheet> 
                   ? Center(
                       child: Text(
                         'No countries found',
-                        style: context.body2.copyWith(color: context.neutral700),
+                        style: context.body2.copyWith(
+                          color: context.neutral700,
+                        ),
                       ),
                     )
                   : ListView.separated(
@@ -403,8 +411,7 @@ class _AccountCountryPickerSheetState extends State<_AccountCountryPickerSheet> 
                       ),
                       itemBuilder: (context, index) {
                         final country = _filtered[index];
-                        final isSelected =
-                            country.code == widget.selected.code;
+                        final isSelected = country.code == widget.selected.code;
 
                         return InkWell(
                           onTap: () => Navigator.of(context).pop(country),

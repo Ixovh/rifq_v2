@@ -39,6 +39,9 @@ class AdoptionState extends Equatable {
     this.createdPost,
 
     this.errorMessage,
+    this.isCreatingRequest = false,
+    this.isRequestCreated = false,
+    this.createdRequest,
   });
 
   AdoptionState copyWith({
@@ -59,6 +62,10 @@ class AdoptionState extends Equatable {
 
     String? errorMessage,
     List<AdoptionPetCardEntity>? allAdoptionPetCards,
+
+    bool? isCreatingRequest,
+    bool? isRequestCreated,
+    AdoptionRequestEntity? createdRequest,
   }) {
     return AdoptionState(
       selectedTabIndex: selectedTabIndex ?? this.selectedTabIndex,
@@ -84,6 +91,11 @@ class AdoptionState extends Equatable {
 
       errorMessage: errorMessage,
       allAdoptionPetCards: allAdoptionPetCards ?? this.allAdoptionPetCards,
+      isCreatingRequest: isCreatingRequest ?? this.isCreatingRequest,
+
+      isRequestCreated: isRequestCreated ?? this.isRequestCreated,
+
+      createdRequest: createdRequest ?? this.createdRequest,
     );
   }
 
@@ -92,6 +104,11 @@ class AdoptionState extends Equatable {
   // =========================
   final bool isLoadingPetDetails;
   final AdoptionPetDetailsEntity? petDetails;
+
+  //
+  final bool isCreatingRequest;
+  final bool isRequestCreated;
+  final AdoptionRequestEntity? createdRequest;
 
   @override
   List<Object?> get props => [
@@ -111,5 +128,8 @@ class AdoptionState extends Equatable {
     errorMessage,
     allAdoptionPetCards,
     adoptionPetCards,
+    isCreatingRequest,
+    isRequestCreated,
+    createdRequest,
   ];
 }

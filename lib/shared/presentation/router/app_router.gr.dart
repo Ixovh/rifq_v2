@@ -115,18 +115,52 @@ class AdoptionFeatureRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [AdoptionFormScreen]
-class AdoptionFormRoute extends PageRouteInfo<void> {
-  const AdoptionFormRoute({List<PageRouteInfo>? children})
-    : super(AdoptionFormRoute.name, initialChildren: children);
+class AdoptionFormRoute extends PageRouteInfo<AdoptionFormRouteArgs> {
+  AdoptionFormRoute({
+    Key? key,
+    required String adoptionPostId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         AdoptionFormRoute.name,
+         args: AdoptionFormRouteArgs(key: key, adoptionPostId: adoptionPostId),
+         initialChildren: children,
+       );
 
   static const String name = 'AdoptionFormRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const AdoptionFormScreen();
+      final args = data.argsAs<AdoptionFormRouteArgs>();
+      return AdoptionFormScreen(
+        key: args.key,
+        adoptionPostId: args.adoptionPostId,
+      );
     },
   );
+}
+
+class AdoptionFormRouteArgs {
+  const AdoptionFormRouteArgs({this.key, required this.adoptionPostId});
+
+  final Key? key;
+
+  final String adoptionPostId;
+
+  @override
+  String toString() {
+    return 'AdoptionFormRouteArgs{key: $key, adoptionPostId: $adoptionPostId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AdoptionFormRouteArgs) return false;
+    return key == other.key && adoptionPostId == other.adoptionPostId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ adoptionPostId.hashCode;
 }
 
 /// generated route for

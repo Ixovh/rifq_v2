@@ -4,7 +4,9 @@ import 'package:injectable/injectable.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_entity.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_pet_card_entity.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_pet_details_entity.dart';
+import 'package:rifq_v2/features/adoption/domain/entities/adoption_request_entity.dart';
 import 'package:rifq_v2/features/adoption/domain/use_cases/create_adoption_post_use_case.dart';
+import 'package:rifq_v2/features/adoption/domain/use_cases/create_adoption_request_use_case.dart';
 import 'package:rifq_v2/features/adoption/domain/use_cases/fetch_adoption_pet_details_use_case.dart';
 import 'package:rifq_v2/features/adoption/domain/use_cases/fetch_adoption_posts_use_case.dart';
 
@@ -15,11 +17,13 @@ class AdoptionCubit extends Cubit<AdoptionState> {
   final CreateAdoptionPostUseCase _createAdoptionPostUseCase;
   final FetchAdoptionPetCardsUseCase _fetchAdoptionPetCardsUseCase;
   final FetchAdoptionPetDetailsUseCase _fetchAdoptionPetDetailsUseCase;
+  final CreateAdoptionRequestUseCase _createAdoptionRequestUseCase;
 
   AdoptionCubit(
     this._createAdoptionPostUseCase,
     this._fetchAdoptionPetCardsUseCase,
     this._fetchAdoptionPetDetailsUseCase,
+    this._createAdoptionRequestUseCase,
   ) : super(const AdoptionState());
 
   // =========================
@@ -60,14 +64,6 @@ class AdoptionCubit extends Cubit<AdoptionState> {
     final result = await _fetchAdoptionPetCardsUseCase();
 
     result.when(
-      // (cards) {
-      //   emit(
-      //     state.copyWith(
-      //       isLoadingPosts: false,
-      //       adoptionPetCards: cards,
-      //     ),
-      //   );
-      // },
       (cards) {
         final filteredPets = cards.where((pet) {
           return pet.species?.toLowerCase() ==
@@ -108,6 +104,7 @@ class AdoptionCubit extends Cubit<AdoptionState> {
             isLoadingPetDetails: false,
             petDetails: details,
             errorMessage: null,
+            
           ),
         );
       },
@@ -157,43 +154,43 @@ class AdoptionCubit extends Cubit<AdoptionState> {
       },
     );
   }
-  // Future<void> createAdoptionPost({
-  //   required AdoptionPostEntity adoptionPost,
-  // }) async {
-  //   emit(
-  //     state.copyWith(
-  //       isCreatingPost: true,
-  //       errorMessage: null,
-  //       isPostCreated: false,
-  //     ),
-  //   );
+  Future<void> createAdoptionRequest({
+  required AdoptionRequestEntity adoptionRequest,
+}) async {
+  emit(
+    state.copyWith(
+      isCreatingRequest: true,
+      isRequestCreated: false,
+      errorMessage: null,
+    ),
+  );
 
-  //   final result = await _createAdoptionPostUseCase(
-  //     adoptionPost: adoptionPost,
-  //   );
+  final result = await _createAdoptionRequestUseCase(
+    adoptionRequest: adoptionRequest,
+  );
 
-  //   result.when(
-  //     (post) {
-  //       emit(
-  //         state.copyWith(
-  //           isCreatingPost: false,
-  //           isPostCreated: true,
-  //           createdPost: post,
-  //         ),
-  //       );
-
-  //       getAdoptionPetCards();
-  //     },
-  //     (error) {
-  //       emit(
-  //         state.copyWith(
-  //           isCreatingPost: false,
-  //           errorMessage: error.toString(),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
+  result.when(
+    (request) {
+      emit(
+        state.copyWith(
+          isCreatingRequest: false,
+          isRequestCreated: true,
+          createdRequest: request,
+          errorMessage: null,
+        ),
+      );
+    },
+    (error) {
+      emit(
+        state.copyWith(
+          isCreatingRequest: false,
+          isRequestCreated: false,
+          errorMessage: error.toString(),
+        ),
+      );
+    },
+  );
+}
 
   // =========================
   // Reset Create Post State
