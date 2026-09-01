@@ -6,25 +6,27 @@ import 'package:phone_text_field/phone_text_field.dart';
 import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
-class AccountPhoneField extends StatefulWidget {
-  const AccountPhoneField({
+class PhoneNumberField extends StatefulWidget {
+  const PhoneNumberField({
     super.key,
     required this.onChanged,
     this.initialValue,
     this.initialCountryCode = 'SA',
     this.isRequired = false,
+    this.borderColor,
   });
 
   final ValueChanged<PhoneNumber> onChanged;
   final String? initialValue;
   final String initialCountryCode;
   final bool isRequired;
+  final Color? borderColor;
 
   @override
-  State<AccountPhoneField> createState() => _AccountPhoneFieldState();
+  State<PhoneNumberField> createState() => _PhoneNumberFieldState();
 }
 
-class _AccountPhoneFieldState extends State<AccountPhoneField> {
+class _PhoneNumberFieldState extends State<PhoneNumberField> {
   late final TextEditingController _controller;
   late Country _country;
   late List<Country> _countries;
@@ -78,7 +80,7 @@ class _AccountPhoneFieldState extends State<AccountPhoneField> {
   void _emit() => widget.onChanged(_phoneNumber);
 
   Future<void> _pickCountry() async {
-    final selected = await showAccountCountryPickerSheet(
+    final selected = await showPhoneCountryPickerSheet(
       context: context,
       countries: _countries,
       selected: _country,
@@ -118,10 +120,15 @@ class _AccountPhoneFieldState extends State<AccountPhoneField> {
                   decoration: BoxDecoration(
                     color: context.neutral100,
                     borderRadius: BorderRadius.circular(18.r),
+                    // border: Border.all(
+                    //   color: field.hasError
+                    //       ? context.error
+                    //       : context.neutral200,
+                    // ),
                     border: Border.all(
                       color: field.hasError
                           ? context.error
-                          : context.neutral200,
+                          : widget.borderColor ?? context.neutral200,
                     ),
                   ),
                   // Phone numbers read left-to-right in any UI language: keep the
@@ -229,7 +236,7 @@ class _AccountPhoneFieldState extends State<AccountPhoneField> {
   }
 }
 
-Future<Country?> showAccountCountryPickerSheet({
+Future<Country?> showPhoneCountryPickerSheet({
   required BuildContext context,
   required List<Country> countries,
   required Country selected,
@@ -240,12 +247,12 @@ Future<Country?> showAccountCountryPickerSheet({
     backgroundColor: Colors.transparent,
     barrierColor: Colors.black.withValues(alpha: 0.35),
     builder: (_) =>
-        _AccountCountryPickerSheet(countries: countries, selected: selected),
+        _PhoneCountryPickerSheet(countries: countries, selected: selected),
   );
 }
 
-class _AccountCountryPickerSheet extends StatefulWidget {
-  const _AccountCountryPickerSheet({
+class _PhoneCountryPickerSheet extends StatefulWidget {
+  const _PhoneCountryPickerSheet({
     required this.countries,
     required this.selected,
   });
@@ -254,12 +261,12 @@ class _AccountCountryPickerSheet extends StatefulWidget {
   final Country selected;
 
   @override
-  State<_AccountCountryPickerSheet> createState() =>
-      _AccountCountryPickerSheetState();
+  State<_PhoneCountryPickerSheet> createState() =>
+      _PhoneCountryPickerSheetState();
 }
 
-class _AccountCountryPickerSheetState
-    extends State<_AccountCountryPickerSheet> {
+class _PhoneCountryPickerSheetState
+    extends State<_PhoneCountryPickerSheet> {
   late final TextEditingController _searchController;
   late List<Country> _filtered;
 

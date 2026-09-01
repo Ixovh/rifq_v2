@@ -32,7 +32,11 @@ class AuthScreen extends StatelessWidget {
                 case AuthSuccessState _:
                   context.replaceRoute(const NavWrapperRoute());
                   break;
+ 
                 case AuthSignUPSuccessState _:
+                
+                  // context.pushRoute(OtpRoute(isResetPassword: false,email: cubit.sinUpEmailController.text,));
+
                   context.pushRoute(
                     OtpRoute(
                       email: cubit.sinUpEmailController.text,

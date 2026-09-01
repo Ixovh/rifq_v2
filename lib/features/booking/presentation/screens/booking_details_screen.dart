@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:rifq_v2/l10n/generated/app_localizations.dart';
-import 'package:rifq_v2/features/account/presentation/widgets/account_phone_field.dart';
+import 'package:rifq_v2/shared/presentation/widgets/phone_number_field.dart';
 import 'package:rifq_v2/features/booking/domain/entities/booking_draft_entity.dart';
 import 'package:rifq_v2/features/booking/presentation/cubit/booking_details_cubit.dart';
 import 'package:rifq_v2/features/booking/presentation/widgets/quantity_stepper_widget.dart';
@@ -321,7 +321,7 @@ class _BookingDetailsViewState extends State<_BookingDetailsView> {
                       _FieldLabel(
                         AppLocalizations.of(context)!.common_phoneNumber,
                       ),
-                      AccountPhoneField(
+                      PhoneNumberField(
                         key: ValueKey(_initialPhoneDigits),
                         initialValue: _initialPhoneDigits,
                         isRequired: true,

@@ -1,113 +1,159 @@
-import 'dart:io';
 import 'package:injectable/injectable.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:uuid/uuid.dart';
-import 'package:rifq_v2/shared/constants/storage_buckets.dart';
-import '../../domain/entities/adoption_entity.dart';
-import '../../domain/repositories/adoption_repository_domain.dart';
-import '../models/adoption_model.dart';
+import 'package:multiple_result/multiple_result.dart';
+import 'package:rifq_v2/features/adoption/data/datasources/adoption_remote_data_source.dart';
+import 'package:rifq_v2/features/adoption/data/models/adoption_model.dart';
+import 'package:rifq_v2/features/adoption/data/models/adoption_pet_details_model.dart';
+import 'package:rifq_v2/features/adoption/data/models/adoption_request_model.dart';
+import 'package:rifq_v2/features/adoption/domain/entities/adoption_entity.dart';
+import 'package:rifq_v2/features/adoption/domain/entities/adoption_pet_card_entity.dart';
+import 'package:rifq_v2/features/adoption/domain/entities/adoption_pet_details_entity.dart';
+import 'package:rifq_v2/features/adoption/domain/entities/adoption_request_card_entity.dart';
+import 'package:rifq_v2/features/adoption/domain/entities/adoption_request_entity.dart';
+import 'package:rifq_v2/features/adoption/domain/entities/my_adoption_pet_entity.dart';
+import 'package:rifq_v2/features/adoption/domain/repositories/adoption_repository_domain.dart';
 
 @LazySingleton(as: AdoptionRepositoryDomain)
 class AdoptionRepositoryData implements AdoptionRepositoryDomain {
-  final SupabaseClient _supabase;
-  final Uuid _uuid = const Uuid();
+  final AdoptionRemoteDataSource _remoteDataSource;
 
-  AdoptionRepositoryData(this._supabase);
-
-  @override
-  Future<List<AdoptionPostEntity>> fetchAvailableAdoptionPosts() async {
-    final response = await _supabase
-        .from('adoption_posts')
-        .select('''
-          *,
-          pets (*),
-          profiles (*),
-          pet_photos (*)
-        ''')
-        .eq('status', 'available')
-        .order('created_at', ascending: false);
-
-    return (response as List<dynamic>)
-        .map((json) => AdoptionPostModel.fromJson(json).toEntity())
-        .toList();
-  }
+  AdoptionRepositoryData(this._remoteDataSource);
 
   @override
-  Future<List<AdoptionPostEntity>> fetchMyListings(String userId) async {
-    final response = await _supabase
-        .from('adoption_posts')
-        .select('''
-          *,
-          pets (*),
-          profiles (*),
-          pet_photos (*)
-        ''')
-        .eq('poster_id', userId)
-        .order('created_at', ascending: false);
-
-    return (response as List<dynamic>)
-        .map((json) => AdoptionPostModel.fromJson(json).toEntity())
-        .toList();
-  }
-
-  @override
-  Future<void> createAdoptionListing({
-    required String petName,
-    required String species,
-    required String breed,
-    required int age,
-    required String gender,
-    String? healthStatusSummary,
-    required String description,
-    required String location,
-    required List<File> imageFiles,
+  Future<Result<AdoptionPostEntity, Object>> createAdoptionPost({
+    required AdoptionPostEntity adoptionPost,
   }) async {
-    final currentUserId = _supabase.auth.currentUser!.id;
-    final petId = _uuid.v4();
-    final postId = _uuid.v4();
+    try {
+      final model = AdoptionPostModel.fromEntity(adoptionPost);
 
-    await _supabase.from('pets').insert({
-      'id': petId,
-      'owner_id': currentUserId,
-      'name': petName,
-      'species': species,
-      'breed': breed,
-      'age': age,
-      'gender': gender,
-      'health_status_summary': healthStatusSummary,
-    });
+      final result = await _remoteDataSource.createAdoptionPost(model);
 
-    for (int i = 0; i < imageFiles.length; i++) {
-      final file = imageFiles[i];
-      final photoId = _uuid.v4();
-      final fileExt = file.path.split('.').last.toLowerCase();
-      final storagePath = '$currentUserId/$petId/$photoId.$fileExt';
+      return Success(result);
+    } catch (e) {
+      return Error(e);
+    }
+  }
 
-      await _supabase.storage
-          .from(StorageBuckets.petPhotos)
-          .upload(storagePath, file);
-      final publicUrl = _supabase.storage
-          .from(StorageBuckets.petPhotos)
-          .getPublicUrl(storagePath);
+  @override
+  Future<Result<List<AdoptionPetCardEntity>, Object>>
+      getAdoptionPetCards() async {
+    try {
+      final result = await _remoteDataSource.getAdoptionPetCards();
 
-      await _supabase.from('pet_photos').insert({
-        'id': photoId,
-        'pet_id': petId,
-        'uploader_id': currentUserId,
-        'storage_path': storagePath,
-        'public_url': publicUrl,
-        'is_primary': i == 0,
-        'display_order': i,
-      });
+      return Success(result);
+    } catch (e) {
+      return Error(e);
+    }
+  }
+
+
+  @override
+Future<Result<AdoptionPetDetailsEntity, Object>>
+    getAdoptionPetDetails({
+  required String adoptionPostId,
+}) async {
+  try {
+    final result = await _remoteDataSource.getAdoptionPetDetails(
+      adoptionPostId,
+    );
+
+    final model = AdoptionPetDetailsModel.fromJson(result);
+
+    return Success(model);
+  } catch (e) {
+    return Error(e);
+  }
+}
+
+@override
+Future<Result<AdoptionRequestEntity, Object>> createAdoptionRequest({
+  required AdoptionRequestEntity adoptionRequest,
+}) async {
+  try {
+    final model = AdoptionRequestModel.fromEntity(adoptionRequest);
+
+    final result = await _remoteDataSource.createAdoptionRequest(model);
+
+    return Success(result);
+  } catch (e) {
+    return Error(e);
+  }
+}
+@override
+Future<Result<List<MyAdoptionPetEntity>, Object>>
+    getMyAdoptionPetCards() async {
+  try {
+    final result = await _remoteDataSource.getMyAdoptionPetCards();
+
+    return Success(result);
+  } catch (e) {
+    return Error(e);
+  }
+}
+
+@override
+Future<void> deleteAdoptionPost(String adoptionPostId) async {
+  await _remoteDataSource.deleteAdoptionPost(adoptionPostId);
+  await _remoteDataSource.refreshUserPetsCache();
+}
+
+@override
+Future<Result<List<AdoptionRequestCardEntity>, Object>>
+    getAdoptionRequests({
+  required String adoptionPostId,
+}) async {
+  try {
+    final result = await _remoteDataSource.getAdoptionRequests(
+      adoptionPostId,
+    );
+
+    return Success(result);
+  } catch (e) {
+    return Error(e);
+  }
+}
+@override
+Future<Result<void, Object>> updateAdoptionRequestStatus({
+  required String requestId,
+  required String adoptionPostId,
+  required String status,
+}) async {
+  try {
+    await _remoteDataSource.updateAdoptionRequestStatus(
+      requestId: requestId,
+      status: status,
+    );
+
+    if (status == 'accepted') {
+      await _remoteDataSource.updateAdoptionPostStatus(
+        adoptionPostId: adoptionPostId,
+        status: 'adopted',
+      );
+
+      final petId = await _remoteDataSource.getPetIdForAdoptionPost(
+        adoptionPostId,
+      );
+      if (petId != null) {
+        await _remoteDataSource.removeOwnedPetFromCache(petId);
+      }
     }
 
-    await _supabase.from('adoption_posts').insert({
-      'id': postId,
-      'pet_id': petId,
-      'poster_id': currentUserId,
-      'description': description,
-      'status': 'available',
-      'location': location,
-    });
+    return const Success(null);
+  } catch (e) {
+    return Error(e);
   }
+}
+
+@override
+Future<Result<String?, Object>> getMyAdoptionRequestStatus({
+  required String adoptionPostId,
+}) async {
+  try {
+    final status = await _remoteDataSource.getMyAdoptionRequestStatus(
+      adoptionPostId,
+    );
+    return Success(status);
+  } catch (e) {
+    return Error(e);
+  }
+}
 }

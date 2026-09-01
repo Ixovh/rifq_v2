@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'l10n/cubit/locale_cubit.dart';
 import 'l10n/generated/app_localizations.dart';
 import 'shared/setup.dart';
@@ -14,6 +15,12 @@ Future<void> main() async {
   await setup();
   await configureDependencies();
   GoogleFonts.config.allowRuntimeFetching = false;
+
+  Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+    if (data.event == AuthChangeEvent.signedIn) {
+      _appRouter.replaceAll([const NavWrapperRoute()]);
+    }
+  });
 
   runApp(const MainApp());
 }

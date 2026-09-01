@@ -38,7 +38,9 @@ class OtpScreen extends StatelessWidget {
   }
 
   bool get _canResend =>
-      purpose == OtpPurpose.signUp || purpose == OtpPurpose.emailChange;
+      purpose == OtpPurpose.signUp ||
+      purpose == OtpPurpose.emailChange ||
+      purpose == OtpPurpose.resetPassword;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +66,24 @@ class OtpScreen extends StatelessWidget {
                     context.replaceRoute(const NavWrapperRoute());
                   }
                   break;
+                  // case AuthSuccessState _:
+                  //   if (purpose == OtpPurpose.emailChange) {
+                  //     ScaffoldMessenger.of(context).showSnackBar(
+                  //       const SnackBar(
+                  //         content: Text('Email updated successfully'),
+                  //       ),
+
+                  //     );
+
+                  //     context.router.popUntil(
+                  //       (route) =>
+                  //           route.settings.name == AccountRoute.name ||
+                  //           route.isFirst,
+                  //     );
+                  //   } else {
+                  //     context.replaceRoute(const NavWrapperRoute());
+                  //   }
+                  // break;
                 case AuthErrorState _:
                   context.showErrorToast(state.msg);
                   break;
@@ -81,10 +101,10 @@ class OtpScreen extends StatelessWidget {
                   purpose: purpose,
                   canResend: _canResend,
                   onVerify: (pin) async {
-                    if (purpose == OtpPurpose.resetPassword) {
-                      context.pushRoute(const ResetPasswordRoute());
-                      return;
-                    }
+                    // if (purpose == OtpPurpose.resetPassword) {
+                    //   context.pushRoute(const ResetPasswordRoute());
+                    //   return;
+                    // }
                     await cubit.verifyOtp(
                       email: email,
                       otp: pin,
@@ -248,7 +268,21 @@ class _OtpContentState extends State<_OtpContent> {
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
-            onCompleted: widget.onVerify,
+            onCompleted: (pin) {
+              final normalizedPin = pin
+                  .replaceAll('٠', '0')
+                  .replaceAll('١', '1')
+                  .replaceAll('٢', '2')
+                  .replaceAll('٣', '3')
+                  .replaceAll('٤', '4')
+                  .replaceAll('٥', '5')
+                  .replaceAll('٦', '6')
+                  .replaceAll('٧', '7')
+                  .replaceAll('٨', '8')
+                  .replaceAll('٩', '9');
+
+              widget.onVerify(normalizedPin);
+            },
           ),
           if (widget.canResend) ...[
             SizedBox(height: 20.h),

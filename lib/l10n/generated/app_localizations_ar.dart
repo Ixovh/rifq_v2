@@ -984,7 +984,199 @@ class AppLocalizationsAr extends AppLocalizations {
   String get applePay_confirmSideButton => 'أكّد بالزر الجانبي';
 
   @override
+  String get pet_ageLessThanOneMonth => 'أقل من شهر';
+
+  @override
   String get adoption_screenTitle => 'التبني';
+
+  @override
+  String get adoption_tabForAdoption => 'للتبني';
+
+  @override
+  String get adoption_tabMyPets => 'حيواناتي';
+
+  @override
+  String get adoption_petCategories => 'فئات الحيوانات';
+
+  @override
+  String get adoption_moreCategories => 'المزيد';
+
+  @override
+  String get adoption_chooseOption => 'اختر خيارًا';
+
+  @override
+  String get adoption_chooseOptionSubtitle => 'كيف تريد عرض حيوان للتبني؟';
+
+  @override
+  String get adoption_addNewPet => 'إضافة حيوان جديد';
+
+  @override
+  String get adoption_selectFromMyPets => 'اختيار من حيواناتي';
+
+  @override
+  String get adoption_emptyAvailable => 'لا توجد حيوانات متاحة للتبني';
+
+  @override
+  String get adoption_emptyMyListings => 'ليس لديك حيوانات معروضة للتبني';
+
+  @override
+  String get adoption_myListingsTitle => 'عروض التبني الخاصة بي';
+
+  @override
+  String get adoption_removeListingTitle => 'إزالة العرض';
+
+  @override
+  String get adoption_removeListingMessage =>
+      'سيتم إزالة الحيوان من قائمة التبني. سيبقى ضمن حيواناتك.';
+
+  @override
+  String get adoption_deleteListing => 'حذف';
+
+  @override
+  String get adoption_listingRemoved => 'تمت إزالة عرض التبني';
+
+  @override
+  String get adoption_whichPet => 'أي حيوان؟';
+
+  @override
+  String get adoption_choosePetToList => 'اختر حيوانًا لعرضه للتبني';
+
+  @override
+  String get adoption_noPetsToSelect => 'ليس لديك حيوانات أليفة بعد.';
+
+  @override
+  String get adoption_defaultDescription => 'حيوان متاح للتبني';
+
+  @override
+  String get adoption_petAddedSuccess => 'تمت إضافة الحيوان للتبني بنجاح';
+
+  @override
+  String get adoption_locationAndPhoneRequired =>
+      'الرجاء إدخال الموقع ورقم الجوال';
+
+  @override
+  String get adoption_locationLabel => 'الموقع';
+
+  @override
+  String get adoption_locationHint => 'الرياض';
+
+  @override
+  String get adoption_petDetailsTitle => 'تفاصيل الحيوان';
+
+  @override
+  String get adoption_noDetails => 'لا توجد تفاصيل للحيوان';
+
+  @override
+  String get adoption_unknown => 'غير معروف';
+
+  @override
+  String get adoption_notAvailable => 'غير متاح';
+
+  @override
+  String get adoption_weight => 'الوزن';
+
+  @override
+  String get adoption_ownedBy => 'المالك:';
+
+  @override
+  String get adoption_petOwnerFallback => 'مالك الحيوان';
+
+  @override
+  String get adoption_noDescription => 'لا يوجد وصف.';
+
+  @override
+  String get adoption_requestPending => 'الطلب قيد الانتظار';
+
+  @override
+  String get adoption_requestAgain => 'أعد الطلب';
+
+  @override
+  String get adoption_formTitle => 'نموذج التبني';
+
+  @override
+  String get adoption_city => 'المدينة';
+
+  @override
+  String get adoption_cityRequired => 'الرجاء إدخال مدينتك';
+
+  @override
+  String get adoption_nameMissing => 'اسم ملفك الشخصي غير موجود';
+
+  @override
+  String get adoption_experienceLabel => 'الخبرة مع الحيوانات';
+
+  @override
+  String get adoption_experienceRequired => 'الرجاء إدخال خبرتك مع الحيوانات';
+
+  @override
+  String get adoption_enterNumber => 'الرجاء إدخال رقم';
+
+  @override
+  String get adoption_shortNote => 'ملاحظة قصيرة';
+
+  @override
+  String get adoption_noteRequired => 'الرجاء إدخال ملاحظة قصيرة';
+
+  @override
+  String get adoption_loginFirst => 'الرجاء تسجيل الدخول أولًا';
+
+  @override
+  String get adoption_requestSentTitle => 'تم إرسال الطلب بنجاح';
+
+  @override
+  String get adoption_requestSentBody =>
+      'تم إرسال طلب التبني إلى المالك.\nسيتم إشعارك عند الرد.';
+
+  @override
+  String get adoption_backToHome => 'العودة للرئيسية';
+
+  @override
+  String get adoption_noRequests => 'لا توجد طلبات تبنٍ بعد';
+
+  @override
+  String adoption_requestsTitle(String petName) {
+    return 'طلبات التبني – $petName';
+  }
+
+  @override
+  String get adoption_requestAccepted =>
+      'تم قبول الطلب. نُقل الحيوان إلى المتبنّي.';
+
+  @override
+  String get adoption_badgeNew => 'جديد';
+
+  @override
+  String get adoption_statusAccepted => 'مقبول';
+
+  @override
+  String get adoption_statusRejected => 'مرفوض';
+
+  @override
+  String get adoption_viewRequest => 'عرض الطلب';
+
+  @override
+  String adoption_requestsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count طلب',
+      many: '$count طلبًا',
+      few: '$count طلبات',
+      two: 'طلبان',
+      one: 'طلب واحد',
+      zero: '$count طلب',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get adoption_statusPending => 'بانتظار التبني';
+
+  @override
+  String get adoption_statusAdopted => 'تم التبني';
+
+  @override
+  String get adoption_statusCancelled => 'ملغى';
 
   @override
   String get guest_title => 'استمتع بالتجربة الكاملة!';

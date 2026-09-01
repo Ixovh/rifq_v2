@@ -1736,11 +1736,359 @@ abstract class AppLocalizations {
   /// **'Confirm with Side Button'**
   String get applePay_confirmSideButton;
 
+  /// No description provided for @pet_ageLessThanOneMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Less than 1 month'**
+  String get pet_ageLessThanOneMonth;
+
   /// No description provided for @adoption_screenTitle.
   ///
   /// In en, this message translates to:
   /// **'Adoption'**
   String get adoption_screenTitle;
+
+  /// No description provided for @adoption_tabForAdoption.
+  ///
+  /// In en, this message translates to:
+  /// **'For Adoption'**
+  String get adoption_tabForAdoption;
+
+  /// No description provided for @adoption_tabMyPets.
+  ///
+  /// In en, this message translates to:
+  /// **'My Pets'**
+  String get adoption_tabMyPets;
+
+  /// No description provided for @adoption_petCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Pet Categories'**
+  String get adoption_petCategories;
+
+  /// No description provided for @adoption_moreCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'More categories'**
+  String get adoption_moreCategories;
+
+  /// No description provided for @adoption_chooseOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an option'**
+  String get adoption_chooseOption;
+
+  /// No description provided for @adoption_chooseOptionSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How would you like to list a pet for adoption?'**
+  String get adoption_chooseOptionSubtitle;
+
+  /// No description provided for @adoption_addNewPet.
+  ///
+  /// In en, this message translates to:
+  /// **'Add new pet'**
+  String get adoption_addNewPet;
+
+  /// No description provided for @adoption_selectFromMyPets.
+  ///
+  /// In en, this message translates to:
+  /// **'Select from my pets'**
+  String get adoption_selectFromMyPets;
+
+  /// No description provided for @adoption_emptyAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No pets available for adoption'**
+  String get adoption_emptyAvailable;
+
+  /// No description provided for @adoption_emptyMyListings.
+  ///
+  /// In en, this message translates to:
+  /// **'You have no pets for adoption'**
+  String get adoption_emptyMyListings;
+
+  /// No description provided for @adoption_myListingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Adoption Listings'**
+  String get adoption_myListingsTitle;
+
+  /// No description provided for @adoption_removeListingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove listing'**
+  String get adoption_removeListingTitle;
+
+  /// No description provided for @adoption_removeListingMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This will remove the pet from adoption. The pet will stay in your pets.'**
+  String get adoption_removeListingMessage;
+
+  /// No description provided for @adoption_deleteListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get adoption_deleteListing;
+
+  /// No description provided for @adoption_listingRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Adoption listing removed'**
+  String get adoption_listingRemoved;
+
+  /// No description provided for @adoption_whichPet.
+  ///
+  /// In en, this message translates to:
+  /// **'Which pet?'**
+  String get adoption_whichPet;
+
+  /// No description provided for @adoption_choosePetToList.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a pet to list for adoption'**
+  String get adoption_choosePetToList;
+
+  /// No description provided for @adoption_noPetsToSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have any pets yet.'**
+  String get adoption_noPetsToSelect;
+
+  /// No description provided for @adoption_defaultDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Pet available for adoption'**
+  String get adoption_defaultDescription;
+
+  /// No description provided for @adoption_petAddedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Pet added to adoption successfully'**
+  String get adoption_petAddedSuccess;
+
+  /// No description provided for @adoption_locationAndPhoneRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter location and phone number'**
+  String get adoption_locationAndPhoneRequired;
+
+  /// No description provided for @adoption_locationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get adoption_locationLabel;
+
+  /// No description provided for @adoption_locationHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Riyadh'**
+  String get adoption_locationHint;
+
+  /// No description provided for @adoption_petDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pet Details'**
+  String get adoption_petDetailsTitle;
+
+  /// No description provided for @adoption_noDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'No pet details available'**
+  String get adoption_noDetails;
+
+  /// No description provided for @adoption_unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get adoption_unknown;
+
+  /// No description provided for @adoption_notAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Not available'**
+  String get adoption_notAvailable;
+
+  /// No description provided for @adoption_weight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight'**
+  String get adoption_weight;
+
+  /// No description provided for @adoption_ownedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Owned by:'**
+  String get adoption_ownedBy;
+
+  /// No description provided for @adoption_petOwnerFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'Pet Owner'**
+  String get adoption_petOwnerFallback;
+
+  /// No description provided for @adoption_noDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'No description available.'**
+  String get adoption_noDescription;
+
+  /// No description provided for @adoption_requestPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Request pending'**
+  String get adoption_requestPending;
+
+  /// No description provided for @adoption_requestAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Request again'**
+  String get adoption_requestAgain;
+
+  /// No description provided for @adoption_formTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Adoption Form'**
+  String get adoption_formTitle;
+
+  /// No description provided for @adoption_city.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get adoption_city;
+
+  /// No description provided for @adoption_cityRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your city'**
+  String get adoption_cityRequired;
+
+  /// No description provided for @adoption_nameMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile name is missing'**
+  String get adoption_nameMissing;
+
+  /// No description provided for @adoption_experienceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Experience with pets'**
+  String get adoption_experienceLabel;
+
+  /// No description provided for @adoption_experienceRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your experience with pets'**
+  String get adoption_experienceRequired;
+
+  /// No description provided for @adoption_enterNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a number'**
+  String get adoption_enterNumber;
+
+  /// No description provided for @adoption_shortNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Short note'**
+  String get adoption_shortNote;
+
+  /// No description provided for @adoption_noteRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a short note'**
+  String get adoption_noteRequired;
+
+  /// No description provided for @adoption_loginFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Please login first'**
+  String get adoption_loginFirst;
+
+  /// No description provided for @adoption_requestSentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Request sent successfully'**
+  String get adoption_requestSentTitle;
+
+  /// No description provided for @adoption_requestSentBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your adoption request has been sent to the owner.\nYou will be notified once they respond.'**
+  String get adoption_requestSentBody;
+
+  /// No description provided for @adoption_backToHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Home'**
+  String get adoption_backToHome;
+
+  /// No description provided for @adoption_noRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'No adoption requests yet'**
+  String get adoption_noRequests;
+
+  /// No description provided for @adoption_requestsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Adoption requests – {petName}'**
+  String adoption_requestsTitle(String petName);
+
+  /// No description provided for @adoption_requestAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Request accepted. The pet was transferred to the adopter.'**
+  String get adoption_requestAccepted;
+
+  /// No description provided for @adoption_badgeNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get adoption_badgeNew;
+
+  /// No description provided for @adoption_statusAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted'**
+  String get adoption_statusAccepted;
+
+  /// No description provided for @adoption_statusRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get adoption_statusRejected;
+
+  /// No description provided for @adoption_viewRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'View Request'**
+  String get adoption_viewRequest;
+
+  /// No description provided for @adoption_requestsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 Request} other{{count} Requests}}'**
+  String adoption_requestsCount(int count);
+
+  /// No description provided for @adoption_statusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Adoption'**
+  String get adoption_statusPending;
+
+  /// No description provided for @adoption_statusAdopted.
+  ///
+  /// In en, this message translates to:
+  /// **'Adopted'**
+  String get adoption_statusAdopted;
+
+  /// No description provided for @adoption_statusCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get adoption_statusCancelled;
 
   /// No description provided for @guest_title.
   ///

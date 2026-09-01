@@ -1,58 +1,180 @@
-import 'package:equatable/equatable.dart';
-import '../../domain/entities/adoption_entity.dart';
+part of 'adoption_cubit.dart';
 
-abstract class AdoptionState extends Equatable {
-  const AdoptionState();
+class AdoptionState extends Equatable {
+  final int selectedTabIndex;
+  final String selectedCategory;
 
-  const factory AdoptionState.initial() = AdoptionInitial;
-  const factory AdoptionState.loading() = AdoptionLoading;
-  const factory AdoptionState.feedLoaded(List<AdoptionPostEntity> posts) =
-      AdoptionFeedLoaded;
-  const factory AdoptionState.myListingsLoaded(List<AdoptionPostEntity> posts) =
-      AdoptionMyListingsLoaded;
-  const factory AdoptionState.actionSuccess() = AdoptionActionSuccess;
-  const factory AdoptionState.error(String message) = AdoptionError;
+  // =========================
+  // Get Adoption Pet Cards
+  // =========================
+
+  final bool isLoadingPosts;
+  final List<AdoptionPetCardEntity> adoptionPetCards;
+  final List<AdoptionPetCardEntity> allAdoptionPetCards;
+  // =========================
+  // Create Adoption Post
+  // =========================
+
+  final bool isCreatingPost;
+  final bool isPostCreated;
+  final AdoptionPostEntity? createdPost;
+
+  final String? errorMessage;
+  final bool isLoadingMyAdoptionPets;
+  final List<MyAdoptionPetEntity> myAdoptionPets;
+  final bool isLoadingAdoptionRequests;
+  final List<AdoptionRequestCardEntity> adoptionRequests;
+  final bool isUpdatingRequest;
+  final String? myRequestStatus;
+
+  final bool isDeletingPost;
+
+  const AdoptionState({
+    this.selectedTabIndex = 0,
+    this.selectedCategory = 'cat',
+    this.allAdoptionPetCards = const [],
+    this.adoptionPetCards = const [],
+    // Get adoption pet cards
+    this.isLoadingPosts = false,
+
+    // Get adoption pet details
+    this.isLoadingPetDetails = false,
+    this.petDetails,
+
+    // Create post
+    this.isCreatingPost = false,
+    this.isPostCreated = false,
+    this.createdPost,
+
+    this.errorMessage,
+    this.isCreatingRequest = false,
+    this.isRequestCreated = false,
+    this.createdRequest,
+    this.isLoadingMyAdoptionPets = false,
+    this.myAdoptionPets = const [],
+    this.isDeletingPost = false,
+    this.isLoadingAdoptionRequests = false,
+    this.adoptionRequests = const [],
+    this.isUpdatingRequest = false,
+    this.myRequestStatus,
+  });
+
+  AdoptionState copyWith({
+    int? selectedTabIndex,
+    String? selectedCategory,
+
+    // Get adoption pet cards
+    bool? isLoadingPosts,
+    List<AdoptionPetCardEntity>? adoptionPetCards,
+
+    // Create post
+    bool? isCreatingPost,
+    bool? isPostCreated,
+    AdoptionPostEntity? createdPost,
+    // Get adoption pet details
+    bool? isLoadingPetDetails,
+    AdoptionPetDetailsEntity? petDetails,
+
+    String? errorMessage,
+    List<AdoptionPetCardEntity>? allAdoptionPetCards,
+
+    bool? isCreatingRequest,
+    bool? isRequestCreated,
+    AdoptionRequestEntity? createdRequest,
+    bool? isLoadingMyAdoptionPets,
+    List<MyAdoptionPetEntity>? myAdoptionPets,
+    bool? isDeletingPost,
+    bool? isLoadingAdoptionRequests,
+    List<AdoptionRequestCardEntity>? adoptionRequests,
+    bool? isUpdatingRequest,
+    String? myRequestStatus,
+    bool clearMyRequestStatus = false,
+  }) {
+    return AdoptionState(
+      selectedTabIndex: selectedTabIndex ?? this.selectedTabIndex,
+
+      selectedCategory: selectedCategory ?? this.selectedCategory,
+
+      // Get adoption pet cards
+      isLoadingPosts: isLoadingPosts ?? this.isLoadingPosts,
+
+      adoptionPetCards: adoptionPetCards ?? this.adoptionPetCards,
+
+      // Get adoption pet details
+      isLoadingPetDetails: isLoadingPetDetails ?? this.isLoadingPetDetails,
+
+      petDetails: petDetails ?? this.petDetails,
+
+      // Create post
+      isCreatingPost: isCreatingPost ?? this.isCreatingPost,
+
+      isPostCreated: isPostCreated ?? this.isPostCreated,
+
+      createdPost: createdPost ?? this.createdPost,
+
+      errorMessage: errorMessage,
+      allAdoptionPetCards: allAdoptionPetCards ?? this.allAdoptionPetCards,
+      isCreatingRequest: isCreatingRequest ?? this.isCreatingRequest,
+
+      isRequestCreated: isRequestCreated ?? this.isRequestCreated,
+
+      createdRequest: createdRequest ?? this.createdRequest,
+      isLoadingMyAdoptionPets:
+          isLoadingMyAdoptionPets ?? this.isLoadingMyAdoptionPets,
+
+      myAdoptionPets: myAdoptionPets ?? this.myAdoptionPets,
+      isDeletingPost: isDeletingPost ?? this.isDeletingPost,
+      isLoadingAdoptionRequests:
+          isLoadingAdoptionRequests ?? this.isLoadingAdoptionRequests,
+
+      adoptionRequests: adoptionRequests ?? this.adoptionRequests,
+
+      isUpdatingRequest: isUpdatingRequest ?? this.isUpdatingRequest,
+      myRequestStatus: clearMyRequestStatus
+          ? null
+          : (myRequestStatus ?? this.myRequestStatus),
+    );
+  }
+
+  // =========================
+  // Get Pet Details
+  // =========================
+  final bool isLoadingPetDetails;
+  final AdoptionPetDetailsEntity? petDetails;
+
+  //
+  final bool isCreatingRequest;
+  final bool isRequestCreated;
+  final AdoptionRequestEntity? createdRequest;
 
   @override
-  List<Object?> get props => [];
-}
+  List<Object?> get props => [
+    selectedTabIndex,
+    selectedCategory,
 
-class AdoptionInitial extends AdoptionState {
-  const AdoptionInitial();
-}
+    isLoadingPosts,
+    adoptionPetCards,
 
-class AdoptionLoading extends AdoptionState {
-  const AdoptionLoading();
-}
+    isLoadingPetDetails,
+    petDetails,
 
-class AdoptionFeedLoaded extends AdoptionState {
-  final List<AdoptionPostEntity> posts;
+    isCreatingPost,
+    isPostCreated,
+    createdPost,
 
-  const AdoptionFeedLoaded(this.posts);
+    errorMessage,
+    allAdoptionPetCards,
+    adoptionPetCards,
+    isCreatingRequest,
+    isRequestCreated,
+    createdRequest,
+    isLoadingMyAdoptionPets,
+    myAdoptionPets,
+    isDeletingPost,
 
-  @override
-  List<Object?> get props => [posts];
-}
-
-class AdoptionMyListingsLoaded extends AdoptionState {
-  final List<AdoptionPostEntity> posts;
-
-  const AdoptionMyListingsLoaded(this.posts);
-
-  @override
-  List<Object?> get props => [posts];
-}
-
-// Used after successful creation
-class AdoptionActionSuccess extends AdoptionState {
-  const AdoptionActionSuccess();
-}
-
-class AdoptionError extends AdoptionState {
-  final String message;
-
-  const AdoptionError(this.message);
-
-  @override
-  List<Object?> get props => [message];
+    isLoadingAdoptionRequests,
+    adoptionRequests,
+    isUpdatingRequest,
+    myRequestStatus,
+  ];
 }

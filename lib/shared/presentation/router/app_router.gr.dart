@@ -45,12 +45,18 @@ class AccountRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [AddPetScreen]
 class AddPetRoute extends PageRouteInfo<AddPetRouteArgs> {
-  AddPetRoute({Key? key, List<PageRouteInfo>? children})
-    : super(
-        AddPetRoute.name,
-        args: AddPetRouteArgs(key: key),
-        initialChildren: children,
-      );
+  AddPetRoute({
+    Key? key,
+    bool showAdoptionFields = false,
+    List<PageRouteInfo>? children,
+  }) : super(
+         AddPetRoute.name,
+         args: AddPetRouteArgs(
+           key: key,
+           showAdoptionFields: showAdoptionFields,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'AddPetRoute';
 
@@ -60,30 +66,165 @@ class AddPetRoute extends PageRouteInfo<AddPetRouteArgs> {
       final args = data.argsAs<AddPetRouteArgs>(
         orElse: () => const AddPetRouteArgs(),
       );
-      return AddPetScreen(key: args.key);
+      return AddPetScreen(
+        key: args.key,
+        showAdoptionFields: args.showAdoptionFields,
+      );
     },
   );
 }
 
 class AddPetRouteArgs {
-  const AddPetRouteArgs({this.key});
+  const AddPetRouteArgs({this.key, this.showAdoptionFields = false});
 
   final Key? key;
 
+  final bool showAdoptionFields;
+
   @override
   String toString() {
-    return 'AddPetRouteArgs{key: $key}';
+    return 'AddPetRouteArgs{key: $key, showAdoptionFields: $showAdoptionFields}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! AddPetRouteArgs) return false;
-    return key == other.key;
+    return key == other.key && showAdoptionFields == other.showAdoptionFields;
   }
 
   @override
-  int get hashCode => key.hashCode;
+  int get hashCode => key.hashCode ^ showAdoptionFields.hashCode;
+}
+
+/// generated route for
+/// [AdoptionFeatureScreen]
+class AdoptionFeatureRoute extends PageRouteInfo<void> {
+  const AdoptionFeatureRoute({List<PageRouteInfo>? children})
+    : super(AdoptionFeatureRoute.name, initialChildren: children);
+
+  static const String name = 'AdoptionFeatureRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AdoptionFeatureScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [AdoptionFormScreen]
+class AdoptionFormRoute extends PageRouteInfo<AdoptionFormRouteArgs> {
+  AdoptionFormRoute({
+    Key? key,
+    required String adoptionPostId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         AdoptionFormRoute.name,
+         args: AdoptionFormRouteArgs(key: key, adoptionPostId: adoptionPostId),
+         initialChildren: children,
+       );
+
+  static const String name = 'AdoptionFormRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<AdoptionFormRouteArgs>();
+      return AdoptionFormScreen(
+        key: args.key,
+        adoptionPostId: args.adoptionPostId,
+      );
+    },
+  );
+}
+
+class AdoptionFormRouteArgs {
+  const AdoptionFormRouteArgs({this.key, required this.adoptionPostId});
+
+  final Key? key;
+
+  final String adoptionPostId;
+
+  @override
+  String toString() {
+    return 'AdoptionFormRouteArgs{key: $key, adoptionPostId: $adoptionPostId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AdoptionFormRouteArgs) return false;
+    return key == other.key && adoptionPostId == other.adoptionPostId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ adoptionPostId.hashCode;
+}
+
+/// generated route for
+/// [AdoptionRequestsScreen]
+class AdoptionRequestsRoute extends PageRouteInfo<AdoptionRequestsRouteArgs> {
+  AdoptionRequestsRoute({
+    Key? key,
+    required String adoptionPostId,
+    required String petName,
+    List<PageRouteInfo>? children,
+  }) : super(
+         AdoptionRequestsRoute.name,
+         args: AdoptionRequestsRouteArgs(
+           key: key,
+           adoptionPostId: adoptionPostId,
+           petName: petName,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'AdoptionRequestsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<AdoptionRequestsRouteArgs>();
+      return AdoptionRequestsScreen(
+        key: args.key,
+        adoptionPostId: args.adoptionPostId,
+        petName: args.petName,
+      );
+    },
+  );
+}
+
+class AdoptionRequestsRouteArgs {
+  const AdoptionRequestsRouteArgs({
+    this.key,
+    required this.adoptionPostId,
+    required this.petName,
+  });
+
+  final Key? key;
+
+  final String adoptionPostId;
+
+  final String petName;
+
+  @override
+  String toString() {
+    return 'AdoptionRequestsRouteArgs{key: $key, adoptionPostId: $adoptionPostId, petName: $petName}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AdoptionRequestsRouteArgs) return false;
+    return key == other.key &&
+        adoptionPostId == other.adoptionPostId &&
+        petName == other.petName;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ adoptionPostId.hashCode ^ petName.hashCode;
 }
 
 /// generated route for
@@ -175,6 +316,53 @@ class BookingDetailsRouteArgs {
 
   @override
   int get hashCode => key.hashCode ^ hotel.hashCode;
+}
+
+/// generated route for
+/// [CheckEmailScreen]
+class CheckEmailRoute extends PageRouteInfo<CheckEmailRouteArgs> {
+  CheckEmailRoute({
+    Key? key,
+    required String email,
+    List<PageRouteInfo>? children,
+  }) : super(
+         CheckEmailRoute.name,
+         args: CheckEmailRouteArgs(key: key, email: email),
+         initialChildren: children,
+       );
+
+  static const String name = 'CheckEmailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<CheckEmailRouteArgs>();
+      return CheckEmailScreen(key: args.key, email: args.email);
+    },
+  );
+}
+
+class CheckEmailRouteArgs {
+  const CheckEmailRouteArgs({this.key, required this.email});
+
+  final Key? key;
+
+  final String email;
+
+  @override
+  String toString() {
+    return 'CheckEmailRouteArgs{key: $key, email: $email}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! CheckEmailRouteArgs) return false;
+    return key == other.key && email == other.email;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ email.hashCode;
 }
 
 /// generated route for
@@ -544,6 +732,53 @@ class PaymentSuccessRouteArgs {
 
   @override
   int get hashCode => key.hashCode ^ confirmation.hashCode;
+}
+
+/// generated route for
+/// [PetDetailsScreen]
+class PetDetailsRoute extends PageRouteInfo<PetDetailsRouteArgs> {
+  PetDetailsRoute({
+    Key? key,
+    required AdoptionPetCardEntity pet,
+    List<PageRouteInfo>? children,
+  }) : super(
+         PetDetailsRoute.name,
+         args: PetDetailsRouteArgs(key: key, pet: pet),
+         initialChildren: children,
+       );
+
+  static const String name = 'PetDetailsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<PetDetailsRouteArgs>();
+      return PetDetailsScreen(key: args.key, pet: args.pet);
+    },
+  );
+}
+
+class PetDetailsRouteArgs {
+  const PetDetailsRouteArgs({this.key, required this.pet});
+
+  final Key? key;
+
+  final AdoptionPetCardEntity pet;
+
+  @override
+  String toString() {
+    return 'PetDetailsRouteArgs{key: $key, pet: $pet}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PetDetailsRouteArgs) return false;
+    return key == other.key && pet == other.pet;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ pet.hashCode;
 }
 
 /// generated route for

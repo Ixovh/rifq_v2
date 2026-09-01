@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,7 +18,80 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final Duration minDuration = 2000.ms;
+    final Duration minDuration = 2000.ms;
+
+  //   @override
+  //   void initState() {
+  //     super.initState();
+  //       debugPrint("Splash init");
+  //     Future.delayed(minDuration, _checkAuth);
+  //   }
+
+  //   Future<void> _checkAuth() async {
+  //   final session = Supabase.instance.client.auth.currentUser;
+  //   PageRouteInfo route = const ChoosePathRoute();
+
+  //     if (session != null) {
+  //     // ✅ هذا هو الإصلاح - تحقق أولاً
+  //     if (session.emailConfirmedAt == null) {
+  //       await Supabase.instance.client.auth.signOut();
+  //       if (!mounted) return;
+  //       context.router.replace(const ChoosePathRoute());
+  //       return;
+  //     }
+
+  //     final profile = await Supabase.instance.client
+  //         .from('profiles')
+  //         .select('id, role')
+  //         .eq('id', session.id)
+  //         .maybeSingle();
+
+  //     if (profile != null) {
+  //       final role = profile['role'] as String?;
+  //       if (role == 'pet_owner') {
+  //         route = const NavWrapperRoute();
+  //       } else if (role == 'service_provider') {
+  //         route = const NavWrapperRoute(); // غيّره لاحقاً لشاشة مقدم الخدمة
+  //       }
+  //     }
+  //   }
+
+  //   if (!mounted) return;
+  //   context.router.replace(route);
+  // }
+  // //حق حاتم القديم
+  // //   Future<void> _checkAuth() async {
+  // //     final session = Supabase.instance.client.auth.currentUser;
+  // //     PageRouteInfo route = const ChoosePathRoute();
+
+  // //     if (session != null) {
+  // //       final provider = await Supabase.instance.client
+  // //           .from('profiles')
+  // //           .select('id')
+  // //           .eq('id', session.id)
+  // //           .maybeSingle();
+
+  // //       final user = await Supabase.instance.client
+  // //           .from('users')
+  // //           .select('id')
+  // //           .eq('id', session.id)
+  // //           .maybeSingle();
+
+  // //       // if (user != null) {
+  // //       //   route = Routes.navbar;
+  // //       // } else if (provider != null) {
+  // //       //   route = Routes.providerNavbar;
+  // //       // }
+  // //     }
+  // //     if (!mounted) return;
+  // // context.router.replace(route);
+  // //  }
+
+  //   @override
+
+  StreamSubscription<AuthState>? _authSub;
+  Timer? _fallbackTimer;
+  bool _navigated = false;
 
   @override
   void initState() {
@@ -86,6 +161,12 @@ class _SplashScreenState extends State<SplashScreen> {
   //  }
 
   @override
+  void dispose() {
+    _authSub?.cancel();
+    _fallbackTimer?.cancel();
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.primary,
