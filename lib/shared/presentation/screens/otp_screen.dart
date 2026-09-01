@@ -83,7 +83,7 @@ class OtpScreen extends StatelessWidget {
                   //   } else {
                   //     context.replaceRoute(const NavWrapperRoute());
                   //   }
-                  break;
+                  // break;
                 case AuthErrorState _:
                   context.showErrorToast(state.msg);
                   break;
