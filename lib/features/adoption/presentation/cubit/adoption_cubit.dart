@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_entity.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_pet_card_entity.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_pet_details_entity.dart';
+import 'package:rifq_v2/features/adoption/domain/entities/adoption_request_card_entity.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_request_entity.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/my_adoption_pet_entity.dart';
 import 'package:rifq_v2/features/adoption/domain/use_cases/create_adoption_post_use_case.dart';
@@ -11,7 +12,9 @@ import 'package:rifq_v2/features/adoption/domain/use_cases/create_adoption_reque
 import 'package:rifq_v2/features/adoption/domain/use_cases/delete_adoption_post_use_case.dart';
 import 'package:rifq_v2/features/adoption/domain/use_cases/fetch_adoption_pet_details_use_case.dart';
 import 'package:rifq_v2/features/adoption/domain/use_cases/fetch_adoption_posts_use_case.dart';
+import 'package:rifq_v2/features/adoption/domain/use_cases/fetch_adoption_requests_use_case.dart';
 import 'package:rifq_v2/features/adoption/domain/use_cases/fetch_my_adoption_pet_cards_use_case.dart';
+import 'package:rifq_v2/features/adoption/domain/use_cases/update_adoption_request_status_use_case.dart';
 
 part 'adoption_state.dart';
 
@@ -23,6 +26,8 @@ class AdoptionCubit extends Cubit<AdoptionState> {
   final CreateAdoptionRequestUseCase _createAdoptionRequestUseCase;
   final FetchMyAdoptionPetCardsUseCase _fetchMyAdoptionPetCardsUseCase;
   final DeleteAdoptionPostUseCase _deleteAdoptionPostUseCase;
+final FetchAdoptionRequestsUseCase _fetchAdoptionRequestsUseCase;
+final UpdateAdoptionRequestStatusUseCase _updateAdoptionRequestStatusUseCase;
 
   AdoptionCubit(
     this._createAdoptionPostUseCase,
@@ -31,6 +36,8 @@ class AdoptionCubit extends Cubit<AdoptionState> {
     this._createAdoptionRequestUseCase,
     this._fetchMyAdoptionPetCardsUseCase,
     this._deleteAdoptionPostUseCase,
+      this._fetchAdoptionRequestsUseCase,
+  this._updateAdoptionRequestStatusUseCase,
 
   ) : super(const AdoptionState());
 
@@ -77,13 +84,7 @@ void changeTab(int index) {
   );
 }
 
-  // void selectCategory(String category) {
-  //   emit(
-  //     state.copyWith(
-  //       selectedCategory: category,
-  //     ),
-  //   );
-  // }
+
   void selectCategory(String category) {
     final filteredPets = state.allAdoptionPetCards.where((pet) {
       return pet.species?.toLowerCase() == category.toLowerCase();
@@ -286,6 +287,100 @@ Future<void> deleteAdoptionPost({
       ),
     );
   }
+}
+
+Future<void> getAdoptionRequests({
+  required String adoptionPostId,
+}) async {
+  emit(
+    state.copyWith(
+      isLoadingAdoptionRequests: true,
+      errorMessage: null,
+    ),
+  );
+
+  final result = await _fetchAdoptionRequestsUseCase(
+    adoptionPostId: adoptionPostId,
+  );
+
+  result.when(
+    (requests) {
+      emit(
+        state.copyWith(
+          isLoadingAdoptionRequests: false,
+          adoptionRequests: requests,
+          errorMessage: null,
+        ),
+      );
+    },
+    (error) {
+      emit(
+        state.copyWith(
+          isLoadingAdoptionRequests: false,
+          errorMessage: error.toString(),
+        ),
+      );
+    },
+  );
+}
+//Accept / Reject
+Future<void> updateAdoptionRequestStatus({
+  required String requestId,
+  required String adoptionPostId,
+  required String status,
+}) async {
+  emit(
+    state.copyWith(
+      isUpdatingRequest: true,
+      errorMessage: null,
+    ),
+  );
+
+  final result = await _updateAdoptionRequestStatusUseCase(
+    requestId: requestId,
+    adoptionPostId: adoptionPostId,
+    status: status,
+  );
+
+  result.when(
+    (_) {
+      final updatedRequests = state.adoptionRequests.map((request) {
+        if (request.id == requestId) {
+          return AdoptionRequestCardEntity(
+            id: request.id,
+            adoptionPostId: request.adoptionPostId,
+            requesterId: request.requesterId,
+            fullName: request.fullName,
+            avatarUrl: request.avatarUrl,
+            phoneNumber: request.phoneNumber,
+            location: request.location,
+            message: request.message,
+            experience: request.experience,
+            status: status,
+            createdAt: request.createdAt,
+          );
+        }
+
+        return request;
+      }).toList();
+
+      emit(
+        state.copyWith(
+          isUpdatingRequest: false,
+          adoptionRequests: updatedRequests,
+          errorMessage: null,
+        ),
+      );
+    },
+    (error) {
+      emit(
+        state.copyWith(
+          isUpdatingRequest: false,
+          errorMessage: error.toString(),
+        ),
+      );
+    },
+  );
 }
   
 }

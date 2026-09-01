@@ -164,6 +164,70 @@ class AdoptionFormRouteArgs {
 }
 
 /// generated route for
+/// [AdoptionRequestsScreen]
+class AdoptionRequestsRoute extends PageRouteInfo<AdoptionRequestsRouteArgs> {
+  AdoptionRequestsRoute({
+    Key? key,
+    required String adoptionPostId,
+    required String petName,
+    List<PageRouteInfo>? children,
+  }) : super(
+         AdoptionRequestsRoute.name,
+         args: AdoptionRequestsRouteArgs(
+           key: key,
+           adoptionPostId: adoptionPostId,
+           petName: petName,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'AdoptionRequestsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<AdoptionRequestsRouteArgs>();
+      return AdoptionRequestsScreen(
+        key: args.key,
+        adoptionPostId: args.adoptionPostId,
+        petName: args.petName,
+      );
+    },
+  );
+}
+
+class AdoptionRequestsRouteArgs {
+  const AdoptionRequestsRouteArgs({
+    this.key,
+    required this.adoptionPostId,
+    required this.petName,
+  });
+
+  final Key? key;
+
+  final String adoptionPostId;
+
+  final String petName;
+
+  @override
+  String toString() {
+    return 'AdoptionRequestsRouteArgs{key: $key, adoptionPostId: $adoptionPostId, petName: $petName}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AdoptionRequestsRouteArgs) return false;
+    return key == other.key &&
+        adoptionPostId == other.adoptionPostId &&
+        petName == other.petName;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ adoptionPostId.hashCode ^ petName.hashCode;
+}
+
+/// generated route for
 /// [AuthScreen]
 class AuthRoute extends PageRouteInfo<AuthRouteArgs> {
   AuthRoute({Key? key, required String role, List<PageRouteInfo>? children})

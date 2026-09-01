@@ -23,6 +23,7 @@ import 'package:rifq_v2/shared/constants/app_enums.dart';
 import 'package:rifq_v2/shared/presentation/screens/otp_screen.dart';
 import 'package:rifq_v2/features/adoption/presentation/screens/adoption_feature_screen.dart';
 import 'package:rifq_v2/features/adoption/presentation/screens/pet_details_screen.dart';
+import 'package:rifq_v2/features/adoption/presentation/screens/adoption_requests_screen.dart';
 part 'app_router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen,Route')
@@ -53,6 +54,8 @@ AutoRoute(
   page: AdoptionFormRoute.page,
   path: '/adoption-form',
 ),
-
+AutoRoute(
+  page: AdoptionRequestsRoute.page,
+),
   ];
 }

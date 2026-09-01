@@ -1,7 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/my_adoption_pet_entity.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
+import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/utils/app_date_utils.dart';
 
 class MyAdoptionPetCard extends StatelessWidget {
@@ -98,9 +100,15 @@ class MyAdoptionPetCard extends StatelessWidget {
                   child: SizedBox(
                     width: 176.w,
                     height: 38.h,
+
                     child: ElevatedButton(
                       onPressed: () {
-                        // TODO: View adoption requests
+                        context.router.push(
+                          AdoptionRequestsRoute(
+                            adoptionPostId: pet.adoptionPostId,
+                            petName: pet.name,
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: context.primary50,
@@ -170,11 +178,17 @@ class _PetImage extends StatelessWidget {
             ),
 
             // Status
-            Positioned(
-              top: 12.h,
-              left: 10.w,
-              child: _StatusBadge(status: status),
-            ),
+            // Positioned(
+            //   top: 12.h,
+            //   left: 10.w,
+            //   child: _StatusBadge(status: status),
+            // ),
+            if (status.trim().isNotEmpty)
+              Positioned(
+                top: 12.h,
+                left: 10.w,
+                child: _StatusBadge(status: status),
+              ),
 
             // Delete
             Positioned(

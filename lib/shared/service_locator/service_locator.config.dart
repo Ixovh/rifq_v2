@@ -46,8 +46,12 @@ import '../../features/adoption/domain/use_cases/fetch_adoption_pet_details_use_
     as _i729;
 import '../../features/adoption/domain/use_cases/fetch_adoption_posts_use_case.dart'
     as _i425;
+import '../../features/adoption/domain/use_cases/fetch_adoption_requests_use_case.dart'
+    as _i506;
 import '../../features/adoption/domain/use_cases/fetch_my_adoption_pet_cards_use_case.dart'
     as _i939;
+import '../../features/adoption/domain/use_cases/update_adoption_request_status_use_case.dart'
+    as _i923;
 import '../../features/adoption/presentation/cubit/adoption_cubit.dart'
     as _i431;
 import '../../features/auth/data/datasources/auth_data_source.dart' as _i970;
@@ -172,6 +176,16 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i785.AdoptionRepositoryDomain>(),
       ),
     );
+    gh.factory<_i506.FetchAdoptionRequestsUseCase>(
+      () => _i506.FetchAdoptionRequestsUseCase(
+        gh<_i785.AdoptionRepositoryDomain>(),
+      ),
+    );
+    gh.factory<_i923.UpdateAdoptionRequestStatusUseCase>(
+      () => _i923.UpdateAdoptionRequestStatusUseCase(
+        gh<_i785.AdoptionRepositoryDomain>(),
+      ),
+    );
     gh.lazySingleton<_i803.AccountUseCase>(
       () =>
           _i803.AccountUseCase(accountRepoData: gh<_i533.AccountRepoDomain>()),
@@ -218,6 +232,8 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i374.CreateAdoptionRequestUseCase>(),
         gh<_i939.FetchMyAdoptionPetCardsUseCase>(),
         gh<_i813.DeleteAdoptionPostUseCase>(),
+        gh<_i506.FetchAdoptionRequestsUseCase>(),
+        gh<_i923.UpdateAdoptionRequestStatusUseCase>(),
       ),
     );
     gh.singleton<_i261.LocalKeysService>(() => _i261.LocalKeysService());

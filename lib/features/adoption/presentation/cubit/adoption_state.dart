@@ -22,6 +22,9 @@ class AdoptionState extends Equatable {
   final String? errorMessage;
   final bool isLoadingMyAdoptionPets;
   final List<MyAdoptionPetEntity> myAdoptionPets;
+  final bool isLoadingAdoptionRequests;
+  final List<AdoptionRequestCardEntity> adoptionRequests;
+  final bool isUpdatingRequest;
 
   final bool isDeletingPost;
 
@@ -49,6 +52,9 @@ class AdoptionState extends Equatable {
     this.isLoadingMyAdoptionPets = false,
     this.myAdoptionPets = const [],
     this.isDeletingPost = false,
+    this.isLoadingAdoptionRequests = false,
+    this.adoptionRequests = const [],
+    this.isUpdatingRequest = false,
   });
 
   AdoptionState copyWith({
@@ -76,6 +82,9 @@ class AdoptionState extends Equatable {
     bool? isLoadingMyAdoptionPets,
     List<MyAdoptionPetEntity>? myAdoptionPets,
     bool? isDeletingPost,
+    bool? isLoadingAdoptionRequests,
+    List<AdoptionRequestCardEntity>? adoptionRequests,
+    bool? isUpdatingRequest,
   }) {
     return AdoptionState(
       selectedTabIndex: selectedTabIndex ?? this.selectedTabIndex,
@@ -111,6 +120,12 @@ class AdoptionState extends Equatable {
 
       myAdoptionPets: myAdoptionPets ?? this.myAdoptionPets,
       isDeletingPost: isDeletingPost ?? this.isDeletingPost,
+      isLoadingAdoptionRequests:
+          isLoadingAdoptionRequests ?? this.isLoadingAdoptionRequests,
+
+      adoptionRequests: adoptionRequests ?? this.adoptionRequests,
+
+      isUpdatingRequest: isUpdatingRequest ?? this.isUpdatingRequest,
     );
   }
 
@@ -149,5 +164,9 @@ class AdoptionState extends Equatable {
     isLoadingMyAdoptionPets,
     myAdoptionPets,
     isDeletingPost,
+
+    isLoadingAdoptionRequests,
+    adoptionRequests,
+    isUpdatingRequest,
   ];
 }

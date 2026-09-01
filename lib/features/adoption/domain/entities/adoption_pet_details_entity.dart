@@ -56,5 +56,6 @@ class AdoptionPetDetailsEntity extends Equatable {
         ownerId,
         ownerName,
         ownerAvatarUrl,
+        ownerPhone,
       ];
 }
