@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/features/adoption/presentation/cubit/adoption_cubit.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/utils/app_date_utils.dart';
@@ -24,6 +25,7 @@ class AdoptionPetListSection extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context, AdoptionState state) {
+        final l10n = AppLocalizations.of(context)!;
         if (state.isLoadingPosts && state.adoptionPetCards.isEmpty) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -48,7 +50,7 @@ class AdoptionPetListSection extends StatelessWidget {
               SizedBox(height: 160.h),
               Center(
                 child: Text(
-                  'No pets available for adoption',
+                  l10n.adoption_emptyAvailable,
                   style: context.body1.copyWith(color: context.neutral400),
                 ),
               ),
@@ -149,7 +151,7 @@ class AdoptionPetListSection extends StatelessWidget {
                               ),
                               SizedBox(width: 6.w),
                               Text(
-                                AppDateUtils.formatAge(pet.birthdate),
+                                AppDateUtils.formatAge(pet.birthdate, l10n),
                                 style: context.body2.copyWith(
                                   color: context.neutral400,
                                 ),

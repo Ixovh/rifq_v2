@@ -4,8 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_pet_card_entity.dart';
 import 'package:rifq_v2/features/adoption/presentation/cubit/adoption_cubit.dart';
+import 'package:rifq_v2/features/account/presentation/widgets/pet_label_helpers.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_back_icon.dart';
 import 'package:rifq_v2/shared/service_locator/service_locator.dart';
+import 'package:rifq_v2/shared/utils/app_date_utils.dart';
 @RoutePage()
 class PetDetailsScreen extends StatelessWidget {
   final AdoptionPetCardEntity pet;
@@ -32,6 +36,7 @@ class _PetDetailsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AdoptionCubit, AdoptionState>(
       builder: (context, state) {
+        final l10n = AppLocalizations.of(context)!;
         // Loading
         if (state.isLoadingPetDetails) {
           return const Scaffold(
@@ -42,7 +47,7 @@ class _PetDetailsView extends StatelessWidget {
         // Error
         if (state.errorMessage != null && state.petDetails == null) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Pet Details')),
+            appBar: AppBar(title: Text(l10n.adoption_petDetailsTitle)),
             body: Center(child: Text(state.errorMessage!)),
           );
         }
@@ -51,8 +56,8 @@ class _PetDetailsView extends StatelessWidget {
         final details = state.petDetails;
 
         if (details == null) {
-          return const Scaffold(
-            body: Center(child: Text('No pet details available')),
+          return Scaffold(
+            body: Center(child: Text(l10n.adoption_noDetails)),
           );
         }
 
@@ -71,7 +76,7 @@ class _PetDetailsView extends StatelessWidget {
                       SizedBox(height: 4.h),
 
                       Text(
-                        details.name ?? 'Unknown',
+                        details.name ?? l10n.adoption_unknown,
                         style: TextStyle(
                           fontSize: 38.sp,
                           fontWeight: FontWeight.w700,
@@ -85,7 +90,7 @@ class _PetDetailsView extends StatelessWidget {
                         icon: Icons.location_on_outlined,
                         text: details.location?.isNotEmpty == true
                             ? details.location!
-                            : 'Not available',
+                            : l10n.adoption_notAvailable,
                       ),
 
                       SizedBox(height: 9.h),
@@ -93,8 +98,8 @@ class _PetDetailsView extends StatelessWidget {
                       _detailRow(
                         icon: Icons.calendar_month_outlined,
                         text: details.birthdate != null
-                            ? _formatAge(details.birthdate!)
-                            : 'Not available',
+                            ? AppDateUtils.formatAge(details.birthdate!, l10n)
+                            : l10n.adoption_notAvailable,
                       ),
 
                       SizedBox(height: 20.h),
@@ -102,17 +107,23 @@ class _PetDetailsView extends StatelessWidget {
                       Row(
                         children: [
                           _infoBox(
-                            value: details.gender ?? 'Not available',
-                            label: 'Gender',
+                            value: details.gender != null &&
+                                    details.gender!.isNotEmpty
+                                ? petGenderLabel(context, details.gender!)
+                                : l10n.adoption_notAvailable,
+                            label: l10n.common_gender,
                           ),
                           _infoBox(
-                            value: details.breed ?? 'Not available',
-                            label: 'Breed',
+                            value: details.breed ?? l10n.adoption_notAvailable,
+                            label: l10n.common_breed,
                           ),
                           _infoBox(
-                            value:
-                                details.weight?.toString() ?? 'Not available',
-                            label: 'Weight',
+                            value: details.weight != null
+                                ? l10n.common_weightKg(
+                                    details.weight!.toString(),
+                                  )
+                                : l10n.adoption_notAvailable,
+                            label: l10n.adoption_weight,
                           ),
                         ],
                       ),
@@ -146,7 +157,7 @@ class _PetDetailsView extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Owner by:',
+                                l10n.adoption_ownedBy,
                                 style: TextStyle(
                                   color: Colors.grey.shade500,
                                   fontSize: 13.sp,
@@ -154,7 +165,7 @@ class _PetDetailsView extends StatelessWidget {
                               ),
                               SizedBox(height: 2.h),
                               Text(
-                                details.ownerName ?? 'Pet Owner',
+                                details.ownerName ?? l10n.adoption_petOwnerFallback,
                                 style: TextStyle(
                                   color: const Color(0xFF5F5F5F),
                                   fontSize: 18.sp,
@@ -184,7 +195,7 @@ class _PetDetailsView extends StatelessWidget {
                       Text(
                         details.description?.isNotEmpty == true
                             ? details.description!
-                            : 'No description available.',
+                            : l10n.adoption_noDescription,
                         style: TextStyle(
                           color: details.description?.isNotEmpty == true
                               ? Colors.grey.shade600
@@ -221,10 +232,10 @@ class _PetDetailsView extends StatelessWidget {
                           ),
                           child: Text(
                             state.myRequestStatus == 'pending'
-                                ? 'Request pending'
+                                ? l10n.adoption_requestPending
                                 : state.myRequestStatus == 'rejected'
-                                ? 'Request again'
-                                : 'Adopt',
+                                ? l10n.adoption_requestAgain
+                                : l10n.home_adopt,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20.sp,
@@ -271,9 +282,9 @@ class _PetDetailsView extends StatelessWidget {
                 : _imagePlaceholder(),
           ),
 
-          Positioned(
+          PositionedDirectional(
             top: MediaQuery.of(context).padding.top + 12.h,
-            left: 20.w,
+            start: 20.w,
             child: GestureDetector(
               onTap: () {
                 context.router.pop();
@@ -285,7 +296,7 @@ class _PetDetailsView extends StatelessWidget {
                   color: Colors.black.withOpacity(0.18),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.arrow_back, color: Colors.white, size: 27.r),
+                child: const AppBackIcon(color: Colors.white, size: 20),
               ),
             ),
           ),
@@ -362,33 +373,5 @@ class _PetDetailsView extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  String _formatAge(DateTime birthdate) {
-    final now = DateTime.now();
-
-    int years = now.year - birthdate.year;
-
-    if (now.month < birthdate.month ||
-        (now.month == birthdate.month && now.day < birthdate.day)) {
-      years--;
-    }
-
-    if (years < 0) {
-      years = 0;
-    }
-
-    if (years == 0) {
-      final months =
-          (now.year - birthdate.year) * 12 + now.month - birthdate.month;
-
-      if (months <= 0) {
-        return 'Less than 1 month';
-      }
-
-      return months == 1 ? '1 month' : '$months months';
-    }
-
-    return years == 1 ? '1 year' : '$years years';
   }
 }

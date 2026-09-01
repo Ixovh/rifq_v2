@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/features/adoption/presentation/cubit/adoption_cubit.dart';
 import 'package:rifq_v2/features/adoption/presentation/widgets/my_adoption_pet_card.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/widgets/app_confirm_sheet.dart';
 import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
@@ -24,6 +25,7 @@ class MyAdoptionListingsSection extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context, AdoptionState state) {
+        final l10n = AppLocalizations.of(context)!;
         if (state.isLoadingMyAdoptionPets && state.myAdoptionPets.isEmpty) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -37,7 +39,7 @@ class MyAdoptionListingsSection extends StatelessWidget {
               SizedBox(height: 160.h),
               Center(
                 child: Text(
-                  'You have no pets for adoption',
+                  l10n.adoption_emptyMyListings,
                   style: context.body1.copyWith(
                     color: context.neutral400,
                   ),
@@ -60,7 +62,7 @@ class MyAdoptionListingsSection extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'My Adoption Listings',
+                  l10n.adoption_myListingsTitle,
                   style: context.body1.copyWith(
                     fontSize: 22.sp,
                     fontWeight: FontWeight.w700,
@@ -68,7 +70,7 @@ class MyAdoptionListingsSection extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'See all',
+                  l10n.common_seeAll,
                   style: context.body2.copyWith(
                     color: context.neutral400,
                   ),
@@ -93,12 +95,12 @@ class MyAdoptionListingsSection extends StatelessWidget {
     BuildContext context,
     String adoptionPostId,
   ) async {
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await showAppConfirmSheet(
       context: context,
-      title: 'Remove listing',
-      message:
-          'This will remove the pet from adoption. The pet will stay in your pets.',
-      confirmLabel: 'Delete',
+      title: l10n.adoption_removeListingTitle,
+      message: l10n.adoption_removeListingMessage,
+      confirmLabel: l10n.adoption_deleteListing,
       icon: Icons.delete_outline_rounded,
       isDestructive: true,
     );
@@ -115,6 +117,6 @@ class MyAdoptionListingsSection extends StatelessWidget {
       return;
     }
 
-    context.showSuccessToast('Adoption listing removed');
+    context.showSuccessToast(l10n.adoption_listingRemoved);
   }
 }

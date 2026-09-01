@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:rifq_v2/features/add_pet/domain/entities/add_pet_entity.dart';
+import 'package:rifq_v2/features/account/presentation/widgets/pet_label_helpers.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_pickers.dart';
 
 class PetCard extends StatelessWidget {
   final AddPetEntity pet;
@@ -131,7 +134,7 @@ class PetCard extends StatelessWidget {
                       SizedBox(width: 6.w),
                       Expanded(
                         child: Text(
-                          '${pet.species} • ${pet.breed}',
+                          '${speciesLabel(context, pet.species)} • ${pet.breed}',
                           style: context.body2.copyWith(
                             fontSize: 15.sp,
                             color: context.neutral400,
@@ -145,7 +148,7 @@ class PetCard extends StatelessWidget {
 
                   // Gender
                   Text(
-                    'Gender: ${pet.gender}',
+                    '${AppLocalizations.of(context)!.common_gender}: ${petGenderLabel(context, pet.gender)}',
                     style: context.body2.copyWith(
                       fontSize: 15.sp,
                       color: context.neutral400,

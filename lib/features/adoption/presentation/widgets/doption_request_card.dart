@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_request_card_entity.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 
 class AdoptionRequestCard extends StatelessWidget {
   final AdoptionRequestCardEntity request;
@@ -48,7 +49,7 @@ class AdoptionRequestCard extends StatelessWidget {
           SizedBox(width: 12.w),
 
           Expanded(
-            child: _buildInformation(isPending),
+            child: _buildInformation(context, isPending),
           ),
 
           SizedBox(width: 5.w),
@@ -56,7 +57,7 @@ class AdoptionRequestCard extends StatelessWidget {
           if (isPending)
             _buildActions()
           else
-            _buildStatus(),
+            _buildStatus(context),
         ],
       ),
     );
@@ -100,7 +101,8 @@ class AdoptionRequestCard extends StatelessWidget {
   // Information
   // =========================
 
-  Widget _buildInformation(bool isPending) {
+  Widget _buildInformation(BuildContext context, bool isPending) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -108,7 +110,7 @@ class AdoptionRequestCard extends StatelessWidget {
           children: [
             Flexible(
               child: Text(
-                request.fullName ?? 'Unknown',
+                request.fullName ?? l10n.adoption_unknown,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
@@ -121,7 +123,7 @@ class AdoptionRequestCard extends StatelessWidget {
 
             if (isPending) ...[
               SizedBox(width: 8.w),
-              _buildNewBadge(),
+              _buildNewBadge(context),
             ],
           ],
         ),
@@ -167,7 +169,7 @@ class AdoptionRequestCard extends StatelessWidget {
 
         if (request.createdAt != null)
           Align(
-            alignment: Alignment.centerRight,
+            alignment: AlignmentDirectional.centerEnd,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -229,7 +231,7 @@ class AdoptionRequestCard extends StatelessWidget {
   // New Badge
   // =========================
 
-  Widget _buildNewBadge() {
+  Widget _buildNewBadge(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 12.w,
@@ -243,7 +245,7 @@ class AdoptionRequestCard extends StatelessWidget {
         ),
       ),
       child: Text(
-        'New',
+        AppLocalizations.of(context)!.adoption_badgeNew,
         style: TextStyle(
           fontSize: 12.sp,
           color: const Color(0xFF087A4D),
@@ -310,17 +312,18 @@ class AdoptionRequestCard extends StatelessWidget {
   // Status
   // =========================
 
-  Widget _buildStatus() {
+  Widget _buildStatus(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final status = request.status.toLowerCase();
 
     String text;
     Color color;
 
     if (status == 'accepted') {
-      text = 'Accepted';
+      text = l10n.adoption_statusAccepted;
       color = const Color(0xFF16B364);
     } else {
-      text = 'Rejected';
+      text = l10n.adoption_statusRejected;
       color = const Color(0xFFFF482D);
     }
 

@@ -231,7 +231,7 @@ class AddPetScreen extends StatelessWidget {
                   }
 
                   context.showSuccessToast(
-                    'Pet added to adoption successfully',
+                    l10n.adoption_petAddedSuccess,
                   );
 
                   Navigator.pop(context, true);
@@ -444,7 +444,7 @@ class AddPetScreen extends StatelessWidget {
                                 (locationCtrl.text.trim().isEmpty ||
                                     (adoptionPhoneNumber ?? '').isEmpty)) {
                               context.showWarningToast(
-                                'Please enter location and phone number',
+                                l10n.adoption_locationAndPhoneRequired,
                               );
                               return;
                             }

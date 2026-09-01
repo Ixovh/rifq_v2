@@ -96,7 +96,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/features/adoption/presentation/cubit/adoption_cubit.dart';
 import 'package:rifq_v2/features/adoption/presentation/widgets/pet_category_item_widgets.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_pickers.dart';
 
 class PetCategoriesSection extends StatelessWidget {
   const PetCategoriesSection({
@@ -108,19 +110,19 @@ class PetCategoriesSection extends StatelessWidget {
 
   static const categories = [
     (
-      title: 'Cat',
+      value: 'cat',
       imagePath: 'assets/images/icons8-cat-64.png',
     ),
     (
-      title: 'Dog',
+      value: 'dog',
       imagePath: 'assets/images/icons8-dog-64.png',
     ),
     (
-      title: 'Turtle',
+      value: 'turtle',
       imagePath: 'assets/images/icons8-turtell-64.png',
     ),
     (
-      title: 'Rabbit',
+      value: 'rabbit',
       imagePath: 'assets/images/icons8-Rabbit-64.png',
     ),
   ];
@@ -131,6 +133,7 @@ class PetCategoriesSection extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.selectedCategory != current.selectedCategory,
       builder: (context, state) {
+        final l10n = AppLocalizations.of(context)!;
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
@@ -142,7 +145,7 @@ class PetCategoriesSection extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    'Pet Categories',
+                    l10n.adoption_petCategories,
                     style: TextStyle(
                       fontSize: 20.sp,
                       fontWeight: FontWeight.w600,
@@ -155,7 +158,7 @@ class PetCategoriesSection extends StatelessWidget {
                   GestureDetector(
                     onTap: onMoreCategoryTap,
                     child: Text(
-                      'More Category',
+                      l10n.adoption_moreCategories,
                       style: TextStyle(
                         fontSize: 15.sp,
                         fontWeight: FontWeight.w400,
@@ -184,14 +187,14 @@ class PetCategoriesSection extends StatelessWidget {
                     final category = categories[index];
 
                     return PetCategoryItem(
-                      title: category.title,
+                      title: speciesLabel(context, category.value),
                       imagePath: category.imagePath,
                       isSelected:
-                          state.selectedCategory == category.title,
+                          state.selectedCategory == category.value,
                       onTap: () {
                         context
                             .read<AdoptionCubit>()
-                            .selectCategory(category.title);
+                            .selectCategory(category.value);
                       },
                     );
                   },

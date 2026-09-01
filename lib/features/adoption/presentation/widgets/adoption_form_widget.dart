@@ -8,6 +8,7 @@ import 'package:rifq_v2/shared/presentation/widgets/phone_number_field.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_request_entity.dart';
 import 'package:rifq_v2/features/adoption/presentation/cubit/adoption_cubit.dart';
 import 'package:rifq_v2/features/adoption/presentation/widgets/adoption_form_fields.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/service_locator/service_locator.dart';
 import 'package:rifq_v2/shared/storage_service/auth_helper.dart';
@@ -91,6 +92,7 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
         }
       },
       builder: (context, state) {
+        final l10n = AppLocalizations.of(context)!;
         return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
@@ -101,7 +103,7 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
             centerTitle: true,
             iconTheme: IconThemeData(color: context.neutral1000),
             title: Text(
-              'Adoption Form',
+              l10n.adoption_formTitle,
               style: TextStyle(
                 fontSize: 23.sp,
                 fontWeight: FontWeight.w600,
@@ -120,7 +122,7 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
                     // =========================
                     // Name
                     // =========================
-                    AdoptionFormFields.label(context, 'Name'),
+                    AdoptionFormFields.label(context, l10n.common_name),
 
                     SizedBox(height: 7.h),
 
@@ -131,7 +133,7 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
                       readOnly: true,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Your profile name is missing';
+                          return l10n.adoption_nameMissing;
                         }
 
                         return null;
@@ -143,7 +145,7 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
                     // =========================
                     // City
                     // =========================
-                    AdoptionFormFields.label(context, 'City'),
+                    AdoptionFormFields.label(context, l10n.adoption_city),
 
                     SizedBox(height: 7.h),
 
@@ -153,7 +155,7 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
                       hintText: '',
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter your city';
+                          return l10n.adoption_cityRequired;
                         }
 
                         return null;
@@ -181,7 +183,7 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
                     // =========================
                     // Experience
                     // =========================
-                    AdoptionFormFields.label(context, 'Experience with pets'),
+                    AdoptionFormFields.label(context, l10n.adoption_experienceLabel),
 
                     SizedBox(height: 7.h),
                     AdoptionFormFields.textField(
@@ -195,10 +197,10 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
                       ],
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter your experience with pets';
+                          return l10n.adoption_experienceRequired;
                         }
                         if (int.tryParse(value.trim()) == null) {
-                          return 'Please enter a number';
+                          return l10n.adoption_enterNumber;
                         }
                         return null;
                       },
@@ -209,7 +211,7 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
                     // =========================
                     // Short Note
                     // =========================
-                    AdoptionFormFields.label(context, 'Short note'),
+                    AdoptionFormFields.label(context, l10n.adoption_shortNote),
 
                     SizedBox(height: 7.h),
 
@@ -222,7 +224,7 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
                       counterText: '',
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter a short note';
+                          return l10n.adoption_noteRequired;
                         }
                         return null;
                       },
@@ -232,9 +234,9 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
                     // Character Counter
                     // =========================
                     Align(
-                      alignment: Alignment.bottomLeft,
+                      alignment: AlignmentDirectional.bottomStart,
                       child: Padding(
-                        padding: EdgeInsets.only(left: 12.w, top: 2.h),
+                        padding: EdgeInsetsDirectional.only(start: 12.w, top: 2.h),
                         child: ValueListenableBuilder<TextEditingValue>(
                           valueListenable: _noteController,
                           builder: (context, value, child) {
@@ -282,7 +284,7 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
                                 ),
                               )
                             : Text(
-                                'Adopt',
+                                l10n.home_adopt,
                                 style: TextStyle(
                                   fontSize: 22.sp,
                                   fontWeight: FontWeight.w500,
@@ -339,6 +341,7 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
   // =========================
 
   void _submit() {
+    final l10n = AppLocalizations.of(context)!;
     // Prevent duplicate submission
     if (context.read<AdoptionCubit>().state.isCreatingRequest) {
       return;
@@ -355,13 +358,13 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
     if (userId == null) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Please login first')));
+      ).showSnackBar(SnackBar(content: Text(l10n.adoption_loginFirst)));
       return;
     }
 
     if (_phoneNumber == null || _phoneNumber!.number.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter your phone number')),
+        SnackBar(content: Text(l10n.account_phoneRequired)),
       );
       return;
     }
@@ -387,6 +390,7 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
   // =========================
 
   void _showSuccessDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -429,7 +433,7 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
                 // Title
                 // =========================
                 Text(
-                  'Request sent successfully',
+                  l10n.adoption_requestSentTitle,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 22.sp,
@@ -444,8 +448,7 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
                 // Description
                 // =========================
                 Text(
-                  'Your adoption request has been sent to the owner.\n'
-                  'You will be notified once they respond.',
+                  l10n.adoption_requestSentBody,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 15.sp,
@@ -478,7 +481,7 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
                       ),
                     ),
                     child: Text(
-                      'Back to Home',
+                      l10n.adoption_backToHome,
                       style: TextStyle(
                         fontSize: 19.sp,
                         fontWeight: FontWeight.w500,

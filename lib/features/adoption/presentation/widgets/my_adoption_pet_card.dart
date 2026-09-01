@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/my_adoption_pet_entity.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/utils/app_date_utils.dart';
@@ -18,6 +19,7 @@ class MyAdoptionPetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -87,7 +89,7 @@ class MyAdoptionPetCard extends StatelessWidget {
                 // Age
                 _InfoRow(
                   icon: Icons.calendar_today_outlined,
-                  text: AppDateUtils.formatAge(pet.birthdate),
+                  text: AppDateUtils.formatAge(pet.birthdate, l10n),
                 ),
 
                 SizedBox(height: 5.h),
@@ -95,7 +97,7 @@ class MyAdoptionPetCard extends StatelessWidget {
                 // Requests
                 _InfoRow(
                   icon: Icons.mail_outline,
-                  text: '${pet.requestsCount} Requests',
+                  text: l10n.adoption_requestsCount(pet.requestsCount),
                 ),
 
                 SizedBox(height: 12.h),
@@ -125,7 +127,7 @@ class MyAdoptionPetCard extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        'View Request',
+                        l10n.adoption_viewRequest,
                         style: context.body2.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
@@ -227,6 +229,7 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final normalizedStatus = status.trim().toLowerCase();
 
     final Color backgroundColor;
@@ -240,21 +243,21 @@ class _StatusBadge extends StatelessWidget {
         backgroundColor = const Color(0xFFFFF8E8);
         borderColor = const Color(0xFFFFD36A);
         textColor = const Color(0xFF9E3E0A);
-        displayStatus = 'Pending Adoption';
+        displayStatus = l10n.adoption_statusPending;
         break;
 
       case 'adopted':
         backgroundColor = const Color(0xFFEEF7FF);
         borderColor = const Color(0xFF8DC8FF);
         textColor = const Color(0xFF2457A6);
-        displayStatus = 'Adopted';
+        displayStatus = l10n.adoption_statusAdopted;
         break;
 
       case 'cancelled':
         backgroundColor = const Color(0xFFFFEEEE);
         borderColor = const Color(0xFFFF8A8A);
         textColor = const Color(0xFFC62828);
-        displayStatus = 'Cancelled';
+        displayStatus = l10n.adoption_statusCancelled;
         break;
 
       default:

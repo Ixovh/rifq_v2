@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
 class AdoptionHeader extends StatelessWidget {
@@ -68,7 +69,7 @@ class AdoptionHeader extends StatelessWidget {
           // Title
           // =========================
           Text(
-            'Adoption',
+            AppLocalizations.of(context)!.adoption_screenTitle,
             style: TextStyle(
               fontSize: 23.sp,
               fontWeight: FontWeight.w600,

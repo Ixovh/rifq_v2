@@ -10,6 +10,7 @@ import 'package:rifq_v2/features/adoption/presentation/widgets/adoption_tabs_wid
 import 'package:rifq_v2/features/adoption/presentation/widgets/my_adoption_listings_section.dart';
 import 'package:rifq_v2/features/adoption/presentation/widgets/my_pets_selection_sheet.dart';
 import 'package:rifq_v2/features/adoption/presentation/widgets/pet_categories_section.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
@@ -36,6 +37,7 @@ class _AdoptionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.white,
       floatingActionButton: Padding(
@@ -48,9 +50,9 @@ class _AdoptionView extends StatelessWidget {
             Icons.add,
             color: Colors.white,
           ),
-          label: const Text(
-            'Adopt',
-            style: TextStyle(
+          label: Text(
+            l10n.home_adopt,
+            style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w600,
             ),
@@ -64,7 +66,7 @@ class _AdoptionView extends StatelessWidget {
             HomeHeader(
               isGuest: AuthHelper.isGuestUser(),
               imageUrl: _profileImageUrl(),
-              initials: _getUserInitial(),
+              initials: _getUserInitial(context),
               onAvatarTap: () => context.pushRoute(const AccountRoute()),
             ),
             const SizedBox(height: 12),
@@ -127,7 +129,9 @@ class _AdoptionView extends StatelessWidget {
     final userId = Supabase.instance.client.auth.currentUser?.id;
 
     if (userId == null) {
-      context.showErrorToast('User profile not found');
+      context.showErrorToast(
+        AppLocalizations.of(context)!.addPet_profileNotFound,
+      );
       return;
     }
 
@@ -157,7 +161,9 @@ class _AdoptionView extends StatelessWidget {
                 Supabase.instance.client.auth.currentUser?.id;
 
             if (currentUserId == null) {
-              context.showErrorToast('User profile not found');
+              context.showErrorToast(
+                AppLocalizations.of(context)!.addPet_profileNotFound,
+              );
               return;
             }
 
@@ -167,7 +173,8 @@ class _AdoptionView extends StatelessWidget {
               id: '',
               petId: pet['id'].toString(),
               posterId: currentUserId,
-              description: 'Pet available for adoption',
+              description:
+                  AppLocalizations.of(context)!.adoption_defaultDescription,
               status: 'available',
               location: '',
               createdAt: now,
@@ -192,7 +199,7 @@ class _AdoptionView extends StatelessWidget {
     return UserDataStore.profileOf(snapshot)['image_url'] as String?;
   }
 
-  String _getUserInitial() {
+  String _getUserInitial(BuildContext context) {
     final userId = AuthHelper.getUserId() ??
         Supabase.instance.client.auth.currentUser?.id;
     if (userId != null) {
@@ -211,7 +218,7 @@ class _AdoptionView extends StatelessWidget {
     final user = Supabase.instance.client.auth.currentUser;
 
     if (user == null) {
-      return 'U';
+      return AppLocalizations.of(context)!.common_userFallback[0].toUpperCase();
     }
 
     final metadata = user.userMetadata;
@@ -224,7 +231,7 @@ class _AdoptionView extends StatelessWidget {
         '';
 
     if (name.trim().isEmpty) {
-      return 'U';
+      return AppLocalizations.of(context)!.common_userFallback[0].toUpperCase();
     }
 
     return name.trim()[0].toUpperCase();

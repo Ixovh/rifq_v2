@@ -31,7 +31,7 @@ class AdoptionState extends Equatable {
 
   const AdoptionState({
     this.selectedTabIndex = 0,
-    this.selectedCategory = 'Cat',
+    this.selectedCategory = 'cat',
     this.allAdoptionPetCards = const [],
     this.adoptionPetCards = const [],
     // Get adoption pet cards

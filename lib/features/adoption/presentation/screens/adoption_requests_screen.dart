@@ -170,6 +170,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/features/adoption/presentation/cubit/adoption_cubit.dart';
 import 'package:rifq_v2/features/adoption/presentation/widgets/doption_request_card.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_back_icon.dart';
 import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/service_locator/service_locator.dart';
 
@@ -239,7 +241,7 @@ class AdoptionRequestsScreen extends StatelessWidget {
                     if (state.adoptionRequests.isEmpty) {
                       return Center(
                         child: Text(
-                          'No adoption requests yet',
+                          AppLocalizations.of(context)!.adoption_noRequests,
                           style: TextStyle(
                             fontSize: 15.sp,
                             color: Colors.grey,
@@ -290,7 +292,8 @@ class AdoptionRequestsScreen extends StatelessWidget {
                             }
 
                             context.showSuccessToast(
-                              'Request accepted. The pet was transferred to the adopter.',
+                              AppLocalizations.of(context)!
+                                  .adoption_requestAccepted,
                             );
                           },
 
@@ -338,9 +341,8 @@ class AdoptionRequestsScreen extends StatelessWidget {
             onTap: () {
               context.router.pop();
             },
-            child: Icon(
-              Icons.arrow_back,
-              size: 30.sp,
+            child: AppBackIcon(
+              size: 20.sp,
               color: Colors.black87,
             ),
           ),
@@ -348,7 +350,7 @@ class AdoptionRequestsScreen extends StatelessWidget {
           Expanded(
             child: Center(
               child: Text(
-                'Adoption requests – $petName',
+                AppLocalizations.of(context)!.adoption_requestsTitle(petName),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 21.sp,

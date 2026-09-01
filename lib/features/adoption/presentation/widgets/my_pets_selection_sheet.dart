@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_pickers.dart';
 
 class MyPetsSelectionSheet extends StatelessWidget {
   const MyPetsSelectionSheet({
@@ -13,6 +15,7 @@ class MyPetsSelectionSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(24, 20, 24, 28),
@@ -24,7 +27,7 @@ class MyPetsSelectionSheet extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  'Which pet?',
+                  l10n.adoption_whichPet,
                   style: context.body1.copyWith(
                     fontSize: 24,
                     fontWeight: FontWeight.w600,
@@ -47,7 +50,7 @@ class MyPetsSelectionSheet extends StatelessWidget {
             const SizedBox(height: 8),
 
             Text(
-              'Choose a pet to list for adoption',
+              l10n.adoption_choosePetToList,
               style: context.body2.copyWith(
                 color: context.neutral600,
               ),
@@ -68,7 +71,7 @@ class MyPetsSelectionSheet extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        "You don't have any pets yet.",
+                        l10n.adoption_noPetsToSelect,
                         style: context.body2.copyWith(
                           color: context.neutral600,
                         ),
@@ -184,7 +187,7 @@ class _PetItem extends StatelessWidget {
 
             // Species
             Text(
-              species,
+              species.isEmpty ? species : speciesLabel(context, species),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,

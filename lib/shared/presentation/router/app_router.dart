@@ -16,6 +16,7 @@ import 'package:rifq_v2/features/booking/presentation/screens/receipt_screen.dar
 import 'package:rifq_v2/features/hotel/domain/entities/hotel_detail_entity.dart';
 import 'package:rifq_v2/features/edit_pet/presentation/screens/edit_pet_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/auth_screen.dart';
+import 'package:rifq_v2/features/auth/presentation/screens/check_email_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/sends_to_email_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/welcome_screen.dart';

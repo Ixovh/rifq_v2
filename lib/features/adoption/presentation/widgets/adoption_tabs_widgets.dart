@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rifq_v2/features/adoption/presentation/cubit/adoption_cubit.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
 
@@ -17,19 +18,20 @@ class AdoptionTabs extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.selectedTabIndex != current.selectedTabIndex,
       builder: (context, state) {
+        final l10n = AppLocalizations.of(context)!;
         return Column(
           children: [
             Row(
               children: [
                 _TabItem(
-                  title: 'For Adoption',
+                  title: l10n.adoption_tabForAdoption,
                   isSelected: state.selectedTabIndex == 0,
                   onTap: () {
                     context.read<AdoptionCubit>().changeTab(0);
                   },
                 ),
                 _TabItem(
-                  title: 'My Pets',
+                  title: l10n.adoption_tabMyPets,
                   isSelected: state.selectedTabIndex == 1,
                   onTap: () {
                     context.read<AdoptionCubit>().changeTab(1);

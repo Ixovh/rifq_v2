@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
 class AdoptionOptionSheet extends StatelessWidget {
@@ -13,6 +14,7 @@ class AdoptionOptionSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(24, 20, 24, 24),
@@ -32,14 +34,14 @@ class AdoptionOptionSheet extends StatelessWidget {
             const SizedBox(height: 4),
 
             Text(
-              'Choose an option',
+              l10n.adoption_chooseOption,
               style: context.body1,
             ),
 
             const SizedBox(height: 12),
 
             Text(
-              'How would you like to list a pet for adoption?',
+              l10n.adoption_chooseOptionSubtitle,
               textAlign: TextAlign.center,
               style: context.body2.copyWith(
                 color: context.neutral600,
@@ -52,14 +54,14 @@ class AdoptionOptionSheet extends StatelessWidget {
               children: [
                 Expanded(
                   child: _OptionButton(
-                    title: 'Add new pet',
+                    title: l10n.adoption_addNewPet,
                     onTap: onAddNewPet,
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: _OptionButton(
-                    title: 'Select from my pet',
+                    title: l10n.adoption_selectFromMyPets,
                     onTap: onSelectMyPet,
                   ),
                 ),

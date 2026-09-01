@@ -204,7 +204,7 @@ class AddPetStepOne extends StatelessWidget {
             if (showAdoptionFields) ...[
               const SizedBox(height: 24),
 
-              Text('Location', style: context.body1),
+              Text(l10n.adoption_locationLabel, style: context.body1),
               const SizedBox(height: 12),
 
               Container(
@@ -217,7 +217,7 @@ class AddPetStepOne extends StatelessWidget {
                   controller: locationCtrl,
                   style: context.body2,
                   decoration: InputDecoration(
-                    hintText: 'Riyadh',
+                    hintText: l10n.adoption_locationHint,
                     hintStyle: context.body2.copyWith(
                       color: context.neutral500,
                     ),
