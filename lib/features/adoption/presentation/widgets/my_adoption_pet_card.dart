@@ -8,8 +8,13 @@ import 'package:rifq_v2/shared/utils/app_date_utils.dart';
 
 class MyAdoptionPetCard extends StatelessWidget {
   final MyAdoptionPetEntity pet;
+  final VoidCallback? onDelete;
 
-  const MyAdoptionPetCard({super.key, required this.pet});
+  const MyAdoptionPetCard({
+    super.key,
+    required this.pet,
+    this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +45,7 @@ class MyAdoptionPetCard extends StatelessWidget {
             imageUrl: pet.imageUrl,
             status: pet.status,
             adoptionPostId: pet.adoptionPostId,
-            onDelete: () {},
+            onDelete: onDelete ?? () {},
           ),
 
           // ============================================================

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_entity.dart';
 import 'package:rifq_v2/features/adoption/presentation/cubit/adoption_cubit.dart';
-import 'package:rifq_v2/features/adoption/presentation/widgets/adoption_header_widget.dart';
+import 'package:rifq_v2/features/home/presentation/widgets/home_header.dart';
 import 'package:rifq_v2/features/adoption/presentation/widgets/adoption_option_sheet.dart';
 import 'package:rifq_v2/features/adoption/presentation/widgets/adoption_pet_list_section.dart';
 import 'package:rifq_v2/features/adoption/presentation/widgets/adoption_tabs_widgets.dart';
@@ -14,6 +14,7 @@ import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.d
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/service_locator/service_locator.dart';
+import 'package:rifq_v2/shared/storage_service/auth_helper.dart';
 import 'package:rifq_v2/shared/storage_service/user_data_store.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -60,9 +61,11 @@ class _AdoptionView extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            AdoptionHeader(
-              userInitial: _getUserInitial(),
-              onNotificationTap: () {},
+            HomeHeader(
+              isGuest: AuthHelper.isGuestUser(),
+              imageUrl: _profileImageUrl(),
+              initials: _getUserInitial(),
+              onAvatarTap: () => context.pushRoute(const AccountRoute()),
             ),
             const SizedBox(height: 12),
             PetCategoriesSection(
@@ -99,11 +102,17 @@ class _AdoptionView extends StatelessWidget {
       ),
       builder: (_) {
         return AdoptionOptionSheet(
-          onAddNewPet: () {
+          onAddNewPet: () async {
             Navigator.pop(context);
-            context.router.push(
+            final added = await context.router.push(
               AddPetRoute(showAdoptionFields: true),
             );
+            if (!context.mounted) return;
+            if (added == true) {
+              await context.read<AdoptionCubit>().getMyAdoptionPets(
+                silent: true,
+              );
+            }
           },
           onSelectMyPet: () {
             Navigator.pop(context);
@@ -174,11 +183,35 @@ class _AdoptionView extends StatelessWidget {
     );
   }
 
+  String? _profileImageUrl() {
+    final userId = AuthHelper.getUserId() ??
+        Supabase.instance.client.auth.currentUser?.id;
+    if (userId == null) return null;
+    final snapshot = UserDataStore.read(userId);
+    if (snapshot == null) return null;
+    return UserDataStore.profileOf(snapshot)['image_url'] as String?;
+  }
+
   String _getUserInitial() {
+    final userId = AuthHelper.getUserId() ??
+        Supabase.instance.client.auth.currentUser?.id;
+    if (userId != null) {
+      final snapshot = UserDataStore.read(userId);
+      if (snapshot != null) {
+        final name =
+            (UserDataStore.profileOf(snapshot)['full_name'] as String?)
+                ?.trim() ??
+            '';
+        if (name.isNotEmpty) {
+          return name[0].toUpperCase();
+        }
+      }
+    }
+
     final user = Supabase.instance.client.auth.currentUser;
 
     if (user == null) {
-      return '?';
+      return 'U';
     }
 
     final metadata = user.userMetadata;
@@ -191,7 +224,7 @@ class _AdoptionView extends StatelessWidget {
         '';
 
     if (name.trim().isEmpty) {
-      return '?';
+      return 'U';
     }
 
     return name.trim()[0].toUpperCase();

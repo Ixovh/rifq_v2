@@ -91,10 +91,9 @@ Future<Result<List<MyAdoptionPetEntity>, Object>>
 }
 
 @override
-Future<void> deleteAdoptionPost(String adoptionPostId) {
-  return _remoteDataSource.deleteAdoptionPost(
-    adoptionPostId,
-  );
+Future<void> deleteAdoptionPost(String adoptionPostId) async {
+  await _remoteDataSource.deleteAdoptionPost(adoptionPostId);
+  await _remoteDataSource.refreshUserPetsCache();
 }
 
 @override
@@ -129,9 +128,30 @@ Future<Result<void, Object>> updateAdoptionRequestStatus({
         adoptionPostId: adoptionPostId,
         status: 'adopted',
       );
+
+      final petId = await _remoteDataSource.getPetIdForAdoptionPost(
+        adoptionPostId,
+      );
+      if (petId != null) {
+        await _remoteDataSource.removeOwnedPetFromCache(petId);
+      }
     }
 
     return const Success(null);
+  } catch (e) {
+    return Error(e);
+  }
+}
+
+@override
+Future<Result<String?, Object>> getMyAdoptionRequestStatus({
+  required String adoptionPostId,
+}) async {
+  try {
+    final status = await _remoteDataSource.getMyAdoptionRequestStatus(
+      adoptionPostId,
+    );
+    return Success(status);
   } catch (e) {
     return Error(e);
   }

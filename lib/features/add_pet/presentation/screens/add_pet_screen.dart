@@ -66,7 +66,7 @@ class AddPetScreen extends StatelessWidget {
   final bool showAdoptionFields;
 
   final TextEditingController locationCtrl = TextEditingController();
-  final TextEditingController phoneCtrl = TextEditingController();
+  String? adoptionPhoneNumber;
 
   // ID للحيوان الذي تمت إضافته جديدًا من صفحة التبني.
   // نحتاجه فقط لحذفه من UserDataStore بعد نجاح إنشاء adoption post.
@@ -136,6 +136,17 @@ class AddPetScreen extends StatelessWidget {
                     'User profile not found',
                   );
                   return;
+                }
+
+                final phone = adoptionPhoneNumber?.trim();
+                if (phone != null && phone.isNotEmpty) {
+                  await Supabase.instance.client
+                      .from('profiles')
+                      .update({'phone_number': phone})
+                      .eq('id', ownerId);
+                  await UserDataStore.mergeProfileFields(ownerId, {
+                    'phone_number': phone,
+                  });
                 }
 
                 debugPrint(
@@ -322,7 +333,11 @@ class AddPetScreen extends StatelessWidget {
 
                           locationCtrl: locationCtrl,
 
-                          phoneCtrl: phoneCtrl,
+                          initialPhone: adoptionPhoneNumber,
+
+                          onPhoneChanged: (phone) {
+                            adoptionPhoneNumber = phone;
+                          },
 
                           onImagePicked: (file) {
                             formState.value =
@@ -421,6 +436,15 @@ class AddPetScreen extends StatelessWidget {
                                 'Please complete all fields',
                               );
 
+                              return;
+                            }
+
+                            if (showAdoptionFields &&
+                                (locationCtrl.text.trim().isEmpty ||
+                                    (adoptionPhoneNumber ?? '').isEmpty)) {
+                              context.showWarningToast(
+                                'Please enter location and phone number',
+                              );
                               return;
                             }
 

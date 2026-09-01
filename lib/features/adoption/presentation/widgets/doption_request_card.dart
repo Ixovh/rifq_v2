@@ -140,6 +140,13 @@ class AdoptionRequestCard extends StatelessWidget {
             request.phoneNumber!,
           ),
 
+        if (request.experience != null &&
+            request.experience!.trim().isNotEmpty)
+          _infoRow(
+            Icons.pets_outlined,
+            request.experience!,
+          ),
+
         if (request.message != null &&
             request.message!.trim().isNotEmpty)
           Padding(

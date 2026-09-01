@@ -9,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:rifq_v2/features/account/presentation/cubit/account_cubit.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/account_avatar.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/account_outlined_field.dart';
-import 'package:rifq_v2/features/account/presentation/widgets/account_phone_field.dart';
+import 'package:rifq_v2/shared/presentation/widgets/phone_number_field.dart';
 import 'package:rifq_v2/shared/constants/app_enums.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
@@ -274,7 +274,7 @@ class _EditAccountViewState extends State<_EditAccountView> {
                             },
                           ),
                           SizedBox(height: 42.h),
-                          AccountPhoneField(
+                          PhoneNumberField(
                             initialValue: cubit.phoneController.text,
                             onChanged: (phone) {
                               cubit.phoneController.text = phone.number.isEmpty

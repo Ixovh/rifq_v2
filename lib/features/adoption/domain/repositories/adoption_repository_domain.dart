@@ -40,4 +40,8 @@ Future<Result<void, Object>> updateAdoptionRequestStatus({
   required String adoptionPostId,
   required String status,
 });
+
+  Future<Result<String?, Object>> getMyAdoptionRequestStatus({
+    required String adoptionPostId,
+  });
 }

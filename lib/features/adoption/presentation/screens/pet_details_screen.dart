@@ -6,7 +6,6 @@ import 'package:rifq_v2/features/adoption/domain/entities/adoption_pet_card_enti
 import 'package:rifq_v2/features/adoption/presentation/cubit/adoption_cubit.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/service_locator/service_locator.dart';
-import 'package:rifq_v2/shared/service_locator/service_locator.dart';
 @RoutePage()
 class PetDetailsScreen extends StatelessWidget {
   final AdoptionPetCardEntity pet;
@@ -201,22 +200,31 @@ class _PetDetailsView extends StatelessWidget {
                         width: double.infinity,
                         height: 58.h,
                         child: ElevatedButton(
-                          onPressed: () {
-                            context.router.push(
-                              AdoptionFormRoute(
-                                adoptionPostId: pet.adoptionPostId,
-                              ),
-                            );
-                          },
+                          onPressed: state.myRequestStatus == 'pending'
+                              ? null
+                              : () {
+                                  context.router.push(
+                                    AdoptionFormRoute(
+                                      adoptionPostId: pet.adoptionPostId,
+                                    ),
+                                  );
+                                },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF36B8AB),
+                            disabledBackgroundColor: const Color(
+                              0xFF36B8AB,
+                            ).withValues(alpha: 0.45),
                             elevation: 0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.r),
                             ),
                           ),
                           child: Text(
-                            'Adopt',
+                            state.myRequestStatus == 'pending'
+                                ? 'Request pending'
+                                : state.myRequestStatus == 'rejected'
+                                ? 'Request again'
+                                : 'Adopt',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20.sp,

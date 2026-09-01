@@ -50,6 +50,8 @@ import '../../features/adoption/domain/use_cases/fetch_adoption_requests_use_cas
     as _i506;
 import '../../features/adoption/domain/use_cases/fetch_my_adoption_pet_cards_use_case.dart'
     as _i939;
+import '../../features/adoption/domain/use_cases/fetch_my_adoption_request_status_use_case.dart'
+    as _i215;
 import '../../features/adoption/domain/use_cases/update_adoption_request_status_use_case.dart'
     as _i923;
 import '../../features/adoption/presentation/cubit/adoption_cubit.dart'
@@ -181,6 +183,11 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i785.AdoptionRepositoryDomain>(),
       ),
     );
+    gh.factory<_i215.FetchMyAdoptionRequestStatusUseCase>(
+      () => _i215.FetchMyAdoptionRequestStatusUseCase(
+        gh<_i785.AdoptionRepositoryDomain>(),
+      ),
+    );
     gh.factory<_i923.UpdateAdoptionRequestStatusUseCase>(
       () => _i923.UpdateAdoptionRequestStatusUseCase(
         gh<_i785.AdoptionRepositoryDomain>(),
@@ -218,12 +225,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i493.AddPetCubit>(
       () => _i493.AddPetCubit(gh<_i667.AddPetUseCase>()),
     );
-    gh.factory<_i1036.HealthRecordCubit>(
-      () => _i1036.HealthRecordCubit(gh<_i653.HealthRecordUseCase>()),
-    );
-    gh.factory<_i578.EditPetCubit>(
-      () => _i578.EditPetCubit(gh<_i430.EditPetUseCase>()),
-    );
     gh.factory<_i431.AdoptionCubit>(
       () => _i431.AdoptionCubit(
         gh<_i824.CreateAdoptionPostUseCase>(),
@@ -234,7 +235,14 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i813.DeleteAdoptionPostUseCase>(),
         gh<_i506.FetchAdoptionRequestsUseCase>(),
         gh<_i923.UpdateAdoptionRequestStatusUseCase>(),
+        gh<_i215.FetchMyAdoptionRequestStatusUseCase>(),
       ),
+    );
+    gh.factory<_i1036.HealthRecordCubit>(
+      () => _i1036.HealthRecordCubit(gh<_i653.HealthRecordUseCase>()),
+    );
+    gh.factory<_i578.EditPetCubit>(
+      () => _i578.EditPetCubit(gh<_i430.EditPetUseCase>()),
     );
     gh.singleton<_i261.LocalKeysService>(() => _i261.LocalKeysService());
     return this;

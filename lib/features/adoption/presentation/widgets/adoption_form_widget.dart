@@ -1,14 +1,17 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:phone_text_field/phone_text_field.dart';
-import 'package:rifq_v2/features/account/presentation/widgets/account_phone_field.dart';
+import 'package:rifq_v2/shared/presentation/widgets/phone_number_field.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_request_entity.dart';
 import 'package:rifq_v2/features/adoption/presentation/cubit/adoption_cubit.dart';
 import 'package:rifq_v2/features/adoption/presentation/widgets/adoption_form_fields.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/service_locator/service_locator.dart';
+import 'package:rifq_v2/shared/storage_service/auth_helper.dart';
+import 'package:rifq_v2/shared/storage_service/user_data_store.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 @RoutePage()
@@ -44,6 +47,12 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
   final _noteController = TextEditingController();
 
   PhoneNumber? _phoneNumber;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController.text = _currentUserName();
+  }
 
   @override
   void dispose() {
@@ -86,8 +95,19 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
           backgroundColor: Colors.white,
           appBar: AppBar(
             backgroundColor: Colors.white,
+            surfaceTintColor: Colors.white,
             elevation: 0,
-            centerTitle: false,
+            scrolledUnderElevation: 0,
+            centerTitle: true,
+            iconTheme: IconThemeData(color: context.neutral1000),
+            title: Text(
+              'Adoption Form',
+              style: TextStyle(
+                fontSize: 23.sp,
+                fontWeight: FontWeight.w600,
+                color: context.primary50,
+              ),
+            ),
           ),
           body: SafeArea(
             child: Form(
@@ -97,23 +117,6 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // =========================
-                    // Title
-                    // =========================
-
-                    Center(
-                      child: Text(
-                        'Adoption Form',
-                        style: TextStyle(
-                          fontSize: 23.sp,
-                          fontWeight: FontWeight.w600,
-                          color: context.primary50,
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(height: 45.h),
-
                     // =========================
                     // Name
                     // =========================
@@ -125,9 +128,10 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
                       context: context,
                       controller: _nameController,
                       hintText: '',
+                      readOnly: true,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter your name';
+                          return 'Your profile name is missing';
                         }
 
                         return null;
@@ -164,9 +168,9 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
                     // AdoptionFormFields.label(context, 'Phone Number'),
                     SizedBox(height: 7.h),
 
-                    AccountPhoneField(
+                    PhoneNumberField(
                       isRequired: true,
-                      borderColor:context.primary50,
+                      borderColor: context.primary50,
                       onChanged: (phone) {
                         _phoneNumber = phone;
                       },
@@ -185,9 +189,16 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
                       controller: _experienceController,
                       hintText: '',
                       maxLines: 1,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
                           return 'Please enter your experience with pets';
+                        }
+                        if (int.tryParse(value.trim()) == null) {
+                          return 'Please enter a number';
                         }
                         return null;
                       },
@@ -289,6 +300,40 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
     );
   }
 
+  String _currentUserName() {
+    final userId =
+        AuthHelper.getUserId() ??
+        Supabase.instance.client.auth.currentUser?.id;
+
+    if (userId != null) {
+      final snapshot = UserDataStore.read(userId);
+      if (snapshot != null) {
+        final name =
+            (UserDataStore.profileOf(snapshot)['full_name'] as String?)
+                ?.trim() ??
+            '';
+        if (name.isNotEmpty) {
+          return name;
+        }
+      }
+    }
+
+    final user = Supabase.instance.client.auth.currentUser;
+    if (user == null) {
+      return '';
+    }
+
+    final metadata = user.userMetadata;
+    final name =
+        metadata?['full_name']?.toString() ??
+        metadata?['name']?.toString() ??
+        metadata?['username']?.toString() ??
+        user.email?.split('@').first ??
+        '';
+
+    return name.trim();
+  }
+
   // =========================
   // Submit
   // =========================
@@ -314,10 +359,20 @@ class _AdoptionFormState extends State<_AdoptionFormView> {
       return;
     }
 
+    if (_phoneNumber == null || _phoneNumber!.number.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter your phone number')),
+      );
+      return;
+    }
+
     // Create adoption request
     final request = AdoptionRequestEntity(
       adoptionPostId: widget.adoptionPostId,
       requesterId: userId,
+      requesterName: _nameController.text.trim(),
+      requesterPhone: _phoneNumber!.completeNumber,
+      requesterCity: _cityController.text.trim(),
       message: _noteController.text.trim(),
       experience: _experienceController.text.trim(),
     );

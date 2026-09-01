@@ -7,7 +7,8 @@ class AdoptionPetCardEntity extends Equatable {
   final DateTime birthdate;
   final String location;
   final String? imageUrl;
-  final String?species;
+  final String? species;
+  final String? posterId;
 
   const AdoptionPetCardEntity({
     required this.adoptionPostId,
@@ -16,7 +17,8 @@ class AdoptionPetCardEntity extends Equatable {
     required this.birthdate,
     required this.location,
     this.imageUrl,
-    this.species
+    this.species,
+    this.posterId,
   });
 
   @override
@@ -27,6 +29,7 @@ class AdoptionPetCardEntity extends Equatable {
         birthdate,
         location,
         imageUrl,
-        species
+        species,
+        posterId,
       ];
 }

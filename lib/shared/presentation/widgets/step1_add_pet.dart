@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
+import 'package:rifq_v2/shared/presentation/widgets/phone_number_field.dart';
 
 class AddPetStepOne extends StatelessWidget {
   final TextEditingController nameCtrl;
@@ -12,7 +13,8 @@ class AddPetStepOne extends StatelessWidget {
   final String selectedGender;
   final bool showAdoptionFields;
   final TextEditingController? locationCtrl;
-  final TextEditingController? phoneCtrl;
+  final ValueChanged<String>? onPhoneChanged;
+  final String? initialPhone;
 
   const AddPetStepOne({
     super.key,
@@ -23,7 +25,8 @@ class AddPetStepOne extends StatelessWidget {
     required this.selectedGender,
     this.showAdoptionFields = false,
     this.locationCtrl,
-    this.phoneCtrl,
+    this.onPhoneChanged,
+    this.initialPhone,
   });
 
   Future<void> pickImage(BuildContext context) async {
@@ -230,35 +233,14 @@ class AddPetStepOne extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              Text('Phone Number', style: context.body1),
-              const SizedBox(height: 12),
-
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFFE5E5E5)),
-                ),
-                child: TextField(
-                  controller: phoneCtrl,
-                  keyboardType: TextInputType.phone,
-                  style: context.body2,
-                  decoration: InputDecoration(
-                    hintText: '05XXXXXXXX',
-                    hintStyle: context.body2.copyWith(
-                      color: context.neutral500,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 16,
-                    ),
-                    prefixIcon: Icon(
-                      CupertinoIcons.phone,
-                      color: context.neutral500,
-                    ),
-                  ),
-                ),
+              PhoneNumberField(
+                isRequired: true,
+                initialValue: initialPhone,
+                onChanged: (phone) {
+                  onPhoneChanged?.call(
+                    phone.number.isEmpty ? '' : phone.completeNumber,
+                  );
+                },
               ),
             ],
           ],

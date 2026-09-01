@@ -7,6 +7,12 @@ class AdoptionRequestEntity extends Equatable {
 
   final String requesterId;
 
+  final String? requesterName;
+
+  final String? requesterPhone;
+
+  final String? requesterCity;
+
   final String? message;
 
   final String? experience;
@@ -25,6 +31,9 @@ class AdoptionRequestEntity extends Equatable {
     this.id,
     required this.adoptionPostId,
     required this.requesterId,
+    this.requesterName,
+    this.requesterPhone,
+    this.requesterCity,
     this.message,
     this.experience,
     this.status = 'pending',
@@ -39,6 +48,9 @@ class AdoptionRequestEntity extends Equatable {
         id,
         adoptionPostId,
         requesterId,
+        requesterName,
+        requesterPhone,
+        requesterCity,
         message,
         experience,
         status,

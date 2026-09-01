@@ -14,29 +14,50 @@ class AdoptionPetListSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AdoptionCubit, AdoptionState>(
       builder: (context, state) {
-        if (state.isLoadingPosts) {
+        return RefreshIndicator(
+          color: context.primary,
+          onRefresh: () => context.read<AdoptionCubit>().refreshCurrentTab(),
+          child: _buildContent(context, state),
+        );
+      },
+    );
+  }
+
+  Widget _buildContent(BuildContext context, AdoptionState state) {
+        if (state.isLoadingPosts && state.adoptionPetCards.isEmpty) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (state.errorMessage != null) {
-          return Center(
-            child: Padding(
-              padding: EdgeInsets.all(24.w),
-              child: Text(state.errorMessage!, textAlign: TextAlign.center),
-            ),
+        if (state.errorMessage != null && state.adoptionPetCards.isEmpty) {
+          return ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: [
+              SizedBox(height: 160.h),
+              Padding(
+                padding: EdgeInsets.all(24.w),
+                child: Text(state.errorMessage!, textAlign: TextAlign.center),
+              ),
+            ],
           );
         }
 
         if (state.adoptionPetCards.isEmpty) {
-          return Center(
-            child: Text(
-              'No pets available for adoption',
-              style: context.body1.copyWith(color: context.neutral400),
-            ),
+          return ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: [
+              SizedBox(height: 160.h),
+              Center(
+                child: Text(
+                  'No pets available for adoption',
+                  style: context.body1.copyWith(color: context.neutral400),
+                ),
+              ),
+            ],
           );
         }
 
         return ListView.builder(
+          physics: const AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 100.h),
           itemCount: state.adoptionPetCards.length,
           itemBuilder: (context, index) {
@@ -144,8 +165,6 @@ class AdoptionPetListSection extends StatelessWidget {
             );
           },
         );
-      },
-    );
   }
 }
 

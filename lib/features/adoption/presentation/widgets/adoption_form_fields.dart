@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
@@ -40,12 +41,19 @@ class AdoptionFormFields {
     int maxLines = 1,
     int? maxLength,
     String? counterText,
+    TextInputType? keyboardType,
+    List<TextInputFormatter>? inputFormatters,
+    bool readOnly = false,
     String? Function(String?)? validator,
   }) {
     return TextFormField(
       controller: controller,
       maxLines: maxLines,
       maxLength: maxLength,
+      keyboardType: keyboardType,
+      inputFormatters: inputFormatters,
+      readOnly: readOnly,
+      enableInteractiveSelection: true,
       validator: validator,
       style: TextStyle(
         fontSize: 16.sp,

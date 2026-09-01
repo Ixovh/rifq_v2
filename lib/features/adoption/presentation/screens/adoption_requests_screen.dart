@@ -170,6 +170,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/features/adoption/presentation/cubit/adoption_cubit.dart';
 import 'package:rifq_v2/features/adoption/presentation/widgets/doption_request_card.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/service_locator/service_locator.dart';
 
 @RoutePage()
@@ -274,15 +275,23 @@ class AdoptionRequestsScreen extends StatelessWidget {
                           // Accept
                           // =========================
 
-                          onAccept: () {
-                            context
-                                .read<AdoptionCubit>()
-                                .updateAdoptionRequestStatus(
-                                  requestId: request.id,
-                                  adoptionPostId:
-                                      request.adoptionPostId,
-                                  status: 'accepted',
-                                );
+                          onAccept: () async {
+                            final cubit = context.read<AdoptionCubit>();
+                            await cubit.updateAdoptionRequestStatus(
+                              requestId: request.id,
+                              adoptionPostId: request.adoptionPostId,
+                              status: 'accepted',
+                            );
+
+                            if (!context.mounted) return;
+                            if (cubit.state.errorMessage != null) {
+                              context.showErrorToast(cubit.state.errorMessage!);
+                              return;
+                            }
+
+                            context.showSuccessToast(
+                              'Request accepted. The pet was transferred to the adopter.',
+                            );
                           },
 
                           // =========================

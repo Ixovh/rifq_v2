@@ -14,6 +14,7 @@ import 'package:rifq_v2/features/adoption/domain/use_cases/fetch_adoption_pet_de
 import 'package:rifq_v2/features/adoption/domain/use_cases/fetch_adoption_posts_use_case.dart';
 import 'package:rifq_v2/features/adoption/domain/use_cases/fetch_adoption_requests_use_case.dart';
 import 'package:rifq_v2/features/adoption/domain/use_cases/fetch_my_adoption_pet_cards_use_case.dart';
+import 'package:rifq_v2/features/adoption/domain/use_cases/fetch_my_adoption_request_status_use_case.dart';
 import 'package:rifq_v2/features/adoption/domain/use_cases/update_adoption_request_status_use_case.dart';
 
 part 'adoption_state.dart';
@@ -26,8 +27,9 @@ class AdoptionCubit extends Cubit<AdoptionState> {
   final CreateAdoptionRequestUseCase _createAdoptionRequestUseCase;
   final FetchMyAdoptionPetCardsUseCase _fetchMyAdoptionPetCardsUseCase;
   final DeleteAdoptionPostUseCase _deleteAdoptionPostUseCase;
-final FetchAdoptionRequestsUseCase _fetchAdoptionRequestsUseCase;
-final UpdateAdoptionRequestStatusUseCase _updateAdoptionRequestStatusUseCase;
+  final FetchAdoptionRequestsUseCase _fetchAdoptionRequestsUseCase;
+  final UpdateAdoptionRequestStatusUseCase _updateAdoptionRequestStatusUseCase;
+  final FetchMyAdoptionRequestStatusUseCase _fetchMyAdoptionRequestStatusUseCase;
 
   AdoptionCubit(
     this._createAdoptionPostUseCase,
@@ -36,9 +38,9 @@ final UpdateAdoptionRequestStatusUseCase _updateAdoptionRequestStatusUseCase;
     this._createAdoptionRequestUseCase,
     this._fetchMyAdoptionPetCardsUseCase,
     this._deleteAdoptionPostUseCase,
-      this._fetchAdoptionRequestsUseCase,
-  this._updateAdoptionRequestStatusUseCase,
-
+    this._fetchAdoptionRequestsUseCase,
+    this._updateAdoptionRequestStatusUseCase,
+    this._fetchMyAdoptionRequestStatusUseCase,
   ) : super(const AdoptionState());
 
   // =========================
@@ -48,15 +50,25 @@ final UpdateAdoptionRequestStatusUseCase _updateAdoptionRequestStatusUseCase;
 void changeTab(int index) {
   emit(state.copyWith(selectedTabIndex: index));
 
-  if (index == 1 && state.myAdoptionPets.isEmpty) {
+  if (index == 1) {
     getMyAdoptionPets();
+  } else {
+    getAdoptionPetCards();
   }
 }
 
-  Future<void> getMyAdoptionPets() async {
+  Future<void> refreshCurrentTab() async {
+    if (state.selectedTabIndex == 1) {
+      await getMyAdoptionPets(silent: true);
+    } else {
+      await getAdoptionPetCards(silent: true);
+    }
+  }
+
+  Future<void> getMyAdoptionPets({bool silent = false}) async {
   emit(
     state.copyWith(
-      isLoadingMyAdoptionPets: true,
+      isLoadingMyAdoptionPets: silent ? state.isLoadingMyAdoptionPets : true,
       errorMessage: null,
     ),
   );
@@ -102,8 +114,13 @@ void changeTab(int index) {
   // Get Adoption Pet Cards
   // =========================
 
-  Future<void> getAdoptionPetCards() async {
-    emit(state.copyWith(isLoadingPosts: true, errorMessage: null));
+  Future<void> getAdoptionPetCards({bool silent = false}) async {
+    emit(
+      state.copyWith(
+        isLoadingPosts: silent ? state.isLoadingPosts : true,
+        errorMessage: null,
+      ),
+    );
 
     final result = await _fetchAdoptionPetCardsUseCase();
 
@@ -140,6 +157,15 @@ void changeTab(int index) {
     final result = await _fetchAdoptionPetDetailsUseCase(
       adoptionPostId: adoptionPostId,
     );
+    final myStatusResult = await _fetchMyAdoptionRequestStatusUseCase(
+      adoptionPostId: adoptionPostId,
+    );
+
+    String? myRequestStatus;
+    myStatusResult.when(
+      (status) => myRequestStatus = status,
+      (_) {},
+    );
 
     result.when(
       (details) {
@@ -147,8 +173,8 @@ void changeTab(int index) {
           state.copyWith(
             isLoadingPetDetails: false,
             petDetails: details,
+            myRequestStatus: myRequestStatus,
             errorMessage: null,
-            
           ),
         );
       },
@@ -188,8 +214,7 @@ void changeTab(int index) {
             createdPost: post,
           ),
         );
-
-        // لا نحط getAdoptionPetCards هنا
+        getMyAdoptionPets(silent: true);
       },
       (error) {
         emit(
@@ -215,14 +240,15 @@ void changeTab(int index) {
 
   result.when(
     (request) {
-      emit(
-        state.copyWith(
-          isCreatingRequest: false,
-          isRequestCreated: true,
-          createdRequest: request,
-          errorMessage: null,
-        ),
-      );
+        emit(
+          state.copyWith(
+            isCreatingRequest: false,
+            isRequestCreated: true,
+            createdRequest: request,
+            myRequestStatus: request.status,
+            errorMessage: null,
+          ),
+        );
     },
     (error) {
       emit(
@@ -271,11 +297,23 @@ Future<void> deleteAdoptionPost({
           (pet) => pet.adoptionPostId != adoptionPostId,
         )
         .toList();
+    final updatedCards = state.adoptionPetCards
+        .where(
+          (pet) => pet.adoptionPostId != adoptionPostId,
+        )
+        .toList();
+    final updatedAllCards = state.allAdoptionPetCards
+        .where(
+          (pet) => pet.adoptionPostId != adoptionPostId,
+        )
+        .toList();
 
     emit(
       state.copyWith(
         isDeletingPost: false,
         myAdoptionPets: updatedPets,
+        adoptionPetCards: updatedCards,
+        allAdoptionPetCards: updatedAllCards,
         errorMessage: null,
       ),
     );
@@ -357,6 +395,23 @@ Future<void> updateAdoptionRequestStatus({
             message: request.message,
             experience: request.experience,
             status: status,
+            createdAt: request.createdAt,
+          );
+        }
+
+        if (status == 'accepted' &&
+            request.status.toLowerCase() == 'pending') {
+          return AdoptionRequestCardEntity(
+            id: request.id,
+            adoptionPostId: request.adoptionPostId,
+            requesterId: request.requesterId,
+            fullName: request.fullName,
+            avatarUrl: request.avatarUrl,
+            phoneNumber: request.phoneNumber,
+            location: request.location,
+            message: request.message,
+            experience: request.experience,
+            status: 'rejected',
             createdAt: request.createdAt,
           );
         }

@@ -25,10 +25,17 @@ class AdoptionRequestCardModel extends AdoptionRequestCardEntity {
       adoptionPostId: json['adoption_post_id'] as String,
       requesterId: json['requester_id'] as String,
 
-      fullName: profile?['full_name'] as String?,
+      fullName: (json['requester_name'] as String?)?.trim().isNotEmpty == true
+          ? json['requester_name'] as String
+          : profile?['full_name'] as String?,
       avatarUrl: profile?['avatar_url'] as String?,
-      phoneNumber: profile?['phone_number'] as String?,
-      location: profile?['location'] as String?,
+      phoneNumber:
+          (json['requester_phone'] as String?)?.trim().isNotEmpty == true
+          ? json['requester_phone'] as String
+          : profile?['phone_number'] as String?,
+      location: (json['requester_city'] as String?)?.trim().isNotEmpty == true
+          ? json['requester_city'] as String
+          : profile?['location'] as String?,
 
       message: json['message'] as String?,
       experience: json['experience'] as String?,

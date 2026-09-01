@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/features/adoption/presentation/cubit/adoption_cubit.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
-import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 
 
 class AdoptionTabs extends StatelessWidget {
