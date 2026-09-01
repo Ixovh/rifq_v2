@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rifq_v2/features/adoption/presentation/screens/adoption_feature_screen.dart';
 import 'package:rifq_v2/features/home/presentation/screens/home_feature_screen.dart';
+import 'package:rifq_v2/features/hotel/presentation/screens/hotel_list_screen.dart';
+import 'package:rifq_v2/shared/presentation/widgets/coming_soon_placeholder.dart';
 
 import 'nav_state.dart';
 
 class NavCubit extends Cubit<NavState> {
   List<Widget> screens = [
     HomeScreen(),
-    // ClinicScreen(),
-    // HotelHomeScreen(),
-     const SizedBox(), // Health - مؤقتًا
-  const SizedBox(),
-const AdoptionFeatureScreen(),  ];
+    // ClinicScreen() — Health tab, not built yet; placeholder keeps index 2 = Hotel
+    const ComingSoonPlaceholder(),
+    HotelListScreen(),
+    const AdoptionFeatureScreen(),
+  ];
   int currentIndex = 0;
   bool isAiActive = false;
 

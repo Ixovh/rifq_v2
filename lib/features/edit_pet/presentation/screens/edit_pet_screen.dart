@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/account_outlined_field.dart';
 import 'package:rifq_v2/shared/presentation/widgets/app_pickers.dart';
 import 'package:rifq_v2/features/edit_pet/presentation/cubit/edit_pet_cubit.dart';
@@ -17,6 +18,7 @@ import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/presentation/widgets/container_button.dart';
 import 'package:rifq_v2/shared/presentation/widgets/lottie_loding.dart';
 import 'package:rifq_v2/shared/storage_service/profile_image_cache.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_back_icon.dart';
 
 @RoutePage()
 class EditPetScreen extends StatelessWidget {
@@ -59,7 +61,9 @@ class _EditPetViewState extends State<_EditPetView> {
       setState(() => _pickedImage = compressed);
     } catch (_) {
       if (!mounted) return;
-      context.showErrorToast('Could not pick image');
+      context.showErrorToast(
+        AppLocalizations.of(context)!.common_couldNotPickImage,
+      );
     }
   }
 
@@ -73,7 +77,9 @@ class _EditPetViewState extends State<_EditPetView> {
             children: [
               ListTile(
                 leading: const Icon(Icons.photo_library_outlined),
-                title: const Text('Choose from gallery'),
+                title: Text(
+                  AppLocalizations.of(context)!.common_chooseFromGallery,
+                ),
                 onTap: () {
                   Navigator.pop(sheetContext);
                   _pickPhoto(ImageSource.gallery);
@@ -81,7 +87,7 @@ class _EditPetViewState extends State<_EditPetView> {
               ),
               ListTile(
                 leading: const Icon(Icons.camera_alt_outlined),
-                title: const Text('Take a photo'),
+                title: Text(AppLocalizations.of(context)!.common_takePhoto),
                 onTap: () {
                   Navigator.pop(sheetContext);
                   _pickPhoto(ImageSource.camera);
@@ -98,7 +104,7 @@ class _EditPetViewState extends State<_EditPetView> {
     final picked = await showAppDatePicker(
       context: context,
       selectedDate: cubit.birthdate,
-      title: 'Choose date of birth',
+      title: AppLocalizations.of(context)!.common_chooseDateOfBirth,
     );
     if (picked != null) {
       cubit.setBirthdate(picked);
@@ -113,7 +119,9 @@ class _EditPetViewState extends State<_EditPetView> {
     return BlocConsumer<EditPetCubit, EditPetState>(
       listener: (context, state) {
         if (state is EditPetUpdateSuccess) {
-          context.showSuccessToast('Pet updated');
+          context.showSuccessToast(
+            AppLocalizations.of(context)!.editPet_updated,
+          );
           context.router.maybePop(true);
         }
         if (state is EditPetError) {
@@ -130,7 +138,7 @@ class _EditPetViewState extends State<_EditPetView> {
             body: Center(
               child: TextButton(
                 onPressed: () => context.router.maybePop(),
-                child: const Text('Go back'),
+                child: Text(AppLocalizations.of(context)!.common_goBack),
               ),
             ),
           );
@@ -148,7 +156,7 @@ class _EditPetViewState extends State<_EditPetView> {
             body: Center(
               child: TextButton(
                 onPressed: () => cubit.loadPet(widget.petId),
-                child: const Text('Retry'),
+                child: Text(AppLocalizations.of(context)!.common_retry),
               ),
             ),
           );
@@ -170,15 +178,11 @@ class _EditPetViewState extends State<_EditPetView> {
                       children: [
                         IconButton(
                           onPressed: () => context.router.maybePop(),
-                          icon: Icon(
-                            Icons.arrow_back_ios_new,
-                            size: 20.sp,
-                            color: context.neutral1000,
-                          ),
+                          icon: AppBackIcon(color: context.neutral1000, size: 20.sp),
                         ),
                         Expanded(
                           child: Text(
-                            'Edit Pet',
+                            AppLocalizations.of(context)!.editPet_title,
                             textAlign: TextAlign.center,
                             style: context.h4.copyWith(
                               color: context.primary300,
@@ -263,11 +267,15 @@ class _EditPetViewState extends State<_EditPetView> {
                           ),
                           SizedBox(height: 48.h),
                           AccountOutlinedField(
-                            label: "Pet's Name",
+                            label: AppLocalizations.of(
+                              context,
+                            )!.editPet_nameLabel,
                             controller: cubit.nameController,
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
-                                return 'Name is required';
+                                return AppLocalizations.of(
+                                  context,
+                                )!.common_nameRequired;
                               }
                               return null;
                             },
@@ -281,18 +289,24 @@ class _EditPetViewState extends State<_EditPetView> {
                           ),
                           SizedBox(height: 42.h),
                           AccountOutlinedField(
-                            label: "Pet's breed",
+                            label: AppLocalizations.of(
+                              context,
+                            )!.editPet_breedLabel,
                             controller: cubit.breedController,
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
-                                return 'Breed is required';
+                                return AppLocalizations.of(
+                                  context,
+                                )!.editPet_breedRequired;
                               }
                               return null;
                             },
                           ),
                           SizedBox(height: 42.h),
                           AccountOutlinedField(
-                            label: "Pet's weight",
+                            label: AppLocalizations.of(
+                              context,
+                            )!.editPet_weightLabel,
                             controller: cubit.weightController,
                             keyboardType: const TextInputType.numberWithOptions(
                               decimal: true,
@@ -311,7 +325,7 @@ class _EditPetViewState extends State<_EditPetView> {
                   Padding(
                     padding: EdgeInsets.fromLTRB(18.w, 8.h, 18.w, 24.h),
                     child: ContainerButton(
-                      label: 'Save',
+                      label: AppLocalizations.of(context)!.common_save,
                       containerColor: context.primary300,
                       textColor: context.neutral100,
                       fontSize: 20,
@@ -319,6 +333,12 @@ class _EditPetViewState extends State<_EditPetView> {
                       onTap: () => cubit.savePet(
                         petId: widget.petId,
                         photoFile: _pickedImage,
+                        ageRequiredMessage: AppLocalizations.of(
+                          context,
+                        )!.editPet_ageRequired,
+                        invalidWeightMessage: AppLocalizations.of(
+                          context,
+                        )!.editPet_invalidWeight,
                       ),
                     ),
                   ),
@@ -343,7 +363,7 @@ class _BirthdateField extends StatelessWidget {
     final hasDate = birthdate != null;
     final label = hasDate
         ? DateFormat('dd-MM-yyyy').format(birthdate!)
-        : 'Choose Date';
+        : AppLocalizations.of(context)!.common_chooseDate;
 
     return Stack(
       clipBehavior: Clip.none,
@@ -383,14 +403,14 @@ class _BirthdateField extends StatelessWidget {
             ),
           ),
         ),
-        Positioned(
-          left: 22.w,
+        PositionedDirectional(
+          start: 22.w,
           top: -10.h,
           child: Container(
             color: context.neutral100,
             padding: EdgeInsets.symmetric(horizontal: 4.w),
             child: Text(
-              "Pet's age",
+              AppLocalizations.of(context)!.editPet_ageLabel,
               style: context.body2.copyWith(
                 color: context.neutral700,
                 fontWeight: FontWeight.w400,

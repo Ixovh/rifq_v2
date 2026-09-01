@@ -5,18 +5,28 @@ import 'package:rifq_v2/features/account/presentation/screens/account_screen.dar
 import 'package:rifq_v2/features/account/presentation/screens/edit_account_screen.dart';
 import 'package:rifq_v2/features/account/presentation/screens/pet_profile_screen.dart';
 import 'package:rifq_v2/features/add_pet/presentation/screens/add_pet_screen.dart';
-import 'package:rifq_v2/features/adoption/data/models/adoption_pet_card_model.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_pet_card_entity.dart';
 import 'package:rifq_v2/features/adoption/presentation/widgets/adoption_form_widget.dart';
+import 'package:rifq_v2/features/booking/domain/entities/booking_draft_entity.dart';
+import 'package:rifq_v2/features/booking/domain/entities/hotel_booking_entity.dart';
+import 'package:rifq_v2/features/booking/presentation/screens/booking_details_screen.dart';
+import 'package:rifq_v2/features/booking/presentation/screens/confirm_and_pay_screen.dart';
+import 'package:rifq_v2/features/booking/presentation/screens/payment_success_screen.dart';
+import 'package:rifq_v2/features/booking/presentation/screens/receipt_screen.dart';
+import 'package:rifq_v2/features/hotel/domain/entities/hotel_detail_entity.dart';
 import 'package:rifq_v2/features/edit_pet/presentation/screens/edit_pet_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/auth_screen.dart';
-import 'package:rifq_v2/features/auth/presentation/screens/check_email_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/sends_to_email_screen.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/welcome_screen.dart';
 import 'package:rifq_v2/features/home/presentation/screens/home_feature_screen.dart';
+import 'package:rifq_v2/features/home_boarding/presentation/screens/request_sent_screen.dart';
+import 'package:rifq_v2/features/home_boarding/presentation/screens/sitter_detail_screen.dart';
+import 'package:rifq_v2/features/hotel/presentation/screens/hotel_detail_screen.dart';
+import 'package:rifq_v2/features/hotel/presentation/screens/hotel_list_screen.dart';
 import 'package:rifq_v2/features/nav/presentation/screens/nav_screen.dart';
 import 'package:rifq_v2/features/onboarding/presentation/screens/onboarding_feature_screen.dart';
+import 'package:rifq_v2/features/search/presentation/screens/search_screen.dart';
 import 'package:rifq_v2/features/splash/presentation/screens/choose_path.dart';
 import 'package:rifq_v2/features/splash/presentation/screens/splash_screen.dart';
 import 'package:rifq_v2/shared/constants/app_enums.dart';
@@ -46,16 +56,17 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: PetProfileRoute.page, path: '/pet-profile/:petId'),
     AutoRoute(page: EditPetRoute.page, path: '/edit-pet/:petId'),
     AutoRoute(page: EditAccountRoute.page, path: '/edit-account'),
- AutoRoute(
-  page: PetDetailsRoute.page,
-  path: '/pet-details',
-),
-AutoRoute(
-  page: AdoptionFormRoute.page,
-  path: '/adoption-form',
-),
-AutoRoute(
-  page: AdoptionRequestsRoute.page,
-),
+    AutoRoute(page: PetDetailsRoute.page, path: '/pet-details'),
+    AutoRoute(page: AdoptionFormRoute.page, path: '/adoption-form'),
+    AutoRoute(page: AdoptionRequestsRoute.page),
+    AutoRoute(page: HotelListRoute.page, path: '/hotel'),
+    AutoRoute(page: HotelDetailRoute.page, path: '/hotel-detail/:hotelId'),
+    AutoRoute(page: SitterDetailRoute.page, path: '/sitter-detail/:sitterId'),
+    AutoRoute(page: SearchRoute.page, path: '/search'),
+    AutoRoute(page: BookingDetailsRoute.page, path: '/booking-details'),
+    AutoRoute(page: ConfirmAndPayRoute.page, path: '/confirm-and-pay'),
+    AutoRoute(page: PaymentSuccessRoute.page, path: '/payment-success'),
+    AutoRoute(page: ReceiptRoute.page, path: '/receipt'),
+    AutoRoute(page: RequestSentRoute.page, path: '/request-sent'),
   ];
 }

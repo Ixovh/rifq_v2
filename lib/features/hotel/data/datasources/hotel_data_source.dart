@@ -1,0 +1,185 @@
+import 'package:geolocator/geolocator.dart';
+import 'package:injectable/injectable.dart';
+import 'package:multiple_result/multiple_result.dart';
+import 'package:rifq_v2/features/hotel/data/models/hotel_detail_model.dart';
+import 'package:rifq_v2/features/hotel/data/models/hotel_list_item_model.dart';
+import 'package:rifq_v2/features/hotel/domain/entities/hotel_detail_entity.dart';
+import 'package:rifq_v2/features/hotel/domain/entities/hotel_entity.dart';
+import 'package:rifq_v2/shared/constants/app_enums.dart';
+import 'package:rifq_v2/shared/errors/custome_exception.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+abstract class BaseHotelDataSource {
+  Future<Result<List<HotelListItemEntity>, Object>> getHotels({
+    SortOption sortOption = SortOption.recommended,
+    String? searchQuery,
+  });
+
+  Future<Result<HotelDetailEntity, Object>> getHotelDetail({
+    required String hotelId,
+  });
+}
+
+@LazySingleton(as: BaseHotelDataSource)
+class HotelDataSource implements BaseHotelDataSource {
+  const HotelDataSource({required SupabaseClient supabase})
+    : _supabase = supabase;
+
+  final SupabaseClient _supabase;
+
+  static const _hotelListSelect =
+      'id, name, rating, review_count, location_text, latitude, longitude, '
+      'profiles!owner_id(full_name), '
+      'hotel_images(id, public_url, display_order, is_primary), '
+      'hotel_rooms(id, room_type, price_per_night, size_label, includes, total_rooms), '
+      'hotel_services(id, name, price, price_unit)';
+
+  static const _hotelDetailSelect =
+      'id, name, location_text, latitude, longitude, description, '
+      'profiles!owner_id(full_name), '
+      'hotel_images(id, public_url, display_order, is_primary), '
+      'hotel_rooms(id, room_type, price_per_night, size_label, includes, total_rooms), '
+      'hotel_services(id, name, price, price_unit), '
+      'hotel_facilities(id, category, label), '
+      'hotel_rules(id, rule_text, display_order)';
+
+  @override
+  Future<Result<List<HotelListItemEntity>, Object>> getHotels({
+    SortOption sortOption = SortOption.recommended,
+    String? searchQuery,
+  }) async {
+    try {
+      final rows = await _supabase
+          .from('pet_hotels')
+          .select(_hotelListSelect)
+          .eq('status', 'active');
+
+      final position = await _currentPositionOrNull();
+
+      var hotels = rows.map((row) {
+        final model = HotelListItemModel.fromJson(row);
+        final distanceKm = _distanceKmOrNull(
+          from: position,
+          toLat: model.latitude,
+          toLng: model.longitude,
+        );
+        return model.toEntity(distanceKm: distanceKm);
+      }).toList();
+
+      hotels = _applySort(hotels, sortOption);
+
+      final query = searchQuery?.trim().toLowerCase();
+      if (query != null && query.isNotEmpty) {
+        hotels = hotels
+            .where(
+              (h) =>
+                  h.name.toLowerCase().contains(query) ||
+                  h.locationText.toLowerCase().contains(query),
+            )
+            .toList();
+      }
+
+      return Success(hotels);
+    } catch (e) {
+      return Result.error(CatchErrorMessage(error: e).getWriteMessage());
+    }
+  }
+
+  List<HotelListItemEntity> _applySort(
+    List<HotelListItemEntity> hotels,
+    SortOption sortOption,
+  ) {
+    final sorted = [...hotels];
+    switch (sortOption) {
+      case SortOption.nearest:
+        sorted.sort((a, b) {
+          if (a.distanceKm == null && b.distanceKm == null) return 0;
+          if (a.distanceKm == null) return 1;
+          if (b.distanceKm == null) return -1;
+          return a.distanceKm!.compareTo(b.distanceKm!);
+        });
+      case SortOption.topRated:
+        sorted.sort((a, b) => b.rating.compareTo(a.rating));
+      case SortOption.lowestPrice:
+        sorted.sort((a, b) {
+          if (a.startingPrice == null && b.startingPrice == null) return 0;
+          if (a.startingPrice == null) return 1;
+          if (b.startingPrice == null) return -1;
+          return a.startingPrice!.compareTo(b.startingPrice!);
+        });
+      case SortOption.recommended:
+      case SortOption.mostExperienced:
+        break;
+    }
+    return sorted;
+  }
+
+  @override
+  Future<Result<HotelDetailEntity, Object>> getHotelDetail({
+    required String hotelId,
+  }) async {
+    try {
+      final row = await _supabase
+          .from('pet_hotels')
+          .select(_hotelDetailSelect)
+          .eq('id', hotelId)
+          .eq('status', 'active')
+          .single();
+
+      final model = HotelDetailModel.fromJson(row);
+      final position = await _currentPositionOrNull();
+      return Success(
+        model.toEntity(
+          distanceKm: _distanceKmOrNull(
+            from: position,
+            toLat: model.latitude,
+            toLng: model.longitude,
+          ),
+        ),
+      );
+    } catch (e) {
+      return Result.error(CatchErrorMessage(error: e).getWriteMessage());
+    }
+  }
+
+  double? _distanceKmOrNull({
+    required Position? from,
+    required double? toLat,
+    required double? toLng,
+  }) {
+    if (from == null || toLat == null || toLng == null) return null;
+    return Geolocator.distanceBetween(
+          from.latitude,
+          from.longitude,
+          toLat,
+          toLng,
+        ) /
+        1000;
+  }
+
+  /// Best-effort device position for the list screen's distance column.
+  /// Never throws — permission denial or a disabled location service just
+  /// means every hotel's distance is omitted, not an error state.
+  Future<Position?> _currentPositionOrNull() async {
+    try {
+      if (!await Geolocator.isLocationServiceEnabled()) return null;
+
+      var permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        return null;
+      }
+
+      return await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.low,
+        ),
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+}

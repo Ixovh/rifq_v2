@@ -272,6 +272,53 @@ class AuthRouteArgs {
 }
 
 /// generated route for
+/// [BookingDetailsScreen]
+class BookingDetailsRoute extends PageRouteInfo<BookingDetailsRouteArgs> {
+  BookingDetailsRoute({
+    Key? key,
+    required HotelDetailEntity hotel,
+    List<PageRouteInfo>? children,
+  }) : super(
+         BookingDetailsRoute.name,
+         args: BookingDetailsRouteArgs(key: key, hotel: hotel),
+         initialChildren: children,
+       );
+
+  static const String name = 'BookingDetailsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<BookingDetailsRouteArgs>();
+      return BookingDetailsScreen(key: args.key, hotel: args.hotel);
+    },
+  );
+}
+
+class BookingDetailsRouteArgs {
+  const BookingDetailsRouteArgs({this.key, required this.hotel});
+
+  final Key? key;
+
+  final HotelDetailEntity hotel;
+
+  @override
+  String toString() {
+    return 'BookingDetailsRouteArgs{key: $key, hotel: $hotel}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! BookingDetailsRouteArgs) return false;
+    return key == other.key && hotel == other.hotel;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ hotel.hashCode;
+}
+
+/// generated route for
 /// [CheckEmailScreen]
 class CheckEmailRoute extends PageRouteInfo<CheckEmailRouteArgs> {
   CheckEmailRoute({
@@ -332,6 +379,53 @@ class ChoosePathRoute extends PageRouteInfo<void> {
       return const ChoosePathScreen();
     },
   );
+}
+
+/// generated route for
+/// [ConfirmAndPayScreen]
+class ConfirmAndPayRoute extends PageRouteInfo<ConfirmAndPayRouteArgs> {
+  ConfirmAndPayRoute({
+    Key? key,
+    required BookingDraftEntity draft,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ConfirmAndPayRoute.name,
+         args: ConfirmAndPayRouteArgs(key: key, draft: draft),
+         initialChildren: children,
+       );
+
+  static const String name = 'ConfirmAndPayRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ConfirmAndPayRouteArgs>();
+      return ConfirmAndPayScreen(key: args.key, draft: args.draft);
+    },
+  );
+}
+
+class ConfirmAndPayRouteArgs {
+  const ConfirmAndPayRouteArgs({this.key, required this.draft});
+
+  final Key? key;
+
+  final BookingDraftEntity draft;
+
+  @override
+  String toString() {
+    return 'ConfirmAndPayRouteArgs{key: $key, draft: $draft}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ConfirmAndPayRouteArgs) return false;
+    return key == other.key && draft == other.draft;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ draft.hashCode;
 }
 
 /// generated route for
@@ -406,6 +500,69 @@ class HomeRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const HomeScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [HotelDetailScreen]
+class HotelDetailRoute extends PageRouteInfo<HotelDetailRouteArgs> {
+  HotelDetailRoute({
+    Key? key,
+    required String hotelId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         HotelDetailRoute.name,
+         args: HotelDetailRouteArgs(key: key, hotelId: hotelId),
+         initialChildren: children,
+       );
+
+  static const String name = 'HotelDetailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<HotelDetailRouteArgs>();
+      return HotelDetailScreen(key: args.key, hotelId: args.hotelId);
+    },
+  );
+}
+
+class HotelDetailRouteArgs {
+  const HotelDetailRouteArgs({this.key, required this.hotelId});
+
+  final Key? key;
+
+  final String hotelId;
+
+  @override
+  String toString() {
+    return 'HotelDetailRouteArgs{key: $key, hotelId: $hotelId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! HotelDetailRouteArgs) return false;
+    return key == other.key && hotelId == other.hotelId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ hotelId.hashCode;
+}
+
+/// generated route for
+/// [HotelListScreen]
+class HotelListRoute extends PageRouteInfo<void> {
+  const HotelListRoute({List<PageRouteInfo>? children})
+    : super(HotelListRoute.name, initialChildren: children);
+
+  static const String name = 'HotelListRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const HotelListScreen();
     },
   );
 }
@@ -528,6 +685,56 @@ class OtpRouteArgs {
 }
 
 /// generated route for
+/// [PaymentSuccessScreen]
+class PaymentSuccessRoute extends PageRouteInfo<PaymentSuccessRouteArgs> {
+  PaymentSuccessRoute({
+    Key? key,
+    required BookingConfirmationEntity confirmation,
+    List<PageRouteInfo>? children,
+  }) : super(
+         PaymentSuccessRoute.name,
+         args: PaymentSuccessRouteArgs(key: key, confirmation: confirmation),
+         initialChildren: children,
+       );
+
+  static const String name = 'PaymentSuccessRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<PaymentSuccessRouteArgs>();
+      return PaymentSuccessScreen(
+        key: args.key,
+        confirmation: args.confirmation,
+      );
+    },
+  );
+}
+
+class PaymentSuccessRouteArgs {
+  const PaymentSuccessRouteArgs({this.key, required this.confirmation});
+
+  final Key? key;
+
+  final BookingConfirmationEntity confirmation;
+
+  @override
+  String toString() {
+    return 'PaymentSuccessRouteArgs{key: $key, confirmation: $confirmation}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PaymentSuccessRouteArgs) return false;
+    return key == other.key && confirmation == other.confirmation;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ confirmation.hashCode;
+}
+
+/// generated route for
 /// [PetDetailsScreen]
 class PetDetailsRoute extends PageRouteInfo<PetDetailsRouteArgs> {
   PetDetailsRoute({
@@ -622,6 +829,69 @@ class PetProfileRouteArgs {
 }
 
 /// generated route for
+/// [ReceiptScreen]
+class ReceiptRoute extends PageRouteInfo<ReceiptRouteArgs> {
+  ReceiptRoute({
+    Key? key,
+    required BookingConfirmationEntity confirmation,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ReceiptRoute.name,
+         args: ReceiptRouteArgs(key: key, confirmation: confirmation),
+         initialChildren: children,
+       );
+
+  static const String name = 'ReceiptRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ReceiptRouteArgs>();
+      return ReceiptScreen(key: args.key, confirmation: args.confirmation);
+    },
+  );
+}
+
+class ReceiptRouteArgs {
+  const ReceiptRouteArgs({this.key, required this.confirmation});
+
+  final Key? key;
+
+  final BookingConfirmationEntity confirmation;
+
+  @override
+  String toString() {
+    return 'ReceiptRouteArgs{key: $key, confirmation: $confirmation}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ReceiptRouteArgs) return false;
+    return key == other.key && confirmation == other.confirmation;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ confirmation.hashCode;
+}
+
+/// generated route for
+/// [RequestSentScreen]
+class RequestSentRoute extends PageRouteInfo<void> {
+  const RequestSentRoute({List<PageRouteInfo>? children})
+    : super(RequestSentRoute.name, initialChildren: children);
+
+  static const String name = 'RequestSentRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RequestSentScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [ResetPasswordScreen]
 class ResetPasswordRoute extends PageRouteInfo<void> {
   const ResetPasswordRoute({List<PageRouteInfo>? children})
@@ -638,6 +908,53 @@ class ResetPasswordRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [SearchScreen]
+class SearchRoute extends PageRouteInfo<SearchRouteArgs> {
+  SearchRoute({
+    Key? key,
+    required BoardingTab initialTab,
+    List<PageRouteInfo>? children,
+  }) : super(
+         SearchRoute.name,
+         args: SearchRouteArgs(key: key, initialTab: initialTab),
+         initialChildren: children,
+       );
+
+  static const String name = 'SearchRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<SearchRouteArgs>();
+      return SearchScreen(key: args.key, initialTab: args.initialTab);
+    },
+  );
+}
+
+class SearchRouteArgs {
+  const SearchRouteArgs({this.key, required this.initialTab});
+
+  final Key? key;
+
+  final BoardingTab initialTab;
+
+  @override
+  String toString() {
+    return 'SearchRouteArgs{key: $key, initialTab: $initialTab}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! SearchRouteArgs) return false;
+    return key == other.key && initialTab == other.initialTab;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ initialTab.hashCode;
+}
+
+/// generated route for
 /// [SendsToEmailScreen]
 class SendsToEmailRoute extends PageRouteInfo<void> {
   const SendsToEmailRoute({List<PageRouteInfo>? children})
@@ -651,6 +968,53 @@ class SendsToEmailRoute extends PageRouteInfo<void> {
       return const SendsToEmailScreen();
     },
   );
+}
+
+/// generated route for
+/// [SitterDetailScreen]
+class SitterDetailRoute extends PageRouteInfo<SitterDetailRouteArgs> {
+  SitterDetailRoute({
+    Key? key,
+    required String sitterId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         SitterDetailRoute.name,
+         args: SitterDetailRouteArgs(key: key, sitterId: sitterId),
+         initialChildren: children,
+       );
+
+  static const String name = 'SitterDetailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<SitterDetailRouteArgs>();
+      return SitterDetailScreen(key: args.key, sitterId: args.sitterId);
+    },
+  );
+}
+
+class SitterDetailRouteArgs {
+  const SitterDetailRouteArgs({this.key, required this.sitterId});
+
+  final Key? key;
+
+  final String sitterId;
+
+  @override
+  String toString() {
+    return 'SitterDetailRouteArgs{key: $key, sitterId: $sitterId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! SitterDetailRouteArgs) return false;
+    return key == other.key && sitterId == other.sitterId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ sitterId.hashCode;
 }
 
 /// generated route for

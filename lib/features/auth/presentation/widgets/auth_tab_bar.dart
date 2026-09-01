@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
 class AuthTabBar extends StatelessWidget {
@@ -25,9 +26,9 @@ class AuthTabBar extends StatelessWidget {
           color: context.neutral100,
           borderRadius: BorderRadius.circular(50.r),
         ),
-        tabs: const [
-          Tab(text: 'Log in'),
-          Tab(text: 'Sign up'),
+        tabs: [
+          Tab(text: AppLocalizations.of(context)!.auth_loginTab),
+          Tab(text: AppLocalizations.of(context)!.auth_signupTab),
         ],
       ),
     );

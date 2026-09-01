@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rifq_v2/features/account/domain/entities/account_entity.dart';
+import 'package:rifq_v2/features/account/presentation/widgets/pet_label_helpers.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
 class AccountPetCard extends StatelessWidget {
@@ -19,13 +21,14 @@ class AccountPetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: fullWidth ? double.infinity : 256.w,
-      margin: EdgeInsets.only(
-        right: fullWidth ? 0 : 12.w,
+      margin: EdgeInsetsDirectional.only(
+        end: fullWidth ? 0 : 12.w,
         bottom: fullWidth ? 12.h : 0,
       ),
-      padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 14.h),
+      padding: EdgeInsetsDirectional.fromSTEB(16.w, 12.h, 16.w, 14.h),
       decoration: BoxDecoration(
         color: const Color(0xFFFBFCFF),
         borderRadius: BorderRadius.circular(20.r),
@@ -46,7 +49,7 @@ class AccountPetCard extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Pet Profile',
+                l10n.petProfile_title,
                 style: context.body3.copyWith(
                   color: context.neutral500,
                   fontWeight: FontWeight.w500,
@@ -63,7 +66,7 @@ class AccountPetCard extends StatelessWidget {
                     border: Border.all(color: context.primary300),
                   ),
                   child: Text(
-                    'List for Adoption',
+                    l10n.account_listedForAdoption,
                     style: context.body3.copyWith(
                       color: context.primary300,
                       fontWeight: FontWeight.w500,
@@ -135,6 +138,7 @@ class AccountPetCard extends StatelessWidget {
                       Icons.chevron_right,
                       color: context.neutral1000,
                       size: 20.sp,
+                      textDirection: Directionality.of(context),
                     ),
                   ],
                 ),
@@ -145,13 +149,20 @@ class AccountPetCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _MetaColumn(label: 'Gender', value: _capitalize(pet.gender)),
-              _MetaColumn(label: 'Age', value: pet.ageLabel, alignCenter: true),
+              _MetaColumn(
+                label: l10n.common_gender,
+                value: petGenderLabel(context, pet.gender),
+              ),
+              _MetaColumn(
+                label: l10n.common_age,
+                value: petAgeLabel(context, pet),
+                alignCenter: true,
+              ),
             ],
           ),
           SizedBox(height: 8.h),
           Text(
-            'Breed',
+            l10n.common_breed,
             style: context.body3.copyWith(
               color: context.neutral500,
               fontWeight: FontWeight.w500,
@@ -171,11 +182,6 @@ class AccountPetCard extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String _capitalize(String value) {
-    if (value.isEmpty) return '-';
-    return '${value[0].toUpperCase()}${value.substring(1)}';
   }
 }
 

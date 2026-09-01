@@ -6,6 +6,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/constants/app_enums.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
@@ -14,22 +15,17 @@ import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/presentation/widgets/container_button.dart';
 import 'package:rifq_v2/shared/presentation/widgets/custom_bottom_sheet.dart';
 import 'package:rifq_v2/features/auth/presentation/widgets/custom_form_builder_text_field.dart';
-import 'package:get_it/get_it.dart';
-import 'package:rifq_v2/features/auth/domain/use_cases/auth_use_case.dart';
+
 @RoutePage()
 class SendsToEmailScreen extends StatelessWidget {
   const SendsToEmailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-     return BlocProvider(
-    create: (_) => AuthCubit(GetIt.I.get<AuthUseCase>()),
-    child: Builder(
+    return Builder(
       builder: (context) {
         final cubit = context.read<AuthCubit>();
-    // return Builder(
-    //   builder: (context) {
-    //     final cubit = context.read<AuthCubit>();
+        final l10n = AppLocalizations.of(context)!;
         return BlocListener<AuthCubit, AuthState>(
           listener: (context, state) {
             switch (state) {
@@ -66,7 +62,7 @@ class SendsToEmailScreen extends StatelessWidget {
                 children: [
                   Center(
                     child: Text(
-                      'Reset Password',
+                      l10n.auth_resetPasswordTitle,
                       style: context.h5.copyWith(
                         fontSize: 24.sp,
                         fontWeight: FontWeight.w500,
@@ -77,7 +73,7 @@ class SendsToEmailScreen extends StatelessWidget {
                   SizedBox(height: 8.h),
 
                   Text(
-                    'Enter your email to verify and reset your password.',
+                    l10n.auth_sendEmailPrompt,
                     style: context.body2.copyWith(color: context.neutral800),
                   ),
                   SizedBox(height: 24.h),
@@ -85,15 +81,15 @@ class SendsToEmailScreen extends StatelessWidget {
                     key: cubit.resetVerfiyEmailFormKey,
                     child: CustomFormBuilderTextField(
                       name: 'email',
-                      label: 'Email',
+                      label: l10n.common_email,
                       iconData: CupertinoIcons.mail_solid,
                       controller: cubit.resetEmailController,
                       validators: [
                         FormBuilderValidators.required(
-                          errorText: '(e.g., username@example.com).',
+                          errorText: l10n.auth_emailHintError,
                         ),
                         FormBuilderValidators.email(
-                          errorText: '(e.g., username@example.com).',
+                          errorText: l10n.auth_emailHintError,
                         ),
                       ],
                     ),
@@ -101,7 +97,7 @@ class SendsToEmailScreen extends StatelessWidget {
                   SizedBox(height: 32.h),
 
                   ContainerButton(
-                    label: 'verfiy',
+                    label: l10n.auth_verifyButton,
                     containerColor: context.primary300,
                     textColor: context.neutral100,
                     fontSize: 20,
@@ -118,7 +114,7 @@ class SendsToEmailScreen extends StatelessWidget {
                   SizedBox(height: 12.h),
 
                   ContainerButton(
-                    label: 'Cancel',
+                    label: l10n.common_cancel,
                     containerColor: context.neutral100,
                     textColor: context.primary300,
                     fontSize: 20,
@@ -142,8 +138,6 @@ class SendsToEmailScreen extends StatelessWidget {
           ),
         );
       },
-      
-)  );
-    
+    );
   }
 }

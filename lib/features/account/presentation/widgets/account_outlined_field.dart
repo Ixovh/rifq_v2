@@ -67,8 +67,8 @@ class AccountOutlinedField extends StatelessWidget {
                     ),
                   ),
                 ),
-                Positioned(
-                  left: 22.w,
+                PositionedDirectional(
+                  start: 22.w,
                   top: -10.h,
                   child: Container(
                     color: context.neutral100,

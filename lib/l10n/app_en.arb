@@ -1,0 +1,423 @@
+{
+  "@@locale": "en",
+
+  "common_retry": "Retry",
+  "common_cancel": "Cancel",
+  "common_save": "Save",
+  "common_next": "Next",
+  "common_goBack": "Go back",
+  "common_continue": "Continue",
+  "common_done": "Done",
+  "common_confirm": "Confirm",
+  "common_apply": "Apply",
+  "common_reset": "Reset",
+  "common_comingSoon": "Coming soon",
+  "common_seeAll": "See all",
+  "common_yourPets": "Your Pets",
+  "common_email": "Email",
+  "common_password": "Password",
+  "common_name": "Name",
+  "common_firstName": "First Name",
+  "common_lastName": "Last Name",
+  "common_phoneNumber": "Phone number",
+  "common_nameRequired": "Name is required",
+  "common_invalidEmail": "Enter a valid email address",
+  "common_gender": "Gender",
+  "common_age": "Age",
+  "common_breed": "Breed",
+  "common_genderMale": "Male",
+  "common_genderFemale": "Female",
+  "common_userFallback": "User",
+  "common_chooseDate": "Choose Date",
+  "common_chooseDateTitle": "Choose date",
+  "common_chooseDatesTitle": "Choose dates",
+  "common_setTimeTitle": "Set time",
+  "common_chooseDateOfBirth": "Choose date of birth",
+  "common_couldNotPickImage": "Could not pick image",
+  "common_chooseFromGallery": "Choose from gallery",
+  "common_takePhoto": "Take a photo",
+  "common_removePhoto": "Remove photo",
+  "common_searchHint": "Search...",
+  "common_date": "Date",
+
+  "common_reviewsCount": "{count, plural, one{(1 review)} other{({count} reviews)}}",
+  "@common_reviewsCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "common_yearsExpShort": "{count, plural, one{1 yr exp.} other{{count} yrs exp.}}",
+  "@common_yearsExpShort": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "common_pricePerNightSar": "SAR {price} / night",
+  "@common_pricePerNightSar": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+  "common_weightKg": "{value} kg",
+  "@common_weightKg": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  },
+  "common_locationDistance": "{location} — {distance} km",
+  "@common_locationDistance": {
+    "placeholders": {
+      "location": { "type": "String" },
+      "distance": { "type": "String" }
+    }
+  },
+
+  "pet_ageMonths": "{count, plural, one{1 month} other{{count} months}}",
+  "@pet_ageMonths": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "pet_ageYears": "{count, plural, one{1 Year} other{{count} Years}}",
+  "@pet_ageYears": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "species_cat": "Cat",
+  "species_dog": "Dog",
+  "species_bird": "Bird",
+  "species_falcon": "Falcon",
+  "species_rabbit": "Rabbit",
+  "species_fish": "Fish",
+  "species_turtle": "Turtle",
+  "species_hamster": "Hamster",
+  "species_pigeon": "Pigeon",
+  "species_horse": "Horse",
+  "species_other": "Other",
+
+  "welcome_title": "Welcome to Rifq",
+  "welcome_subtitle": "Your trusted space for pet care and services.",
+  "welcome_signInPrompt": "Sign in to continue caring with ease.",
+  "welcome_signIn": "Sign in",
+  "welcome_continueGuest": "Continue as Guest",
+
+  "choosePath_subtitle": "making pet care simple for everyone",
+  "choosePath_prompt": "Choose your path to start:",
+  "choosePath_petOwner": "I own a pet",
+  "choosePath_serviceProvider": "I provide care services",
+
+  "onboarding_title1": "Welcome to Rifq!",
+  "onboarding_title2": "Track Your Pet’s \n Health Easily",
+  "onboarding_title3": "Smart Care, Anytime",
+  "onboarding_subtitle1": "Your all-in-one app for caring, tracking,\n and supporting every moment of your \n pet’s life.",
+  "onboarding_subtitle2": "Keep all medical records, vaccinations,\n and check-ups organized in one smart \n health card.",
+  "onboarding_subtitle3": "Use AI to check symptoms,\n find nearby clinics, home services, \n hotels, and everything your pet needs.",
+  "onboarding_getStarted": "Get started",
+  "onboarding_skip": "Skip",
+
+  "auth_loginTab": "Log in",
+  "auth_signupTab": "Sign up",
+  "auth_loginPrompt": "Please enter your email and password.",
+  "auth_signupPrompt": "Please fill in your details to continue.",
+  "auth_emailHintError": "(e.g., username@example.com).",
+  "auth_passwordError": "Incorrect password. Please try again.",
+  "auth_passwordRule": "Includes at least one number or symbol (e.g., @, #, $, !).",
+  "auth_forgotPassword": "Forgot password?",
+  "auth_loginButton": "Log in",
+  "auth_signupButton": "Sign up",
+  "auth_verifyButton": "Verify",
+  "auth_agreePrefix": "By continuing, you agree to our ",
+  "auth_termsAndConditions": "Terms & Conditions ",
+  "auth_agreeAnd": "and ",
+  "auth_privacyPolicy": "Privacy Policy",
+  "auth_resetPasswordTitle": "Reset Password",
+  "auth_resetPasswordPrompt": "Please enter your new password to proceed.",
+  "auth_sendEmailPrompt": "Enter your email to verify and reset your password.",
+
+  "otp_confirmNewEmailTitle": "Confirm New Email",
+  "otp_emailVerificationTitle": "Email Verification",
+  "otp_emailUpdated": "Email updated successfully",
+  "otp_sentAgain": "OTP sent again",
+  "otp_sentNewEmailBody": "We have sent an OTP to your new email address",
+  "otp_sentEmailBody": "We have sent an OTP to your email address",
+  "otp_enterBelow": "Please enter the OTP below",
+  "otp_resendCodeIn": "Resend code in {time}",
+  "@otp_resendCodeIn": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "otp_sending": "Sending...",
+  "otp_resend": "Resend OTP",
+
+  "nav_askAi": "Ask AI",
+  "nav_home": "Home",
+  "nav_health": "Health",
+  "nav_hotel": "Hotel",
+  "nav_adoption": "Adoption",
+
+  "home_quickService": "Quick Service",
+  "home_clinicVisit": "Clinic Visit",
+  "home_petHotel": "Pet Hotel",
+  "home_adopt": "Adopt",
+  "home_recommendations": "Recommendations",
+  "home_welcome": "Welcome",
+  "home_helloPrefix": "Hello, ",
+  "home_addPet": "Add Pet",
+
+  "account_securityPrivacy": "Security & Privacy",
+  "account_language": "Language",
+  "account_logout": "Log out",
+  "account_logoutConfirmMessage": "Are you sure you want to log out?",
+  "account_noPetsYet": "No pets yet",
+  "account_listedForAdoption": "Listed for Adoption",
+  "account_phoneRequired": "Phone number is required",
+  "account_phoneInvalid9": "Enter a valid 9-digit phone number",
+  "account_selectCountry": "Select country",
+  "account_searchCountry": "Search by name or code",
+  "account_noCountriesFound": "No countries found",
+
+  "editProfile_title": "Edit Profile",
+  "editProfile_otpSentNewEmail": "We sent an OTP to your new email",
+  "editProfile_profileUpdated": "Profile updated",
+  "editProfile_signInToEdit": "Sign in to edit profile",
+  "editProfile_firstNameRequired": "First name is required",
+  "editProfile_emailRequired": "Email is required",
+
+  "petProfile_title": "Pet Profile",
+  "petProfile_tabHealthRecord": "Health Record",
+  "petProfile_tabAppointment": "Appointment",
+  "petProfile_noAppointments": "No Appointments Yet",
+
+  "addPet_title": "Add Your Pet",
+  "addPet_success": "Pet added successfully",
+  "addPet_completeAllFields": "Please complete all fields",
+  "addPet_profileNotFound": "User profile not found",
+  "addPet_uploadPhoto": "Upload your pet's photo",
+  "addPet_nameQuestion": "What's your pet's name?",
+  "addPet_nameHint": "Mila",
+  "addPet_genderQuestion": "What's your pet's gender?",
+  "addPet_ageQuestion": "What's your pet's age?",
+  "addPet_typeQuestion": "What type of pet do you have?",
+  "addPet_breedQuestion": "What's your pet's breed?",
+  "addPet_breedHint": "Husky",
+  "addPet_ageValue": "Age: {age}",
+  "@addPet_ageValue": {
+    "placeholders": {
+      "age": { "type": "String" }
+    }
+  },
+
+  "editPet_title": "Edit Pet",
+  "editPet_updated": "Pet updated",
+  "editPet_nameLabel": "Pet's Name",
+  "editPet_breedLabel": "Pet's breed",
+  "editPet_breedRequired": "Breed is required",
+  "editPet_weightLabel": "Pet's weight",
+  "editPet_ageLabel": "Pet's age",
+  "editPet_ageRequired": "Pet age is required",
+  "editPet_invalidWeight": "Enter a valid weight",
+
+  "healthRecord_chooseVisitDate": "Choose date of visit",
+  "healthRecord_visitDateRequired": "Please choose a visit date",
+  "healthRecord_saved": "Health record saved",
+  "healthRecord_addTitle": "Add Health Record",
+  "healthRecord_fieldTitle": "Title",
+  "healthRecord_titleRequired": "Title is required",
+  "healthRecord_fieldType": "Type",
+  "healthRecord_typeRequired": "Type is required",
+  "healthRecord_fieldDescription": "Description",
+  "healthRecord_fieldClinic": "Clinic Name",
+  "healthRecord_saveRecord": "Save Record",
+  "healthRecord_dateOfVisit": "Date of Visit",
+  "healthRecord_empty": "No Health Record Yet",
+  "healthRecord_addNew": "Add new health record",
+
+  "hotel_screenTitle": "Hotel",
+  "hotel_bookNow": "Book Now",
+  "hotel_tabHotels": "Hotels",
+  "hotel_tabHomeBoarding": "Home Boarding",
+  "hotel_tabRooms": "Rooms",
+  "hotel_tabInfo": "Hotel Info",
+  "hotel_noRooms": "No rooms listed for this hotel yet.",
+  "hotel_otherServices": "Other Services",
+  "hotel_aboutTitle": "About the Hotel",
+  "hotel_noDescription": "No description available yet.",
+  "hotel_facilities": "Facilities",
+  "hotel_rulesTitle": "Rules & Requirements",
+  "hotel_location": "Location",
+  "hotel_servicesLabel": "Services : ",
+  "hotel_includesLabel": "Includes :",
+  "hotel_priceUnavailable": "Price unavailable",
+  "hotel_sortFilterTitle": "Sort & Filter",
+  "hotel_emptyHotels": "No hotels available right now — check back soon.",
+  "hotel_emptySitters": "No sitters available right now — check back soon.",
+  "hotel_errorLoadingHotels": "Something went wrong loading hotels. Please try again.",
+  "hotel_startingPrice": "Start from {price} SAR/night",
+  "@hotel_startingPrice": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+  "hotel_locationDistance": "{location} – {distance} km",
+  "@hotel_locationDistance": {
+    "placeholders": {
+      "location": { "type": "String" },
+      "distance": { "type": "String" }
+    }
+  },
+  "hotel_servicePrice": "{name} : SAR {price}",
+  "@hotel_servicePrice": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "price": { "type": "String" }
+    }
+  },
+  "hotel_roomsTotal": "{count, plural, one{1 room total} other{{count} rooms total}}",
+  "@hotel_roomsTotal": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "hotel_available": "Available",
+  "hotel_availabilityLabel": "Availability : ",
+  "hotel_roomsAvailable": "{count, plural, one{1 room available} other{{count} rooms available}}",
+  "@hotel_roomsAvailable": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "sortOption_recommended": "Recommended",
+  "sortOption_nearest": "Nearest",
+  "sortOption_topRated": "Top Rated",
+  "sortOption_lowestPrice": "Lowest Price",
+  "sortOption_mostExperienced": "Most Experienced",
+
+  "homeBoarding_contact": "Contact",
+  "homeBoarding_about": "About",
+  "homeBoarding_skills": "Skills",
+  "homeBoarding_requestPending": "Request Pending",
+  "homeBoarding_sendRequest": "Send Request",
+  "homeBoarding_requestSentTitle": "Request Sent!",
+  "homeBoarding_requestSentBody": "Your home boarding request has been sent to the host.",
+  "homeBoarding_backToHome": "Back to Home",
+  "homeBoarding_errorChecking": "Something went wrong checking your requests. Please try again.",
+  "homeBoarding_errorSending": "Something went wrong sending your request. Please try again.",
+  "homeBoarding_errorLoadingSitters": "Something went wrong loading sitters. Please try again.",
+  "homeBoarding_errorLoadingSitter": "Something went wrong loading this sitter. Please try again.",
+
+  "search_noResults": "No results found.",
+  "search_startTyping": "Start typing to search.",
+  "search_recentSearches": "Recent Searches",
+  "search_clearAll": "Clear all",
+  "search_error": "Something went wrong searching. Please try again.",
+
+  "booking_detailsTitle": "Booking Details",
+  "booking_selectRoom": "Select at least one room.",
+  "booking_chooseDates": "Choose your stay dates.",
+  "booking_chooseTimes": "Choose drop-off and pick-up times.",
+  "booking_chooseDatesTitle": "Choose dates",
+  "booking_dropOffTime": "Drop off time",
+  "booking_pickUpTime": "Pick up time",
+  "booking_numberOfPets": "Number of pets",
+  "booking_servicesLabel": "Services:",
+  "booking_priceOnRequest": "Price on request",
+  "booking_chooseADate": "Choose a date",
+  "booking_dropOffPickUpLabel": "Drop off time & Pick up time",
+  "booking_dropOff": "Drop off",
+  "booking_pickUp": "Pick up",
+  "booking_confirmPayTitle": "Confirm and Pay",
+  "booking_yourOrder": "Your Order",
+  "booking_roomType": "Package / Room Type",
+  "booking_servicesSelected": "Services Selected",
+  "booking_numberOfPetsOrder": "Number of Pets",
+  "booking_stayDuration": "Stay Duration / Booking Date",
+  "booking_nextDaySuffix": " (Next day)",
+  "booking_paymentMethod": "Payment Method",
+  "booking_paymentSuccessTitle": "Payment Successful",
+  "booking_seeDetails": "See Details",
+  "booking_receiptTitle": "Receipt",
+  "booking_receiptError": "Something went wrong generating the receipt. Please try again.",
+  "booking_status": "Status",
+  "booking_priceTitle": "Price",
+  "booking_priceDetailsTitle": "Price Details",
+  "booking_downloadPdf": "Download PDF",
+  "booking_downloadReceipt": "Download Receipt",
+  "booking_roomPrice": "Room Price",
+  "booking_addonServices": "Add-on Services",
+  "booking_totalBeforeFees": "Total Before Fees",
+  "booking_appServiceFee": "App Service Fee",
+  "booking_totalPrice": "Total Price",
+  "booking_errorCreating": "Something went wrong creating your booking. Please try again.",
+  "booking_errorAvailability": "Something went wrong checking room availability. Please try again.",
+  "booking_priceSar": "SAR {price}",
+  "@booking_priceSar": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+  "booking_amountSar": "{amount} SAR",
+  "@booking_amountSar": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "booking_dropOffTimeValue": "Drop-off: {time}",
+  "@booking_dropOffTimeValue": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "booking_pickUpTimeValue": "Pick-up: {time}",
+  "@booking_pickUpTimeValue": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "booking_nightsCount": "{count, plural, one{1 night} other{{count} nights}}",
+  "@booking_nightsCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "booking_petsCount": "{count, plural, one{1 Pet} other{{count} Pets}}",
+  "@booking_petsCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "booking_roomsLeft": "{count, plural, one{Only 1 {roomName} left for these dates.} other{Only {count} {roomName} left for these dates.}}",
+  "@booking_roomsLeft": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "roomName": { "type": "String" }
+    }
+  },
+  "booking_roomsExceedPets": "You can't reserve more rooms than the number of pets.",
+  "booking_petsExceedOwned": "You can't select more pets than you have registered.",
+
+  "paymentMethod_applePay": "Apple Pay",
+  "paymentMethod_visa": "Visa",
+  "paymentMethod_mastercard": "Mastercard",
+  "applePay_payWordmark": "Pay",
+  "applePay_cardName": "Apple Card •••• 1234",
+  "applePay_confirmSideButton": "Confirm with Side Button",
+
+  "adoption_screenTitle": "Adoption",
+
+  "guest_title": "Enjoy the Full Experience!",
+  "guest_body": "Sign in to add your pets and access all features.",
+  "guest_cta": "Get Started Now",
+
+  "pickers_chooseMonth": "Choose month",
+  "pickers_backToCalendar": "Back to calendar",
+  "pickers_selectDateRange": "Select a date range",
+  "pickers_selectPetType": "Select pet type",
+  "pickers_otherCommonPets": "Other common pets",
+
+  "language_english": "English",
+  "language_arabic": "العربية"
+}

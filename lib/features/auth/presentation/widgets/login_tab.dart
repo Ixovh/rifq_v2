@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/router/routers.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
@@ -18,12 +19,13 @@ class LoginTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AuthCubit>();
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 24.h),
         Text(
-          'Please enter your email and Password.',
+          l10n.auth_loginPrompt,
           style: context.body1.copyWith(fontSize: 16.sp),
         ),
         SizedBox(height: 24.h),
@@ -34,33 +36,32 @@ class LoginTab extends StatelessWidget {
             children: [
               CustomFormBuilderTextField(
                 name: 'email',
-                label: 'Email',
+                label: l10n.common_email,
                 iconData: CupertinoIcons.mail_solid,
                 controller: cubit.loginEmailController,
                 validators: [
                   FormBuilderValidators.required(
-                    errorText: '(e.g., username@example.com).',
+                    errorText: l10n.auth_emailHintError,
                   ),
                   FormBuilderValidators.email(
-                    errorText: '(e.g., username@example.com).',
+                    errorText: l10n.auth_emailHintError,
                   ),
                 ],
               ),
               SizedBox(height: 24.h),
               CustomFormBuilderTextField(
                 name: 'password',
-                label: 'Password',
+                label: l10n.common_password,
                 iconData: CupertinoIcons.lock_fill,
                 controller: cubit.loginPasswordController,
                 isPassword: true,
                 validators: [
                   FormBuilderValidators.required(
-                    errorText: 'Incorrect password. Please try again.',
+                    errorText: l10n.auth_passwordError,
                   ),
                   FormBuilderValidators.minLength(
                     6,
-                    errorText:
-                        'Includes at least one number or symbol (e.g., @, #, \$, !).',
+                    errorText: l10n.auth_passwordRule,
                   ),
                 ],
               ),
@@ -74,13 +75,13 @@ class LoginTab extends StatelessWidget {
             // context.push(Routes.sendsToEmail, extra: cubit);
           },
           child: Text(
-            'Forgot password?',
+            l10n.auth_forgotPassword,
             style: context.body3.copyWith(color: context.primary300),
           ),
         ),
         SizedBox(height: 16.h),
         ContainerButton(
-          label: 'Log in',
+          label: l10n.auth_loginButton,
           containerColor: context.primary300,
           textColor: context.neutral100,
           fontSize: 20,

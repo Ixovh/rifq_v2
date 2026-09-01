@@ -4,12 +4,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rifq_v2/features/account/domain/entities/account_entity.dart';
+import 'package:rifq_v2/features/account/presentation/widgets/pet_label_helpers.dart';
 import 'package:rifq_v2/features/edit_pet/presentation/cubit/edit_pet_cubit.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/features/health_record/presentation/cubit/health_record_cubit.dart';
 import 'package:rifq_v2/features/health_record/presentation/widgets/pet_health_record_tab.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/widgets/lottie_loding.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_back_icon.dart';
 
 @RoutePage()
 class PetProfileScreen extends StatelessWidget {
@@ -83,7 +86,7 @@ class _PetProfileViewState extends State<_PetProfileView>
             body: Center(
               child: TextButton(
                 onPressed: () => context.router.maybePop(),
-                child: const Text('Go back'),
+                child: Text(AppLocalizations.of(context)!.common_goBack),
               ),
             ),
           );
@@ -100,15 +103,11 @@ class _PetProfileViewState extends State<_PetProfileView>
                     children: [
                       IconButton(
                         onPressed: () => context.router.maybePop(),
-                        icon: Icon(
-                          Icons.arrow_back_ios_new,
-                          size: 20.sp,
-                          color: context.neutral1000,
-                        ),
+                        icon: AppBackIcon(color: context.neutral1000, size: 20.sp),
                       ),
                       Expanded(
                         child: Text(
-                          'Pet Profile',
+                          AppLocalizations.of(context)!.petProfile_title,
                           textAlign: TextAlign.center,
                           style: context.h4.copyWith(
                             color: context.neutral1000,
@@ -208,7 +207,7 @@ class _PetHero extends StatelessWidget {
         ),
         SizedBox(height: 6.h),
         Text(
-          pet.breed.isEmpty ? pet.speciesLabel : pet.breed,
+          pet.breed.isEmpty ? petSpeciesLabel(context, pet) : pet.breed,
           style: context.body2.copyWith(color: context.neutral600),
           textAlign: TextAlign.center,
         ),
@@ -218,12 +217,12 @@ class _PetHero extends StatelessWidget {
           children: [
             _InfoChip(
               icon: Icons.cake_outlined,
-              label: pet.ageLabel.toLowerCase(),
+              label: petAgeLabel(context, pet).toLowerCase(),
             ),
             SizedBox(width: 18.w),
             _InfoChip(
               icon: Icons.monitor_weight_outlined,
-              label: pet.weightLabel,
+              label: petWeightLabel(context, pet),
             ),
           ],
         ),
@@ -272,9 +271,9 @@ class _PetTabs extends StatelessWidget {
       indicatorWeight: 3,
       labelStyle: context.body2.copyWith(fontWeight: FontWeight.w600),
       unselectedLabelStyle: context.body2,
-      tabs: const [
-        Tab(text: 'Health Record'),
-        Tab(text: 'Appointment'),
+      tabs: [
+        Tab(text: AppLocalizations.of(context)!.petProfile_tabHealthRecord),
+        Tab(text: AppLocalizations.of(context)!.petProfile_tabAppointment),
       ],
     );
   }
@@ -287,7 +286,7 @@ class _AppointmentTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        'No Appointments Yet',
+        AppLocalizations.of(context)!.petProfile_noAppointments,
         style: context.body1.copyWith(
           color: context.neutral700,
           fontWeight: FontWeight.w500,

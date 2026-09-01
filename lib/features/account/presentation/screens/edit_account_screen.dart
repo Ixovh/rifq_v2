@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/features/account/presentation/cubit/account_cubit.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/account_avatar.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/account_outlined_field.dart';
@@ -17,6 +18,7 @@ import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/presentation/widgets/container_button.dart';
 import 'package:rifq_v2/shared/presentation/widgets/lottie_loding.dart';
 import 'package:rifq_v2/shared/storage_service/profile_image_cache.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_back_icon.dart';
 
 @RoutePage()
 class EditAccountScreen extends StatelessWidget {
@@ -59,7 +61,7 @@ class _EditAccountViewState extends State<_EditAccountView> {
       });
     } catch (_) {
       if (!mounted) return;
-      context.showErrorToast('Could not pick image');
+      context.showErrorToast(AppLocalizations.of(context)!.common_couldNotPickImage);
     }
   }
 
@@ -80,7 +82,7 @@ class _EditAccountViewState extends State<_EditAccountView> {
             children: [
               ListTile(
                 leading: const Icon(Icons.photo_library_outlined),
-                title: const Text('Choose from gallery'),
+                title: Text(AppLocalizations.of(context)!.common_chooseFromGallery),
                 onTap: () {
                   Navigator.pop(sheetContext);
                   _pickProfileImage(ImageSource.gallery);
@@ -88,7 +90,7 @@ class _EditAccountViewState extends State<_EditAccountView> {
               ),
               ListTile(
                 leading: const Icon(Icons.camera_alt_outlined),
-                title: const Text('Take a photo'),
+                title: Text(AppLocalizations.of(context)!.common_takePhoto),
                 onTap: () {
                   Navigator.pop(sheetContext);
                   _pickProfileImage(ImageSource.camera);
@@ -100,9 +102,9 @@ class _EditAccountViewState extends State<_EditAccountView> {
                     Icons.delete_outline,
                     color: Color(0xFFFF383C),
                   ),
-                  title: const Text(
-                    'Remove photo',
-                    style: TextStyle(color: Color(0xFFFF383C)),
+                  title: Text(
+                    AppLocalizations.of(context)!.common_removePhoto,
+                    style: const TextStyle(color: Color(0xFFFF383C)),
                   ),
                   onTap: () {
                     Navigator.pop(sheetContext);
@@ -125,7 +127,7 @@ class _EditAccountViewState extends State<_EditAccountView> {
         if (state is AccountUpdateSuccessState) {
           if (state.emailConfirmationPending &&
               (state.pendingEmail?.isNotEmpty ?? false)) {
-            context.showInfoToast('We sent an OTP to your new email');
+            context.showInfoToast(AppLocalizations.of(context)!.editProfile_otpSentNewEmail);
             await context.pushRoute(
               OtpRoute(
                 email: state.pendingEmail!,
@@ -138,7 +140,7 @@ class _EditAccountViewState extends State<_EditAccountView> {
             return;
           }
 
-          context.showSuccessToast('Profile updated');
+          context.showSuccessToast(AppLocalizations.of(context)!.editProfile_profileUpdated);
           context.router.maybePop(true);
         }
         if (state is AccountErrorState) {
@@ -158,7 +160,7 @@ class _EditAccountViewState extends State<_EditAccountView> {
             body: Center(
               child: TextButton(
                 onPressed: () => context.router.maybePop(),
-                child: const Text('Sign in to edit profile'),
+                child: Text(AppLocalizations.of(context)!.editProfile_signInToEdit),
               ),
             ),
           );
@@ -178,7 +180,7 @@ class _EditAccountViewState extends State<_EditAccountView> {
             body: Center(
               child: TextButton(
                 onPressed: () => cubit.loadAccount(),
-                child: const Text('Retry'),
+                child: Text(AppLocalizations.of(context)!.common_retry),
               ),
             ),
           );
@@ -197,15 +199,11 @@ class _EditAccountViewState extends State<_EditAccountView> {
                       children: [
                         IconButton(
                           onPressed: () => context.router.maybePop(),
-                          icon: Icon(
-                            Icons.arrow_back_ios_new,
-                            size: 20.sp,
-                            color: context.neutral1000,
-                          ),
+                          icon: AppBackIcon(color: context.neutral1000, size: 20.sp),
                         ),
                         Expanded(
                           child: Text(
-                            'Edit Profile',
+                            AppLocalizations.of(context)!.editProfile_title,
                             textAlign: TextAlign.center,
                             style: context.h4.copyWith(
                               color: context.primary300,
@@ -242,33 +240,33 @@ class _EditAccountViewState extends State<_EditAccountView> {
                           ),
                           SizedBox(height: 48.h),
                           AccountOutlinedField(
-                            label: 'First Name',
+                            label: AppLocalizations.of(context)!.common_firstName,
                             controller: cubit.firstNameController,
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
-                                return 'First name is required';
+                                return AppLocalizations.of(context)!.editProfile_firstNameRequired;
                               }
                               return null;
                             },
                           ),
                           SizedBox(height: 42.h),
                           AccountOutlinedField(
-                            label: 'Last Name',
+                            label: AppLocalizations.of(context)!.common_lastName,
                             controller: cubit.lastNameController,
                           ),
                           SizedBox(height: 42.h),
                           AccountOutlinedField(
-                            label: 'Email',
+                            label: AppLocalizations.of(context)!.common_email,
                             controller: cubit.emailController,
                             keyboardType: TextInputType.emailAddress,
                             validator: (value) {
                               final email = value?.trim() ?? '';
-                              if (email.isEmpty) return 'Email is required';
+                              if (email.isEmpty) return AppLocalizations.of(context)!.editProfile_emailRequired;
                               final emailRegex = RegExp(
                                 r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
                               );
                               if (!emailRegex.hasMatch(email)) {
-                                return 'Enter a valid email address';
+                                return AppLocalizations.of(context)!.common_invalidEmail;
                               }
                               return null;
                             },
@@ -290,7 +288,7 @@ class _EditAccountViewState extends State<_EditAccountView> {
                   Padding(
                     padding: EdgeInsets.fromLTRB(18.w, 8.h, 18.w, 24.h),
                     child: ContainerButton(
-                      label: 'Save',
+                      label: AppLocalizations.of(context)!.common_save,
                       containerColor: context.primary300,
                       textColor: context.neutral100,
                       fontSize: 20,
@@ -298,9 +296,14 @@ class _EditAccountViewState extends State<_EditAccountView> {
                       onTap: () {
                         if (cubit.editFormKey.currentState?.validate() ??
                             false) {
+                          final l10n = AppLocalizations.of(context)!;
                           cubit.saveProfile(
                             imageFile: _pickedImage,
                             removeImage: _removeImage,
+                            firstNameRequiredMessage:
+                                l10n.editProfile_firstNameRequired,
+                            emailRequiredMessage: l10n.editProfile_emailRequired,
+                            invalidEmailMessage: l10n.common_invalidEmail,
                           );
                         }
                       },

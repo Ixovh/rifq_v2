@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/widgets/app_pickers.dart';
 import 'package:rifq_v2/features/health_record/presentation/cubit/health_record_cubit.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
@@ -57,7 +58,7 @@ class _AddHealthRecordSheetState extends State<_AddHealthRecordSheet> {
     final picked = await showAppDatePicker(
       context: context,
       selectedDate: _visitDate,
-      title: 'Choose date of visit',
+      title: AppLocalizations.of(context)!.healthRecord_chooseVisitDate,
     );
     if (picked != null) setState(() => _visitDate = picked);
   }
@@ -65,7 +66,9 @@ class _AddHealthRecordSheetState extends State<_AddHealthRecordSheet> {
   Future<void> _save() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     if (_visitDate == null) {
-      context.showWarningToast('Please choose a visit date');
+      context.showWarningToast(
+        AppLocalizations.of(context)!.healthRecord_visitDateRequired,
+      );
       return;
     }
 
@@ -84,7 +87,9 @@ class _AddHealthRecordSheetState extends State<_AddHealthRecordSheet> {
     setState(() => _isSaving = false);
 
     if (success) {
-      context.showSuccessToast('Health record saved');
+      context.showSuccessToast(
+        AppLocalizations.of(context)!.healthRecord_saved,
+      );
       Navigator.pop(context);
     }
   }
@@ -113,7 +118,7 @@ class _AddHealthRecordSheetState extends State<_AddHealthRecordSheet> {
                     children: [
                       const Spacer(),
                       Text(
-                        'Add Health Record',
+                        AppLocalizations.of(context)!.healthRecord_addTitle,
                         style: context.h4.copyWith(
                           color: context.primary300,
                           fontWeight: FontWeight.w600,
@@ -133,31 +138,39 @@ class _AddHealthRecordSheetState extends State<_AddHealthRecordSheet> {
                   ),
                   SizedBox(height: 8.h),
                   _HealthRecordField(
-                    label: 'Title',
+                    label: AppLocalizations.of(
+                      context,
+                    )!.healthRecord_fieldTitle,
                     icon: Icons.badge_outlined,
                     controller: _titleController,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'Title is required';
+                        return AppLocalizations.of(
+                          context,
+                        )!.healthRecord_titleRequired;
                       }
                       return null;
                     },
                   ),
                   SizedBox(height: 24.h),
                   _HealthRecordField(
-                    label: 'Type',
+                    label: AppLocalizations.of(context)!.healthRecord_fieldType,
                     icon: Icons.pets_outlined,
                     controller: _typeController,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'Type is required';
+                        return AppLocalizations.of(
+                          context,
+                        )!.healthRecord_typeRequired;
                       }
                       return null;
                     },
                   ),
                   SizedBox(height: 24.h),
                   _HealthRecordField(
-                    label: 'Description',
+                    label: AppLocalizations.of(
+                      context,
+                    )!.healthRecord_fieldDescription,
                     icon: Icons.menu_book_outlined,
                     controller: _descriptionController,
                     maxLines: 4,
@@ -165,7 +178,9 @@ class _AddHealthRecordSheetState extends State<_AddHealthRecordSheet> {
                   ),
                   SizedBox(height: 24.h),
                   _HealthRecordField(
-                    label: 'Clinic Name',
+                    label: AppLocalizations.of(
+                      context,
+                    )!.healthRecord_fieldClinic,
                     icon: Icons.local_hospital_outlined,
                     controller: _clinicController,
                   ),
@@ -173,7 +188,9 @@ class _AddHealthRecordSheetState extends State<_AddHealthRecordSheet> {
                   _VisitDateField(visitDate: _visitDate, onTap: _pickDate),
                   SizedBox(height: 28.h),
                   ContainerButton(
-                    label: 'Save Record',
+                    label: AppLocalizations.of(
+                      context,
+                    )!.healthRecord_saveRecord,
                     containerColor: context.primary300,
                     textColor: context.neutral100,
                     fontSize: 20,
@@ -246,8 +263,8 @@ class _HealthRecordField extends StatelessWidget {
             ],
           ),
         ),
-        Positioned(
-          left: 22.w,
+        PositionedDirectional(
+          start: 22.w,
           top: -10.h,
           child: Container(
             color: context.neutral100,
@@ -277,7 +294,7 @@ class _VisitDateField extends StatelessWidget {
     final hasDate = visitDate != null;
     final label = hasDate
         ? DateFormat('dd-MM-yyyy').format(visitDate!)
-        : 'Choose Date';
+        : AppLocalizations.of(context)!.common_chooseDate;
 
     return Stack(
       clipBehavior: Clip.none,
@@ -316,14 +333,14 @@ class _VisitDateField extends StatelessWidget {
             ),
           ),
         ),
-        Positioned(
-          left: 22.w,
+        PositionedDirectional(
+          start: 22.w,
           top: -10.h,
           child: Container(
             color: context.neutral100,
             padding: EdgeInsets.symmetric(horizontal: 4.w),
             child: Text(
-              'Date of Visit',
+              AppLocalizations.of(context)!.healthRecord_dateOfVisit,
               style: context.body3.copyWith(
                 color: context.neutral700,
                 fontWeight: FontWeight.w400,

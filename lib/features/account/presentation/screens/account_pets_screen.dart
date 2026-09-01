@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/features/account/presentation/cubit/account_cubit.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/account_pet_card.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/widgets/lottie_loding.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_back_icon.dart';
 
 @RoutePage()
 class AccountPetsScreen extends StatelessWidget {
@@ -38,21 +40,17 @@ class _AccountPetsView extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   Text(
-                    'Your Pets',
+                    AppLocalizations.of(context)!.common_yourPets,
                     style: context.h5.copyWith(
                       fontWeight: FontWeight.w600,
                       color: context.neutral1000,
                     ),
                   ),
                   Align(
-                    alignment: Alignment.centerLeft,
+                    alignment: AlignmentDirectional.centerStart,
                     child: IconButton(
                       onPressed: () => context.router.maybePop(),
-                      icon: Icon(
-                        Icons.arrow_back_ios_new,
-                        size: 20.sp,
-                        color: context.neutral1000,
-                      ),
+                      icon: AppBackIcon(color: context.neutral1000, size: 20.sp),
                     ),
                   ),
                 ],
@@ -70,7 +68,7 @@ class _AccountPetsView extends StatelessWidget {
                       child: TextButton(
                         onPressed: () =>
                             context.read<AccountCubit>().loadAccount(),
-                        child: const Text('Retry'),
+                        child: Text(AppLocalizations.of(context)!.common_retry),
                       ),
                     );
                   }
@@ -85,7 +83,7 @@ class _AccountPetsView extends StatelessWidget {
                   if (pets.isEmpty) {
                     return Center(
                       child: Text(
-                        'No pets yet',
+                        AppLocalizations.of(context)!.account_noPetsYet,
                         style: context.body2.copyWith(
                           color: context.neutral600,
                         ),

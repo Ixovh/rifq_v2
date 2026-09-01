@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/features/home/domain/entities/home_entity.dart';
 import 'package:rifq_v2/features/home/presentation/cubit/home_cubit.dart';
 import 'package:rifq_v2/features/home/presentation/widgets/add_pet_circle_widget.dart';
@@ -63,7 +64,7 @@ class _HomeView extends StatelessWidget {
             body: Center(
               child: TextButton(
                 onPressed: () => context.read<HomeCubit>().loadHomeData(),
-                child: const Text('Retry'),
+                child: Text(AppLocalizations.of(context)!.common_retry),
               ),
             ),
           );
@@ -105,6 +106,7 @@ class _HomeBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pets = data?.pets ?? const <HomePetEntity>[];
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: context.background,
@@ -135,8 +137,8 @@ class _HomeBody extends StatelessWidget {
                 if (!isGuest) ...[
                   SizedBox(height: 18.h),
                   _SectionHeader(
-                    title: 'Your Pets',
-                    actionLabel: 'See all',
+                    title: l10n.common_yourPets,
+                    actionLabel: l10n.common_seeAll,
                     onAction: () => _openPetsList(context),
                   ),
                   SizedBox(height: 12.h),
@@ -148,7 +150,7 @@ class _HomeBody extends StatelessWidget {
                       children: [
                         ...pets.map(
                           (pet) => Padding(
-                            padding: EdgeInsets.only(right: 18.w),
+                            padding: EdgeInsetsDirectional.only(end: 18.w),
                             child: PetCircleWidget(
                               petName: pet.name,
                               imageUrl: pet.photoUrl,
@@ -165,7 +167,7 @@ class _HomeBody extends StatelessWidget {
                   ),
                 ],
                 SizedBox(height: 18.h),
-                const _SectionHeader(title: 'Quick Service'),
+                _SectionHeader(title: l10n.home_quickService),
                 SizedBox(height: 12.h),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 18.w),
@@ -174,19 +176,19 @@ class _HomeBody extends StatelessWidget {
                     children: [
                       QuickService(
                         assetPath: AppImages.clinicVisit,
-                        title: 'Clinic Visit',
+                        title: l10n.home_clinicVisit,
                         onTap: () =>
                             context.read<NavCubit>().changeIndex(index: 1),
                       ),
                       QuickService(
                         assetPath: AppImages.petHotel,
-                        title: 'Pet Hotel',
+                        title: l10n.home_petHotel,
                         onTap: () =>
                             context.read<NavCubit>().changeIndex(index: 2),
                       ),
                       QuickService(
                         assetPath: AppImages.adopt,
-                        title: 'Adopt',
+                        title: l10n.home_adopt,
                         onTap: () =>
                             context.read<NavCubit>().changeIndex(index: 3),
                       ),
@@ -194,7 +196,7 @@ class _HomeBody extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 18.h),
-                const _SectionHeader(title: 'Recommendations'),
+                _SectionHeader(title: l10n.home_recommendations),
                 SizedBox(height: 12.h),
                 const RecommendationCarousel(),
                 SizedBox(height: 24.h),

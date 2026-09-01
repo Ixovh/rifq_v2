@@ -61,6 +61,17 @@ import '../../features/auth/data/repositories/auth_repo_data.dart' as _i400;
 import '../../features/auth/domain/repositories/auth_repository_domain.dart'
     as _i998;
 import '../../features/auth/domain/use_cases/auth_use_case.dart' as _i283;
+import '../../features/booking/data/datasources/booking_data_source.dart'
+    as _i394;
+import '../../features/booking/data/repositories/booking_repo_data.dart'
+    as _i730;
+import '../../features/booking/domain/repositories/booking_repository_domain.dart'
+    as _i965;
+import '../../features/booking/domain/use_cases/booking_use_case.dart' as _i245;
+import '../../features/booking/presentation/cubit/booking_create_cubit.dart'
+    as _i625;
+import '../../features/booking/presentation/cubit/booking_details_cubit.dart'
+    as _i581;
 import '../../features/edit_pet/data/datasources/edit_pet_data_source.dart'
     as _i897;
 import '../../features/edit_pet/data/repositories/edit_pet_repo_data.dart'
@@ -87,6 +98,30 @@ import '../../features/home/domain/repositories/home_repository_domain.dart'
     as _i257;
 import '../../features/home/domain/use_cases/home_use_case.dart' as _i933;
 import '../../features/home/presentation/cubit/home_cubit.dart' as _i9;
+import '../../features/home_boarding/data/datasources/home_boarding_data_source.dart'
+    as _i728;
+import '../../features/home_boarding/data/repositories/home_boarding_repo_data.dart'
+    as _i263;
+import '../../features/home_boarding/domain/repositories/home_boarding_repository_domain.dart'
+    as _i926;
+import '../../features/home_boarding/domain/use_cases/home_boarding_use_case.dart'
+    as _i1033;
+import '../../features/home_boarding/presentation/cubit/boarding_request_cubit.dart'
+    as _i782;
+import '../../features/home_boarding/presentation/cubit/home_boarding_list_cubit.dart'
+    as _i323;
+import '../../features/home_boarding/presentation/cubit/sitter_detail_cubit.dart'
+    as _i352;
+import '../../features/hotel/data/datasources/hotel_data_source.dart' as _i292;
+import '../../features/hotel/data/repositories/hotel_repo_data.dart' as _i327;
+import '../../features/hotel/domain/repositories/hotel_repository_domain.dart'
+    as _i603;
+import '../../features/hotel/domain/use_cases/hotel_use_case.dart' as _i783;
+import '../../features/hotel/presentation/cubit/hotel_detail_cubit.dart'
+    as _i419;
+import '../../features/hotel/presentation/cubit/hotel_list_cubit.dart' as _i302;
+import '../../features/search/presentation/cubit/search_cubit.dart' as _i341;
+import '../../l10n/cubit/locale_cubit.dart' as _i368;
 import '../networking/dio_client.dart' as _i201;
 import '../storage_service/local_keys_service.dart' as _i261;
 import 'shared/main_dependencies.dart' as _i1014;
@@ -101,6 +136,7 @@ extension GetItInjectableX on _i174.GetIt {
     final thirdPartyModule = _$ThirdPartyModule();
     gh.singleton<_i792.GetStorage>(() => thirdPartyModule.storage);
     gh.singleton<_i454.SupabaseClient>(() => thirdPartyModule.supabaseClient);
+    gh.singleton<_i368.LocaleCubit>(() => thirdPartyModule.localeCubit);
     gh.lazySingleton<_i201.DioClient>(() => _i201.DioClient());
     gh.lazySingleton<_i956.AdoptionRemoteDataSource>(
       () => _i956.AdoptionRemoteDataSourceImpl(gh<_i454.SupabaseClient>()),
@@ -117,6 +153,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i426.BaseHomeDataSource>(
       () => _i426.HomeDataSource(supabase: gh<_i454.SupabaseClient>()),
     );
+    gh.lazySingleton<_i728.BaseHomeBoardingDataSource>(
+      () => _i728.HomeBoardingDataSource(supabase: gh<_i454.SupabaseClient>()),
+    );
     gh.lazySingleton<_i897.BaseEditPetDataSource>(
       () => _i897.EditPetDataSource(supabase: gh<_i454.SupabaseClient>()),
     );
@@ -125,6 +164,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i1012.BaseAccountDataSource>(
       () => _i1012.AccountDataSource(supabase: gh<_i454.SupabaseClient>()),
+    );
+    gh.lazySingleton<_i292.BaseHotelDataSource>(
+      () => _i292.HotelDataSource(supabase: gh<_i454.SupabaseClient>()),
+    );
+    gh.lazySingleton<_i394.BaseBookingDataSource>(
+      () => _i394.BookingDataSource(supabase: gh<_i454.SupabaseClient>()),
     );
     gh.lazySingleton<_i664.BaseHealthRecordDataSource>(
       () => _i664.HealthRecordDataSource(supabase: gh<_i454.SupabaseClient>()),
@@ -138,16 +183,48 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i933.HomeUseCase>(
       () => _i933.HomeUseCase(homeRepoData: gh<_i257.HomeRepoDomain>()),
     );
+    gh.lazySingleton<_i965.BookingRepoDomain>(
+      () => _i730.BookingRepoData(
+        bookingDataSource: gh<_i394.BaseBookingDataSource>(),
+      ),
+    );
     gh.lazySingleton<_i785.AdoptionRepositoryDomain>(
       () => _i321.AdoptionRepositoryData(gh<_i956.AdoptionRemoteDataSource>()),
     );
+    gh.lazySingleton<_i603.HotelRepoDomain>(
+      () =>
+          _i327.HotelRepoData(hotelDataSource: gh<_i292.BaseHotelDataSource>()),
+    );
+    gh.lazySingleton<_i926.HomeBoardingRepoDomain>(
+      () => _i263.HomeBoardingRepoData(
+        homeBoardingDataSource: gh<_i728.BaseHomeBoardingDataSource>(),
+      ),
+    );
     gh.lazySingleton<_i283.AuthUseCase>(
       () => _i283.AuthUseCase(authRepoData: gh<_i998.AuthRepoDomain>()),
+    );
+    gh.lazySingleton<_i245.BookingUseCase>(
+      () =>
+          _i245.BookingUseCase(bookingRepoData: gh<_i965.BookingRepoDomain>()),
     );
     gh.lazySingleton<_i628.EditPetRepoDomain>(
       () => _i76.EditPetRepoData(
         editPetDataSource: gh<_i897.BaseEditPetDataSource>(),
       ),
+    );
+    gh.lazySingleton<_i1033.HomeBoardingUseCase>(
+      () => _i1033.HomeBoardingUseCase(
+        homeBoardingRepoData: gh<_i926.HomeBoardingRepoDomain>(),
+      ),
+    );
+    gh.factory<_i782.BoardingRequestCubit>(
+      () => _i782.BoardingRequestCubit(gh<_i1033.HomeBoardingUseCase>()),
+    );
+    gh.factory<_i323.HomeBoardingListCubit>(
+      () => _i323.HomeBoardingListCubit(gh<_i1033.HomeBoardingUseCase>()),
+    );
+    gh.factory<_i352.SitterDetailCubit>(
+      () => _i352.SitterDetailCubit(gh<_i1033.HomeBoardingUseCase>()),
     );
     gh.lazySingleton<_i375.HealthRecordRepoDomain>(
       () => _i589.HealthRecordRepoData(
@@ -225,6 +302,15 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i493.AddPetCubit>(
       () => _i493.AddPetCubit(gh<_i667.AddPetUseCase>()),
     );
+    gh.factory<_i625.BookingCreateCubit>(
+      () => _i625.BookingCreateCubit(gh<_i245.BookingUseCase>()),
+    );
+    gh.factory<_i581.BookingDetailsCubit>(
+      () => _i581.BookingDetailsCubit(gh<_i245.BookingUseCase>()),
+    );
+    gh.lazySingleton<_i783.HotelUseCase>(
+      () => _i783.HotelUseCase(hotelRepoData: gh<_i603.HotelRepoDomain>()),
+    );
     gh.factory<_i431.AdoptionCubit>(
       () => _i431.AdoptionCubit(
         gh<_i824.CreateAdoptionPostUseCase>(),
@@ -243,6 +329,18 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i578.EditPetCubit>(
       () => _i578.EditPetCubit(gh<_i430.EditPetUseCase>()),
+    );
+    gh.factory<_i341.SearchCubit>(
+      () => _i341.SearchCubit(
+        gh<_i783.HotelUseCase>(),
+        gh<_i1033.HomeBoardingUseCase>(),
+      ),
+    );
+    gh.factory<_i419.HotelDetailCubit>(
+      () => _i419.HotelDetailCubit(gh<_i783.HotelUseCase>()),
+    );
+    gh.factory<_i302.HotelListCubit>(
+      () => _i302.HotelListCubit(gh<_i783.HotelUseCase>()),
     );
     gh.singleton<_i261.LocalKeysService>(() => _i261.LocalKeysService());
     return this;

@@ -12,6 +12,7 @@ import 'package:rifq_v2/features/auth/domain/entities/auth_entity.dart';
 import 'package:rifq_v2/features/auth/domain/repositories/auth_repository_domain.dart';
 import 'package:rifq_v2/features/auth/domain/use_cases/auth_use_case.dart';
 import 'package:rifq_v2/features/auth/presentation/screens/welcome_screen.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/constants/app_enums.dart';
 import 'package:rifq_v2/shared/storage_service/auth_helper.dart';
 
@@ -63,7 +64,11 @@ class _UnusedAuthRepoDomain implements AuthRepoDomain {
 Widget _wrap(Widget child) {
   return ScreenUtilInit(
     designSize: const Size(402, 874),
-    builder: (_, _) => MaterialApp(home: child),
+    builder: (_, _) => MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: child,
+    ),
   );
 }
 

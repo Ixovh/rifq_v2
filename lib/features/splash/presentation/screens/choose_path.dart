@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/theme/app_color.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
@@ -12,6 +13,7 @@ class ChoosePathScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -36,14 +38,14 @@ class ChoosePathScreen extends StatelessWidget {
                 SizedBox(height: 20.h),
 
                 Text(
-                  "Welcome to Rifq",
+                  l10n.welcome_title,
                   style: context.h3.copyWith(color: context.neutral100),
                 ),
 
                 SizedBox(height: 8.h),
 
                 Text(
-                  "making pet care simple for everyone",
+                  l10n.choosePath_subtitle,
                   textAlign: TextAlign.center,
                   style: context.body1.copyWith(color: context.neutral100),
                 ),
@@ -55,13 +57,13 @@ class ChoosePathScreen extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Choose your path to start:",
+                    l10n.choosePath_prompt,
                     style: context.body1.copyWith(color: context.neutral100),
                   ),
                 ),
                 SizedBox(height: 16.h),
                 PathButton(
-                  title: "I own a pet",
+                  title: l10n.choosePath_petOwner,
                   icon: Icons.pets,
 
                   onTap: () {
@@ -73,7 +75,7 @@ class ChoosePathScreen extends StatelessWidget {
                 SizedBox(height: 16.h),
 
                 PathButton(
-                  title: "I provide care services",
+                  title: l10n.choosePath_serviceProvider,
                   icon: Icons.add_circle_outline,
                   onTap: () {
                     // context.router.push(OnbordingRoute(role: 'service_provider'));

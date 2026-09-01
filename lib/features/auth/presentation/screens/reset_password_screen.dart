@@ -6,7 +6,9 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
+import 'package:rifq_v2/shared/presentation/router/routers.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
@@ -23,6 +25,7 @@ class ResetPasswordScreen extends StatelessWidget {
     return Builder(
       builder: (context) {
         final cubit = context.read<AuthCubit>();
+        final l10n = AppLocalizations.of(context)!;
         return BlocListener<AuthCubit, AuthState>(
           listener: (context, state) {
             switch (state) {
@@ -50,73 +53,71 @@ class ResetPasswordScreen extends StatelessWidget {
                 crossAxisAlignment: .center,
                 children: [
                   Text(
-                    'Reset Password',
+                    l10n.auth_resetPasswordTitle,
                     style: context.h5.copyWith(
                       fontSize: 24.sp,
                       fontWeight: FontWeight.w500,
                       color: context.primary400,
                     ),
-            ),
-                SizedBox(height: 8.h),
+                  ),
+                  SizedBox(height: 8.h),
 
-                    Text(
-                      'Please enter your new password to proceed.',
-                      style: context.body2.copyWith(color: context.neutral800),
+                  Text(
+                    l10n.auth_resetPasswordPrompt,
+                    style: context.body2.copyWith(color: context.neutral800),
+                  ),
+                  SizedBox(height: 24.h),
+                  FormBuilder(
+                    key: cubit.resetVerfiyPasswordFormKey,
+                    child: CustomFormBuilderTextField(
+                      name: 'password',
+                      label: l10n.common_password,
+                      iconData: CupertinoIcons.lock_fill,
+                      controller: cubit.resetPasswordController,
+                      isPassword: true,
+                      validators: [
+                        FormBuilderValidators.required(
+                          errorText: l10n.auth_passwordError,
+                        ),
+                        FormBuilderValidators.minLength(
+                          6,
+                          errorText: l10n.auth_passwordRule,
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 24.h),
-                    FormBuilder(
-                      key: cubit.resetVerfiyPasswordFormKey,
-                      child: CustomFormBuilderTextField(
-                        name: 'password',
-                        label: 'Password',
-                        iconData: CupertinoIcons.lock_fill,
-                        controller: cubit.resetPasswordController,
-                        isPassword: true,
-                        validators: [
-                          FormBuilderValidators.required(
-                            errorText: 'Incorrect password. Please try again.',
-                          ),
-                          FormBuilderValidators.minLength(
-                            6,
-                            errorText:
-                                'Includes at least one number or symbol (e.g., @, #, \$, !).',
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 32.h),
+                  ),
+                  SizedBox(height: 32.h),
 
-                    ContainerButton(
-                      label: 'verfiy',
-                      containerColor: context.primary300,
-                      textColor: context.neutral100,
-                      fontSize: 20,
-                      onTap: () async {
-                        if (cubit.resetVerfiyPasswordFormKey.currentState
-                                ?.saveAndValidate() ??
-                            false) {
-                          await cubit.resetPassword(
-                            newPassword: cubit.resetPasswordController.text,
-                          );
-                        }
-                      },
-                    ),
-                    SizedBox(height: 12.h),
+                  ContainerButton(
+                    label: l10n.auth_verifyButton,
+                    containerColor: context.primary300,
+                    textColor: context.neutral100,
+                    fontSize: 20,
+                    onTap: () async {
+                      if (cubit.resetVerfiyPasswordFormKey.currentState
+                              ?.saveAndValidate() ??
+                          false) {
+                        await cubit.resetPassword(
+                          newPassword: cubit.resetPasswordController.text,
+                        );
+                      }
+                    },
+                  ),
+                  SizedBox(height: 12.h),
 
-                    Spacer(),
-                  ],
-                ),
-              ),
-              body: SafeArea(
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: SvgPicture.asset('assets/icon/logo.svg'),
-                ),
+                  Spacer(),
+                ],
               ),
             ),
-          );
-        },
-   
-   
-  );}
+            body: SafeArea(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: SvgPicture.asset('assets/icon/logo.svg'),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

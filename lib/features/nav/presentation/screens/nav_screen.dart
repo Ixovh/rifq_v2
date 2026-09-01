@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/features/nav/presentation/cubit/nav_cubit.dart';
 import 'package:rifq_v2/features/nav/presentation/cubit/nav_state.dart';
@@ -14,6 +15,7 @@ class NavScreen extends StatelessWidget {
     return Builder(
       builder: (context) {
         final cubit = context.read<NavCubit>();
+        final l10n = AppLocalizations.of(context)!;
         return BlocBuilder<NavCubit, NavState>(
           builder: (context, state) {
             return Scaffold(
@@ -56,7 +58,7 @@ class NavScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 6.h),
                       Text(
-                        'Ask AI',
+                        l10n.nav_askAi,
                         style: context.body3.copyWith(
                           color: context.primary50,
                           fontWeight: FontWeight.w600,
@@ -110,7 +112,7 @@ class NavScreen extends StatelessWidget {
                                 ),
                                 SizedBox(height: 3.h),
                                 Text(
-                                  "Home",
+                                  l10n.nav_home,
                                   style: cubit.currentIndex == 0
                                       ? context.body3.copyWith(
                                           color: context.primary50,
@@ -144,7 +146,7 @@ class NavScreen extends StatelessWidget {
                                 ),
                                 SizedBox(height: 3.h),
                                 Text(
-                                  "Health",
+                                  l10n.nav_health,
                                   style: cubit.currentIndex == 1
                                       ? context.body3.copyWith(
                                           color: context.primary50,
@@ -182,7 +184,7 @@ class NavScreen extends StatelessWidget {
                                 ),
                                 SizedBox(height: 3.h),
                                 Text(
-                                  "Hotel",
+                                  l10n.nav_hotel,
                                   style: cubit.currentIndex == 2
                                       ? context.body3.copyWith(
                                           color: context.primary50,
@@ -216,7 +218,7 @@ class NavScreen extends StatelessWidget {
                                 ),
                                 SizedBox(height: 3.h),
                                 Text(
-                                  "Adoption",
+                                  l10n.nav_adoption,
                                   style: cubit.currentIndex == 3
                                       ? context.body3.copyWith(
                                           color: context.primary50,

@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rifq_v2/features/adoption/domain/entities/adoption_entity.dart';
 import 'package:rifq_v2/features/adoption/presentation/cubit/adoption_cubit.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
+import 'package:rifq_v2/shared/presentation/widgets/app_back_icon.dart';
 import 'package:rifq_v2/shared/presentation/widgets/app_toast.dart';
 import 'package:rifq_v2/shared/presentation/widgets/custome_button_widgets.dart';
 import 'package:rifq_v2/features/add_pet/presentation/cubit/add_pet_cubit.dart';
@@ -74,6 +76,8 @@ class AddPetScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     Future<String?> getOwnerId() async {
       return Supabase.instance.client.auth.currentUser?.id;
     }
@@ -114,7 +118,7 @@ class AddPetScreen extends StatelessWidget {
                 // ======================================================
                 if (!showAdoptionFields) {
                   context.showSuccessToast(
-                    'Pet added successfully',
+                    l10n.addPet_success,
                   );
 
                   Navigator.pop(context, true);
@@ -133,7 +137,7 @@ class AddPetScreen extends StatelessWidget {
 
                 if (ownerId == null) {
                   context.showErrorToast(
-                    'User profile not found',
+                    l10n.addPet_profileNotFound,
                   );
                   return;
                 }
@@ -202,7 +206,7 @@ class AddPetScreen extends StatelessWidget {
 
                   if (ownerId == null) {
                     context.showErrorToast(
-                      'User profile not found',
+                      l10n.addPet_profileNotFound,
                     );
                     return;
                   }
@@ -259,16 +263,13 @@ class AddPetScreen extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: context.background,
             title: Text(
-              "Add Your Pet",
+              l10n.addPet_title,
               style: context.body1,
             ),
             centerTitle: true,
 
             leading: IconButton(
-              icon: Icon(
-                CupertinoIcons.back,
-                color: context.neutral1000,
-              ),
+              icon: AppBackIcon(color: context.neutral1000),
               onPressed: () {
                 if (currentStep.value == 0) {
                   Navigator.pop(context);
@@ -398,8 +399,8 @@ class AddPetScreen extends StatelessWidget {
                       builder: (context, state) {
                         return CustomeButtonWidgets(
                           titel: step == 1
-                              ? "Save"
-                              : "Next",
+                              ? l10n.common_save
+                              : l10n.common_next,
 
                           isLoading:
                               state is AddPetLoading,
@@ -433,7 +434,7 @@ class AddPetScreen extends StatelessWidget {
                                 form.species.isEmpty ||
                                 form.birthdate == null) {
                               context.showWarningToast(
-                                'Please complete all fields',
+                                l10n.addPet_completeAllFields,
                               );
 
                               return;
@@ -460,7 +461,7 @@ class AddPetScreen extends StatelessWidget {
                               }
 
                               context.showErrorToast(
-                                'User profile not found',
+                                l10n.addPet_profileNotFound,
                               );
 
                               return;
@@ -620,7 +621,7 @@ class AddPetScreen extends StatelessWidget {
 //               Supabase.instance.client.auth.currentUser?.id;
 
 //           if (ownerId == null) {
-//             context.showErrorToast('User profile not found');
+//             context.showErrorToast(l10n.addPet_profileNotFound);
 //             return;
 //           }
 
@@ -794,7 +795,7 @@ class AddPetScreen extends StatelessWidget {
 
 //                             if (ownerId == null) {
 //                               if (!context.mounted) return;
-//                               context.showErrorToast('User profile not found');
+//                               context.showErrorToast(l10n.addPet_profileNotFound);
 //                               return;
 //                             }
 

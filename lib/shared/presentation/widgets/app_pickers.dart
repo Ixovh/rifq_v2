@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' hide TextDirection;
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+/// Species options shown in the "other pet types" sheet. `label` is an
+/// English fallback only — the UI renders [speciesLabel] instead.
 const otherSpecies = <({String value, String label, IconData icon})>[
   (value: 'bird', label: 'Bird', icon: Icons.flutter_dash_outlined),
   (value: 'falcon', label: 'Falcon', icon: Icons.air),
@@ -17,13 +20,84 @@ const otherSpecies = <({String value, String label, IconData icon})>[
   (value: 'other', label: 'Other', icon: Icons.more_horiz),
 ];
 
+String _dateLocale(BuildContext context) =>
+    Localizations.localeOf(context).toLanguageTag();
+
+bool _isRtl(BuildContext context) =>
+    Directionality.of(context) == TextDirection.rtl;
+
+/// Saudi/Arabic calendars start the week on Saturday; others on Sunday.
+StartingDayOfWeek _startingDayOfWeek(BuildContext context) {
+  final code = Localizations.localeOf(context).languageCode;
+  return code == 'ar'
+      ? StartingDayOfWeek.saturday
+      : StartingDayOfWeek.sunday;
+}
+
+HeaderStyle _calendarHeaderStyle(BuildContext context) {
+  final rtl = _isRtl(context);
+  return HeaderStyle(
+    titleCentered: true,
+    formatButtonVisible: false,
+    headerPadding: EdgeInsets.symmetric(vertical: 8.h),
+    titleTextStyle: context.body1.copyWith(color: context.neutral1000),
+    // TableCalendar's header Row mirrors under RTL Directionality, so swap
+    // the chevron glyphs so they still point outward.
+    leftChevronIcon: Icon(
+      rtl ? CupertinoIcons.chevron_right : CupertinoIcons.chevron_left,
+      size: 18.sp,
+      color: context.primary300,
+    ),
+    rightChevronIcon: Icon(
+      rtl ? CupertinoIcons.chevron_left : CupertinoIcons.chevron_right,
+      size: 18.sp,
+      color: context.primary300,
+    ),
+  );
+}
+
+/// Localized display name for a stored pet-species value (`'cat'`, `'dog'`,
+/// or one of [otherSpecies]). Falls back to the raw value for anything
+/// unrecognised (e.g. legacy free-text species).
+String speciesLabel(BuildContext context, String value) {
+  final l10n = AppLocalizations.of(context)!;
+  switch (value) {
+    case 'cat':
+      return l10n.species_cat;
+    case 'dog':
+      return l10n.species_dog;
+    case 'bird':
+      return l10n.species_bird;
+    case 'falcon':
+      return l10n.species_falcon;
+    case 'rabbit':
+      return l10n.species_rabbit;
+    case 'fish':
+      return l10n.species_fish;
+    case 'turtle':
+      return l10n.species_turtle;
+    case 'hamster':
+      return l10n.species_hamster;
+    case 'pigeon':
+      return l10n.species_pigeon;
+    case 'horse':
+      return l10n.species_horse;
+    case 'other':
+      return l10n.species_other;
+    default:
+      return value;
+  }
+}
+
 Future<DateTime?> showAppDatePicker({
   required BuildContext context,
   DateTime? selectedDate,
-  String title = 'Choose date',
+  String? title,
   DateTime? firstDay,
   DateTime? lastDay,
 }) {
+  final resolvedTitle =
+      title ?? AppLocalizations.of(context)!.common_chooseDateTitle;
   return showModalBottomSheet<DateTime>(
     context: context,
     isScrollControlled: true,
@@ -31,10 +105,54 @@ Future<DateTime?> showAppDatePicker({
     barrierColor: Colors.black.withValues(alpha: 0.35),
     builder: (_) => _AppDatePickerSheet(
       selectedDate: selectedDate,
-      title: title,
+      title: resolvedTitle,
       firstDay: firstDay ?? DateTime(2000),
       lastDay: lastDay ?? DateUtils.dateOnly(DateTime.now()),
     ),
+  );
+}
+
+Future<({DateTime start, DateTime end})?> showAppDateRangePicker({
+  required BuildContext context,
+  DateTime? initialStart,
+  DateTime? initialEnd,
+  String? title,
+  DateTime? firstDay,
+  DateTime? lastDay,
+}) {
+  final resolvedTitle =
+      title ?? AppLocalizations.of(context)!.common_chooseDatesTitle;
+  return showModalBottomSheet<({DateTime start, DateTime end})>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    barrierColor: Colors.black.withValues(alpha: 0.35),
+    builder: (_) => _AppDateRangePickerSheet(
+      initialStart: initialStart,
+      initialEnd: initialEnd,
+      title: resolvedTitle,
+      firstDay: firstDay ?? DateUtils.dateOnly(DateTime.now()),
+      lastDay:
+          lastDay ??
+          DateUtils.dateOnly(DateTime.now()).add(const Duration(days: 365)),
+    ),
+  );
+}
+
+Future<DateTime?> showAppTimePicker({
+  required BuildContext context,
+  DateTime? initial,
+  String? title,
+}) {
+  final resolvedTitle =
+      title ?? AppLocalizations.of(context)!.common_setTimeTitle;
+  return showModalBottomSheet<DateTime>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    barrierColor: Colors.black.withValues(alpha: 0.35),
+    builder: (_) =>
+        _AppTimePickerSheet(initial: initial, title: resolvedTitle),
   );
 }
 
@@ -218,14 +336,18 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = _dateLocale(context);
+
     return _SheetChrome(
       child: Padding(
-        padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 24.h),
+        padding: EdgeInsetsDirectional.fromSTEB(16.w, 16.h, 16.w, 24.h),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              _pickingMonthYear ? 'Choose month' : widget.title,
+              _pickingMonthYear
+                  ? AppLocalizations.of(context)!.pickers_chooseMonth
+                  : widget.title,
               style: context.body1,
             ),
             SizedBox(height: 4.h),
@@ -233,8 +355,12 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
               _pickingMonthYear
                   ? DateFormat(
                       'MMMM yyyy',
+                      locale,
                     ).format(DateTime(_pickerYear, _pickerMonth))
-                  : DateFormat('EEEE, d MMMM yyyy').format(_selectedDay),
+                  : DateFormat(
+                      'EEEE, d MMMM yyyy',
+                      locale,
+                    ).format(_selectedDay),
               style: context.body3.copyWith(color: context.primary300),
             ),
             SizedBox(height: 8.h),
@@ -263,7 +389,9 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
                   ),
                 ),
                 child: Text(
-                  _pickingMonthYear ? 'Done' : 'Confirm',
+                  _pickingMonthYear
+                      ? AppLocalizations.of(context)!.common_done
+                      : AppLocalizations.of(context)!.common_confirm,
                   style: context.body1.copyWith(color: Colors.white),
                 ),
               ),
@@ -273,7 +401,7 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
               TextButton(
                 onPressed: () => setState(() => _pickingMonthYear = false),
                 child: Text(
-                  'Back to calendar',
+                  AppLocalizations.of(context)!.pickers_backToCalendar,
                   style: context.body2.copyWith(color: context.neutral600),
                 ),
               ),
@@ -286,8 +414,12 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
   }
 
   Widget _buildCalendar(BuildContext context) {
+    final locale = _dateLocale(context);
+
     return TableCalendar(
-      key: ValueKey('cal_${_focusedDay.year}_${_focusedDay.month}'),
+      key: ValueKey('cal_${_focusedDay.year}_${_focusedDay.month}_$locale'),
+      locale: locale,
+      startingDayOfWeek: _startingDayOfWeek(context),
       firstDay: widget.firstDay,
       lastDay: widget.lastDay,
       focusedDay: _focusedDay,
@@ -298,22 +430,7 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
       },
       calendarFormat: CalendarFormat.month,
       availableGestures: AvailableGestures.horizontalSwipe,
-      headerStyle: HeaderStyle(
-        titleCentered: true,
-        formatButtonVisible: false,
-        headerPadding: EdgeInsets.symmetric(vertical: 8.h),
-        titleTextStyle: context.body1.copyWith(color: context.neutral1000),
-        leftChevronIcon: Icon(
-          CupertinoIcons.chevron_left,
-          size: 18.sp,
-          color: context.primary300,
-        ),
-        rightChevronIcon: Icon(
-          CupertinoIcons.chevron_right,
-          size: 18.sp,
-          color: context.primary300,
-        ),
-      ),
+      headerStyle: _calendarHeaderStyle(context),
       calendarBuilders: CalendarBuilders(
         headerTitleBuilder: (context, day) {
           // Custom titles replace TableCalendar's default GestureDetector,
@@ -328,7 +445,7 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    DateFormat('MMMM yyyy').format(day),
+                    DateFormat('MMMM yyyy', locale).format(day),
                     style: context.body1.copyWith(color: context.neutral1000),
                   ),
                   SizedBox(width: 4.w),
@@ -382,6 +499,7 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
 
   Widget _buildMonthYearPicker(BuildContext context) {
     final months = _monthsForYear(_pickerYear);
+    final locale = _dateLocale(context);
 
     return SizedBox(
       height: 220.h,
@@ -402,7 +520,7 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
                 for (final m in months)
                   Center(
                     child: Text(
-                      DateFormat('MMMM').format(DateTime(2000, m)),
+                      DateFormat('MMMM', locale).format(DateTime(2000, m)),
                       style: context.body2,
                     ),
                   ),
@@ -428,6 +546,265 @@ class _AppDatePickerSheetState extends State<_AppDatePickerSheet> {
   }
 }
 
+class _AppDateRangePickerSheet extends StatefulWidget {
+  const _AppDateRangePickerSheet({
+    this.initialStart,
+    this.initialEnd,
+    required this.title,
+    required this.firstDay,
+    required this.lastDay,
+  });
+
+  final DateTime? initialStart;
+  final DateTime? initialEnd;
+  final String title;
+  final DateTime firstDay;
+  final DateTime lastDay;
+
+  @override
+  State<_AppDateRangePickerSheet> createState() =>
+      _AppDateRangePickerSheetState();
+}
+
+class _AppDateRangePickerSheetState extends State<_AppDateRangePickerSheet> {
+  late DateTime _focusedDay;
+  DateTime? _rangeStart;
+  DateTime? _rangeEnd;
+
+  @override
+  void initState() {
+    super.initState();
+    _rangeStart = widget.initialStart != null
+        ? DateUtils.dateOnly(widget.initialStart!)
+        : null;
+    _rangeEnd = widget.initialEnd != null
+        ? DateUtils.dateOnly(widget.initialEnd!)
+        : null;
+    _focusedDay = _rangeStart ?? DateUtils.dateOnly(DateTime.now());
+  }
+
+  bool get _canApply =>
+      _rangeStart != null &&
+      _rangeEnd != null &&
+      _rangeEnd!.isAfter(_rangeStart!);
+
+  @override
+  Widget build(BuildContext context) {
+    final locale = _dateLocale(context);
+
+    return _SheetChrome(
+      child: Padding(
+        padding: EdgeInsetsDirectional.fromSTEB(16.w, 16.h, 16.w, 24.h),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(widget.title, style: context.body1),
+            SizedBox(height: 4.h),
+            Text(
+              _rangeStart == null
+                  ? AppLocalizations.of(context)!.pickers_selectDateRange
+                  : _rangeEnd == null
+                  ? DateFormat('EEE, d MMM', locale).format(_rangeStart!)
+                  : '${DateFormat('EEE, d MMM', locale).format(_rangeStart!)} - '
+                        '${DateFormat('EEE, d MMM yyyy', locale).format(_rangeEnd!)}',
+              style: context.body3.copyWith(color: context.primary300),
+            ),
+            SizedBox(height: 8.h),
+            TableCalendar(
+              locale: locale,
+              startingDayOfWeek: _startingDayOfWeek(context),
+              firstDay: widget.firstDay,
+              lastDay: widget.lastDay,
+              focusedDay: _focusedDay,
+              rangeStartDay: _rangeStart,
+              rangeEndDay: _rangeEnd,
+              rangeSelectionMode: RangeSelectionMode.toggledOn,
+              calendarFormat: CalendarFormat.month,
+              availableGestures: AvailableGestures.horizontalSwipe,
+              headerStyle: _calendarHeaderStyle(context),
+              daysOfWeekStyle: DaysOfWeekStyle(
+                weekdayStyle: context.body3.copyWith(color: context.neutral600),
+                weekendStyle: context.body3.copyWith(color: context.neutral600),
+              ),
+              calendarStyle: CalendarStyle(
+                outsideDaysVisible: false,
+                defaultTextStyle: context.body2.copyWith(
+                  color: context.neutral1000,
+                ),
+                weekendTextStyle: context.body2.copyWith(
+                  color: context.neutral1000,
+                ),
+                disabledTextStyle: context.body2.copyWith(
+                  color: context.neutral400,
+                ),
+                todayDecoration: BoxDecoration(
+                  color: context.primary100,
+                  shape: BoxShape.circle,
+                ),
+                todayTextStyle: context.body2.copyWith(
+                  color: context.primary500,
+                  fontWeight: FontWeight.w600,
+                ),
+                rangeHighlightColor: context.primary100.withValues(alpha: 0.5),
+                rangeStartDecoration: BoxDecoration(
+                  color: context.primary300,
+                  shape: BoxShape.circle,
+                ),
+                rangeEndDecoration: BoxDecoration(
+                  color: context.primary300,
+                  shape: BoxShape.circle,
+                ),
+                rangeStartTextStyle: context.body2.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+                rangeEndTextStyle: context.body2.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+                withinRangeDecoration: BoxDecoration(
+                  color: context.primary100.withValues(alpha: 0.5),
+                  shape: BoxShape.circle,
+                ),
+                withinRangeTextStyle: context.body2.copyWith(
+                  color: context.primary400,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              onRangeSelected: (start, end, focusedDay) {
+                setState(() {
+                  _rangeStart = start != null
+                      ? DateUtils.dateOnly(start)
+                      : null;
+                  _rangeEnd = end != null ? DateUtils.dateOnly(end) : null;
+                  _focusedDay = focusedDay;
+                });
+              },
+              onPageChanged: (focused) => setState(() => _focusedDay = focused),
+            ),
+            SizedBox(height: 16.h),
+            SizedBox(
+              width: double.infinity,
+              height: 52.h,
+              child: ElevatedButton(
+                onPressed: _canApply
+                    ? () => Navigator.pop(context, (
+                        start: _rangeStart!,
+                        end: _rangeEnd!,
+                      ))
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: context.primary300,
+                  disabledBackgroundColor: context.primary100,
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                ),
+                child: Text(
+                  AppLocalizations.of(context)!.common_apply,
+                  style: context.body1.copyWith(color: Colors.white),
+                ),
+              ),
+            ),
+            SizedBox(height: 8.h),
+            TextButton(
+              onPressed: () => setState(() {
+                _rangeStart = null;
+                _rangeEnd = null;
+              }),
+              child: Text(
+                AppLocalizations.of(context)!.common_reset,
+                style: context.body2.copyWith(color: context.neutral600),
+              ),
+            ),
+            SizedBox(height: MediaQuery.paddingOf(context).bottom),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AppTimePickerSheet extends StatefulWidget {
+  const _AppTimePickerSheet({this.initial, required this.title});
+
+  final DateTime? initial;
+  final String title;
+
+  @override
+  State<_AppTimePickerSheet> createState() => _AppTimePickerSheetState();
+}
+
+class _AppTimePickerSheetState extends State<_AppTimePickerSheet> {
+  late DateTime _selected;
+
+  @override
+  void initState() {
+    super.initState();
+    _selected = widget.initial ?? DateTime.now();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _SheetChrome(
+      child: Padding(
+        padding: EdgeInsetsDirectional.fromSTEB(16.w, 16.h, 16.w, 24.h),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(widget.title, style: context.body1),
+            SizedBox(height: 12.h),
+            SizedBox(
+              height: 200.h,
+              child: Localizations.override(
+                context: context,
+                locale: Localizations.localeOf(context),
+                child: CupertinoDatePicker(
+                  mode: CupertinoDatePickerMode.time,
+                  initialDateTime: _selected,
+                  use24hFormat: false,
+                  onDateTimeChanged: (value) => _selected = value,
+                ),
+              ),
+            ),
+            SizedBox(height: 16.h),
+            SizedBox(
+              width: double.infinity,
+              height: 52.h,
+              child: ElevatedButton(
+                onPressed: () => Navigator.pop(context, _selected),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: context.primary300,
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                ),
+                child: Text(
+                  AppLocalizations.of(context)!.common_save,
+                  style: context.body1.copyWith(color: Colors.white),
+                ),
+              ),
+            ),
+            SizedBox(height: 8.h),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(
+                AppLocalizations.of(context)!.common_cancel,
+                style: context.body2.copyWith(color: context.neutral600),
+              ),
+            ),
+            SizedBox(height: MediaQuery.paddingOf(context).bottom),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _AppSpeciesSheet extends StatelessWidget {
   const _AppSpeciesSheet({required this.selectedSpecies});
 
@@ -447,10 +824,13 @@ class _AppSpeciesSheet extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Select pet type', style: context.body1),
+            Text(
+              AppLocalizations.of(context)!.pickers_selectPetType,
+              style: context.body1,
+            ),
             SizedBox(height: 4.h),
             Text(
-              'Another common pets',
+              AppLocalizations.of(context)!.pickers_otherCommonPets,
               style: context.body3.copyWith(color: context.neutral600),
             ),
             SizedBox(height: 16.h),
@@ -504,7 +884,7 @@ class _AppSpeciesSheet extends StatelessWidget {
                             SizedBox(width: 12.w),
                             Expanded(
                               child: Text(
-                                option.label,
+                                speciesLabel(context, option.value),
                                 style: context.body2.copyWith(
                                   color: selected
                                       ? context.primary400

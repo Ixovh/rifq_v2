@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:phone_text_field/helper/countries.dart';
 import 'package:phone_text_field/phone_text_field.dart';
+import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 
 class PhoneNumberField extends StatefulWidget {
@@ -96,10 +97,12 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
       validator: (value) {
         final text = value?.trim() ?? '';
         if (text.isEmpty) {
-          return widget.isRequired ? 'Phone number is required' : null;
+          return widget.isRequired
+              ? AppLocalizations.of(context)!.account_phoneRequired
+              : null;
         }
         if (text.length != 9) {
-          return 'Enter a valid 9-digit phone number';
+          return AppLocalizations.of(context)!.account_phoneInvalid9;
         }
         return null;
       },
@@ -113,7 +116,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
                 Container(
                   height: 56.h,
                   width: double.infinity,
-                  padding: EdgeInsets.only(left: 10.w, right: 16.w),
+                  padding: EdgeInsetsDirectional.only(start: 10.w, end: 16.w),
                   decoration: BoxDecoration(
                     color: context.neutral100,
                     borderRadius: BorderRadius.circular(18.r),
@@ -128,82 +131,87 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
                           : widget.borderColor ?? context.neutral200,
                     ),
                   ),
-                  child: Row(
-                    children: [
-                      InkWell(
-                        onTap: _pickCountry,
-                        borderRadius: BorderRadius.circular(12.r),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 8.w,
-                            vertical: 8.h,
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                _country.flag,
-                                style: TextStyle(fontSize: 20.sp),
-                              ),
-                              SizedBox(width: 6.w),
-                              Text(
-                                '+${_country.dialCode}',
-                                style: context.body2.copyWith(
-                                  color: context.neutral1000,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16.sp,
+                  // Phone numbers read left-to-right in any UI language: keep the
+                  // dial code, divider and digit field in fixed LTR order.
+                  child: Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: Row(
+                      children: [
+                        InkWell(
+                          onTap: _pickCountry,
+                          borderRadius: BorderRadius.circular(12.r),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8.w,
+                              vertical: 8.h,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  _country.flag,
+                                  style: TextStyle(fontSize: 20.sp),
                                 ),
-                              ),
-                              Icon(
-                                Icons.keyboard_arrow_down_rounded,
-                                color: context.neutral700,
-                                size: 22.sp,
-                              ),
+                                SizedBox(width: 6.w),
+                                Text(
+                                  '+${_country.dialCode}',
+                                  style: context.body2.copyWith(
+                                    color: context.neutral1000,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16.sp,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  color: context.neutral700,
+                                  size: 22.sp,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 1,
+                          height: 24.h,
+                          color: context.neutral200,
+                        ),
+                        SizedBox(width: 10.w),
+                        Expanded(
+                          child: TextField(
+                            controller: _controller,
+                            keyboardType: TextInputType.phone,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(9),
                             ],
+                            onChanged: (value) {
+                              field.didChange(value);
+                              _emit();
+                            },
+                            style: context.body2.copyWith(
+                              color: context.neutral1000,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18.sp,
+                            ),
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                            ),
                           ),
                         ),
-                      ),
-                      Container(
-                        width: 1,
-                        height: 24.h,
-                        color: context.neutral200,
-                      ),
-                      SizedBox(width: 10.w),
-                      Expanded(
-                        child: TextField(
-                          controller: _controller,
-                          keyboardType: TextInputType.phone,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(9),
-                          ],
-                          onChanged: (value) {
-                            field.didChange(value);
-                            _emit();
-                          },
-                          style: context.body2.copyWith(
-                            color: context.neutral1000,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18.sp,
-                          ),
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            isDense: true,
-                            contentPadding: EdgeInsets.zero,
-                          ),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-                Positioned(
-                  left: 22.w,
+                PositionedDirectional(
+                  start: 22.w,
                   top: -10.h,
                   child: Container(
                     color: context.neutral100,
                     padding: EdgeInsets.symmetric(horizontal: 4.w),
                     child: Text(
-                      'Phone number',
+                      AppLocalizations.of(context)!.common_phoneNumber,
                       style: context.body2.copyWith(
                         color: context.neutral700,
                         fontWeight: FontWeight.w400,
@@ -331,7 +339,7 @@ class _PhoneCountryPickerSheetState
                 children: [
                   Expanded(
                     child: Text(
-                      'Select country',
+                      AppLocalizations.of(context)!.account_selectCountry,
                       style: context.h5.copyWith(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.w600,
@@ -360,7 +368,7 @@ class _PhoneCountryPickerSheetState
                   fontWeight: FontWeight.w500,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'Search by name or code',
+                  hintText: AppLocalizations.of(context)!.account_searchCountry,
                   hintStyle: context.body2.copyWith(color: context.neutral500),
                   prefixIcon: Icon(
                     Icons.search_rounded,
@@ -396,7 +404,7 @@ class _PhoneCountryPickerSheetState
               child: _filtered.isEmpty
                   ? Center(
                       child: Text(
-                        'No countries found',
+                        AppLocalizations.of(context)!.account_noCountriesFound,
                         style: context.body2.copyWith(
                           color: context.neutral700,
                         ),
