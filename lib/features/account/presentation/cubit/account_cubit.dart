@@ -155,6 +155,27 @@ class AccountCubit extends Cubit<AccountState> {
     );
   }
 
+  Future<void> deleteAccount() async {
+    final previous = state;
+    emit(AccountLoading());
+
+    (await _accountUseCase.deleteAccount()).when(
+      (_) => emit(AccountDeleteSuccessState()),
+      (error) {
+        emit(
+          AccountErrorState(
+            msg: CatchErrorMessage(error: error).getWriteMessage(),
+          ),
+        );
+        if (previous is AccountLoadedState) {
+          emit(previous);
+        } else if (previous is AccountGuestState) {
+          emit(previous);
+        }
+      },
+    );
+  }
+
   @override
   Future<void> close() {
     firstNameController.dispose();

@@ -18,4 +18,6 @@ abstract class AccountRepoDomain {
   });
 
   Future<Result<Null, Object>> logOut();
+
+  Future<Result<Null, Object>> deleteAccount();
 }

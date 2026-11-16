@@ -21,6 +21,8 @@ abstract class BaseEditPetDataSource {
     double? weight,
     File? photoFile,
   });
+
+  Future<Result<Null, Object>> deletePet(String petId);
 }
 
 @LazySingleton(as: BaseEditPetDataSource)
@@ -123,6 +125,102 @@ class EditPetDataSource implements BaseEditPetDataSource {
         await UserDataStore.updatePet(userId, petId, previous);
       }
       return Result.error(CatchErrorMessage(error: e).getWriteMessage());
+    }
+  }
+
+  @override
+  Future<Result<Null, Object>> deletePet(String petId) async {
+    final userId = _userId;
+    if (userId == null) return Error('User not found');
+
+    try {
+      final owned = await _supabase
+          .from('pets')
+          .select('id')
+          .eq('id', petId)
+          .eq('owner_id', userId)
+          .maybeSingle();
+      if (owned == null) return Error('Pet not found');
+
+      final photoPaths = await _petPhotoPaths(userId, petId);
+
+      final posts = await _supabase
+          .from('adoption_posts')
+          .select('id')
+          .eq('pet_id', petId)
+          .eq('poster_id', userId);
+      final postIds = (posts as List)
+          .map((row) => (row as Map)['id'])
+          .whereType<String>()
+          .toList();
+      if (postIds.isNotEmpty) {
+        await _supabase
+            .from('adoption_requests')
+            .delete()
+            .inFilter('adoption_post_id', postIds);
+        await _supabase
+            .from('adoption_posts')
+            .delete()
+            .inFilter('id', postIds)
+            .eq('poster_id', userId);
+      }
+
+      await _supabase
+          .from('pet_health_records')
+          .delete()
+          .eq('pet_id', petId)
+          .eq('owner_id', userId);
+
+      await _supabase.from('pet_photos').delete().eq('pet_id', petId);
+
+      final deleted = await _supabase
+          .from('pets')
+          .delete()
+          .eq('id', petId)
+          .eq('owner_id', userId)
+          .select('id');
+      if ((deleted as List).isEmpty) return Error('Pet not found');
+
+      await _removePetPhotos(photoPaths);
+      await UserDataStore.removePet(userId, petId);
+      return Success(null);
+    } catch (e) {
+      return Result.error(CatchErrorMessage(error: e).getWriteMessage());
+    }
+  }
+
+  Future<List<String>> _petPhotoPaths(String userId, String petId) async {
+    final rows = await _supabase
+        .from('pet_photos')
+        .select('storage_path')
+        .eq('pet_id', petId);
+    final paths = <String>{};
+    for (final raw in rows as List) {
+      final path = (raw as Map)['storage_path'];
+      if (path is String && path.isNotEmpty) paths.add(path);
+    }
+
+    try {
+      final items = await _supabase.storage
+          .from(StorageBuckets.petPhotos)
+          .list(path: '$userId/$petId');
+      for (final item in items) {
+        if (item.name.isEmpty) continue;
+        paths.add('$userId/$petId/${item.name}');
+      }
+    } catch (_) {
+      // Photos uploaded at add-pet time live beside the user folder, not inside it.
+    }
+
+    return paths.toList();
+  }
+
+  Future<void> _removePetPhotos(List<String> paths) async {
+    if (paths.isEmpty) return;
+    try {
+      await _supabase.storage.from(StorageBuckets.petPhotos).remove(paths);
+    } catch (_) {
+      // The pet row is already gone. A leftover file should not keep it on screen.
     }
   }
 

@@ -48,6 +48,8 @@ class AccountUpdateSuccessState extends AccountState {
 
 class AccountLogoutSuccessState extends AccountState {}
 
+class AccountDeleteSuccessState extends AccountState {}
+
 class AccountErrorState extends AccountState {
   final String msg;
 

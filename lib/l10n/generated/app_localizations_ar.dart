@@ -429,6 +429,13 @@ class AppLocalizationsAr extends AppLocalizations {
       'هل أنت متأكد من رغبتك في تسجيل الخروج؟';
 
   @override
+  String get account_deleteAccount => 'حذف الحساب';
+
+  @override
+  String get account_deleteAccountMessage =>
+      'هل تريد حذف حسابك؟ سيتم حذف ملفك وحيواناتك وبياناتك الشخصية، ولا يمكن التراجع عن هذا الإجراء.';
+
+  @override
   String get account_noPetsYet => 'لا توجد حيوانات أليفة بعد';
 
   @override
@@ -547,6 +554,20 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get editPet_invalidWeight => 'أدخل وزنًا صحيحًا';
+
+  @override
+  String get editPet_deleteTitle => 'حذف الحيوان';
+
+  @override
+  String editPet_deleteMessage(String name) {
+    return 'هل تريد حذف $name؟ لا يمكن التراجع عن هذا الإجراء.';
+  }
+
+  @override
+  String get editPet_delete => 'حذف';
+
+  @override
+  String get editPet_deleted => 'تم حذف الحيوان';
 
   @override
   String get healthRecord_chooseVisitDate => 'اختر تاريخ الزيارة';

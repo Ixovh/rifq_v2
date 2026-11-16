@@ -171,6 +171,8 @@
   "account_language": "Language",
   "account_logout": "Log out",
   "account_logoutConfirmMessage": "Are you sure you want to log out?",
+  "account_deleteAccount": "Delete account",
+  "account_deleteAccountMessage": "Delete your account? Your profile, pets, and personal data will be removed. This cannot be undone.",
   "account_noPetsYet": "No pets yet",
   "account_listedForAdoption": "Listed for Adoption",
   "account_phoneRequired": "Phone number is required",
@@ -219,6 +221,15 @@
   "editPet_ageLabel": "Pet's age",
   "editPet_ageRequired": "Pet age is required",
   "editPet_invalidWeight": "Enter a valid weight",
+  "editPet_deleteTitle": "Delete pet",
+  "editPet_deleteMessage": "Delete {name}? This cannot be undone.",
+  "@editPet_deleteMessage": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "editPet_delete": "Delete",
+  "editPet_deleted": "Pet deleted",
 
   "healthRecord_chooseVisitDate": "Choose date of visit",
   "healthRecord_visitDateRequired": "Please choose a visit date",

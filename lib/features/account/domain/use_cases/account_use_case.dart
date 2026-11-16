@@ -32,4 +32,7 @@ class AccountUseCase {
   );
 
   Future<Result<Null, Object>> logOut() async => await accountRepoData.logOut();
+
+  Future<Result<Null, Object>> deleteAccount() async =>
+      await accountRepoData.deleteAccount();
 }

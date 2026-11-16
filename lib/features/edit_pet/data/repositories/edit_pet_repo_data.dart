@@ -32,4 +32,8 @@ class EditPetRepoData implements EditPetRepoDomain {
     weight: weight,
     photoFile: photoFile,
   );
+
+  @override
+  Future<Result<Null, Object>> deletePet(String petId) async =>
+      editPetDataSource.deletePet(petId);
 }

@@ -5,7 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rifq_v2/l10n/generated/app_localizations.dart';
 import 'package:rifq_v2/features/account/presentation/cubit/account_cubit.dart';
+import 'package:rifq_v2/features/account/domain/entities/account_entity.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/account_pet_card.dart';
+import 'package:rifq_v2/features/account/presentation/widgets/delete_pet_flow.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
 import 'package:rifq_v2/shared/presentation/router/app_router.dart';
 import 'package:rifq_v2/shared/presentation/widgets/lottie_loding.dart';
@@ -22,6 +24,17 @@ class AccountPetsScreen extends StatelessWidget {
       child: const _AccountPetsView(),
     );
   }
+}
+
+Future<void> _deletePet(BuildContext context, AccountPetEntity pet) async {
+  final deleted = await confirmAndDeletePet(
+    context: context,
+    petId: pet.id,
+    petName: pet.name,
+  );
+  if (!deleted || !context.mounted) return;
+  await context.read<AccountCubit>().loadAccount();
+  if (context.mounted) showPetDeletedToast(context);
 }
 
 class _AccountPetsView extends StatelessWidget {
@@ -100,11 +113,13 @@ class _AccountPetsView extends StatelessWidget {
                         pet: pet,
                         fullWidth: true,
                         onTap: () async {
-                          await context.pushRoute(
+                          final deleted = await context.pushRoute(
                             PetProfileRoute(petId: pet.id),
                           );
-                          if (context.mounted) {
-                            context.read<AccountCubit>().loadAccount();
+                          if (!context.mounted) return;
+                          await context.read<AccountCubit>().loadAccount();
+                          if (deleted == true && context.mounted) {
+                            showPetDeletedToast(context);
                           }
                         },
                         onEditTap: () async {
@@ -113,6 +128,7 @@ class _AccountPetsView extends StatelessWidget {
                             context.read<AccountCubit>().loadAccount();
                           }
                         },
+                        onDeleteTap: () => _deletePet(context, pet),
                       );
                     },
                   );

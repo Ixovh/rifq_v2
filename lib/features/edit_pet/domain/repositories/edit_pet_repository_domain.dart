@@ -14,4 +14,6 @@ abstract class EditPetRepoDomain {
     double? weight,
     File? photoFile,
   });
+
+  Future<Result<Null, Object>> deletePet(String petId);
 }

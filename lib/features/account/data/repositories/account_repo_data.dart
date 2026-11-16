@@ -38,4 +38,8 @@ class AccountRepoData implements AccountRepoDomain {
   @override
   Future<Result<Null, Object>> logOut() async =>
       await accountDataSource.logOut();
+
+  @override
+  Future<Result<Null, Object>> deleteAccount() async =>
+      await accountDataSource.deleteAccount();
 }

@@ -110,6 +110,41 @@ class EditPetCubit extends Cubit<EditPetState> {
     );
   }
 
+  /// Returns an error message, or null when the pet was deleted.
+  Future<String?> deletePet(String petId) async {
+    if (state is EditPetDeleting) return 'Delete already in progress';
+
+    final pet = _visiblePet();
+    if (pet != null) emit(EditPetDeleting(pet: pet));
+
+    return (await _editPetUseCase.deletePet(petId)).when(
+      (_) {
+        if (!isClosed && pet != null) emit(EditPetDeleteSuccess(pet: pet));
+        return null;
+      },
+      (error) {
+        final message = CatchErrorMessage(error: error).getWriteMessage();
+        if (!isClosed && pet != null) {
+          emit(EditPetDeleteFailure(pet: pet, message: message));
+        }
+        return message;
+      },
+    );
+  }
+
+  AccountPetEntity? _visiblePet() {
+    final current = state;
+    return switch (current) {
+      EditPetLoaded(:final pet) => pet,
+      EditPetUpdating(:final pet) => pet,
+      EditPetUpdateSuccess(:final pet) => pet,
+      EditPetDeleting(:final pet) => pet,
+      EditPetDeleteSuccess(:final pet) => pet,
+      EditPetDeleteFailure(:final pet) => pet,
+      _ => _loadedPet,
+    };
+  }
+
   @override
   Future<void> close() {
     nameController.dispose();

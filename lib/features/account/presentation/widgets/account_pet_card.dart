@@ -11,12 +11,14 @@ class AccountPetCard extends StatelessWidget {
     required this.pet,
     this.onTap,
     this.onEditTap,
+    this.onDeleteTap,
     this.fullWidth = false,
   });
 
   final AccountPetEntity pet;
   final VoidCallback? onTap;
   final VoidCallback? onEditTap;
+  final VoidCallback? onDeleteTap;
   final bool fullWidth;
 
   @override
@@ -48,34 +50,61 @@ class AccountPetCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(
-                l10n.petProfile_title,
-                style: context.body3.copyWith(
-                  color: context.neutral500,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14.sp,
+              Expanded(
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        l10n.petProfile_title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: context.body3.copyWith(
+                          color: context.neutral500,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                    ),
+                    if (pet.listedForAdoption) ...[
+                      SizedBox(width: 8.w),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8.w,
+                          vertical: 2.h,
+                        ),
+                        decoration: BoxDecoration(
+                          color: context.primary100,
+                          borderRadius: BorderRadius.circular(4.r),
+                          border: Border.all(color: context.primary300),
+                        ),
+                        child: Text(
+                          l10n.account_listedForAdoption,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: context.body3.copyWith(
+                            color: context.primary300,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 10.sp,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
               ),
-              if (pet.listedForAdoption) ...[
-                SizedBox(width: 8.w),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
-                  decoration: BoxDecoration(
-                    color: context.primary100,
-                    borderRadius: BorderRadius.circular(4.r),
-                    border: Border.all(color: context.primary300),
-                  ),
-                  child: Text(
-                    l10n.account_listedForAdoption,
-                    style: context.body3.copyWith(
-                      color: context.primary300,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 10.sp,
+              if (onDeleteTap != null)
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: onDeleteTap,
+                  child: Padding(
+                    padding: EdgeInsets.all(4.w),
+                    child: Icon(
+                      Icons.delete_outline,
+                      size: 16.sp,
+                      color: context.red10,
                     ),
                   ),
                 ),
-              ],
-              const Spacer(),
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: onEditTap,

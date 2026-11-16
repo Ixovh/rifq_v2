@@ -412,6 +412,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Are you sure you want to log out?';
 
   @override
+  String get account_deleteAccount => 'Delete account';
+
+  @override
+  String get account_deleteAccountMessage =>
+      'Delete your account? Your profile, pets, and personal data will be removed. This cannot be undone.';
+
+  @override
   String get account_noPetsYet => 'No pets yet';
 
   @override
@@ -529,6 +536,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get editPet_invalidWeight => 'Enter a valid weight';
+
+  @override
+  String get editPet_deleteTitle => 'Delete pet';
+
+  @override
+  String editPet_deleteMessage(String name) {
+    return 'Delete $name? This cannot be undone.';
+  }
+
+  @override
+  String get editPet_delete => 'Delete';
+
+  @override
+  String get editPet_deleted => 'Pet deleted';
 
   @override
   String get healthRecord_chooseVisitDate => 'Choose date of visit';

@@ -806,6 +806,18 @@ abstract class AppLocalizations {
   /// **'Are you sure you want to log out?'**
   String get account_logoutConfirmMessage;
 
+  /// No description provided for @account_deleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get account_deleteAccount;
+
+  /// No description provided for @account_deleteAccountMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your account? Your profile, pets, and personal data will be removed. This cannot be undone.'**
+  String get account_deleteAccountMessage;
+
   /// No description provided for @account_noPetsYet.
   ///
   /// In en, this message translates to:
@@ -1039,6 +1051,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter a valid weight'**
   String get editPet_invalidWeight;
+
+  /// No description provided for @editPet_deleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete pet'**
+  String get editPet_deleteTitle;
+
+  /// No description provided for @editPet_deleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {name}? This cannot be undone.'**
+  String editPet_deleteMessage(String name);
+
+  /// No description provided for @editPet_delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get editPet_delete;
+
+  /// No description provided for @editPet_deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Pet deleted'**
+  String get editPet_deleted;
 
   /// No description provided for @healthRecord_chooseVisitDate.
   ///

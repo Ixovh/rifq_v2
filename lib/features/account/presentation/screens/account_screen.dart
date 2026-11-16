@@ -10,6 +10,7 @@ import 'package:rifq_v2/features/account/presentation/widgets/account_avatar.dar
 import 'package:rifq_v2/features/account/presentation/widgets/account_info_row.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/account_menu_tile.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/account_pet_card.dart';
+import 'package:rifq_v2/features/account/presentation/widgets/delete_pet_flow.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/account_section_header.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/language_picker_sheet.dart';
 import 'package:rifq_v2/shared/presentation/extensions/context_theme_extension.dart';
@@ -43,7 +44,8 @@ class _AccountView extends StatelessWidget {
         if (state is AccountErrorState) {
           context.showErrorToast(state.msg);
         }
-        if (state is AccountLogoutSuccessState) {
+        if (state is AccountLogoutSuccessState ||
+            state is AccountDeleteSuccessState) {
           context.router.replaceAll([const ChoosePathRoute()]);
         }
       },
@@ -208,7 +210,12 @@ class _SignedAccountBody extends StatelessWidget {
                   AccountSectionHeader(
                     title: AppLocalizations.of(context)!.common_yourPets,
                     actionLabel: AppLocalizations.of(context)!.common_seeAll,
-                    onAction: () => context.pushRoute(AccountPetsRoute()),
+                    onAction: () async {
+                      await context.pushRoute(AccountPetsRoute());
+                      if (context.mounted) {
+                        await context.read<AccountCubit>().loadAccount();
+                      }
+                    },
                   ),
                   SizedBox(height: 12.h),
                   SizedBox(
@@ -221,11 +228,13 @@ class _SignedAccountBody extends StatelessWidget {
                         return AccountPetCard(
                           pet: pet,
                           onTap: () async {
-                            await context.pushRoute(
+                            final deleted = await context.pushRoute(
                               PetProfileRoute(petId: pet.id),
                             );
-                            if (context.mounted) {
-                              context.read<AccountCubit>().loadAccount();
+                            if (!context.mounted) return;
+                            await context.read<AccountCubit>().loadAccount();
+                            if (deleted == true && context.mounted) {
+                              showPetDeletedToast(context);
                             }
                           },
                           onEditTap: () async {
@@ -236,6 +245,7 @@ class _SignedAccountBody extends StatelessWidget {
                               context.read<AccountCubit>().loadAccount();
                             }
                           },
+                          onDeleteTap: () => _deletePet(context, pet),
                         );
                       },
                     ),
@@ -258,6 +268,12 @@ class _SignedAccountBody extends StatelessWidget {
                   labelColor: context.red10,
                   onTap: () => _confirmLogout(context),
                 ),
+                AccountMenuTile(
+                  icon: Icons.person_remove_outlined,
+                  label: AppLocalizations.of(context)!.account_deleteAccount,
+                  labelColor: context.red10,
+                  onTap: () => _confirmDeleteAccount(context),
+                ),
                 SizedBox(height: 24.h),
               ],
             ),
@@ -266,6 +282,17 @@ class _SignedAccountBody extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> _deletePet(BuildContext context, AccountPetEntity pet) async {
+  final deleted = await confirmAndDeletePet(
+    context: context,
+    petId: pet.id,
+    petName: pet.name,
+  );
+  if (!deleted || !context.mounted) return;
+  await context.read<AccountCubit>().loadAccount();
+  if (context.mounted) showPetDeletedToast(context);
 }
 
 Future<void> _confirmLogout(BuildContext context) async {
@@ -281,5 +308,21 @@ Future<void> _confirmLogout(BuildContext context) async {
 
   if (confirmed && context.mounted) {
     await context.read<AccountCubit>().logOut();
+  }
+}
+
+Future<void> _confirmDeleteAccount(BuildContext context) async {
+  final l10n = AppLocalizations.of(context)!;
+  final confirmed = await showAppConfirmSheet(
+    context: context,
+    title: l10n.account_deleteAccount,
+    message: l10n.account_deleteAccountMessage,
+    confirmLabel: l10n.account_deleteAccount,
+    icon: Icons.person_remove_outlined,
+    isDestructive: true,
+  );
+
+  if (confirmed && context.mounted) {
+    await context.read<AccountCubit>().deleteAccount();
   }
 }

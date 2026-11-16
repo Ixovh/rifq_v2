@@ -26,6 +26,8 @@ abstract class BaseAccountDataSource {
   });
 
   Future<Result<Null, Object>> logOut();
+
+  Future<Result<Null, Object>> deleteAccount();
 }
 
 @LazySingleton(as: BaseAccountDataSource)
@@ -175,6 +177,29 @@ class AccountDataSource implements BaseAccountDataSource {
     }
   }
 
+  @override
+  Future<Result<Null, Object>> deleteAccount() async {
+    try {
+      final userId = AuthHelper.getUserId() ?? _supabase.auth.currentUser?.id;
+      if (userId == null) return Error('User not found');
+
+      await _deleteOwnedFiles(userId);
+      await _supabase.rpc('delete_current_user');
+
+      try {
+        await _supabase.auth.signOut();
+      } catch (_) {
+        // The auth row is already gone, so the session may already be invalid.
+      }
+      await AuthHelper.logout();
+      await ProfileImageCache.clear(userId);
+      await UserDataStore.clear(userId);
+      return Success(null);
+    } catch (e) {
+      return Result.error(CatchErrorMessage(error: e).getWriteMessage());
+    }
+  }
+
   Future<String> _replaceProfileImage({
     required String userId,
     required File file,
@@ -210,6 +235,40 @@ class AccountDataSource implements BaseAccountDataSource {
       imageUrl: publicUrl,
     );
     return publicUrl;
+  }
+
+  Future<void> _deleteOwnedFiles(String userId) async {
+    await _deleteRemoteProfileImages(userId);
+    await _deleteRemotePetPhotos(userId);
+  }
+
+  Future<void> _deleteRemotePetPhotos(String userId) async {
+    try {
+      final paths = await _filesUnder(StorageBuckets.petPhotos, userId);
+      if (paths.isEmpty) return;
+      await _supabase.storage.from(StorageBuckets.petPhotos).remove(paths);
+    } catch (_) {
+      // A missing photo folder should not block account deletion.
+    }
+  }
+
+  Future<List<String>> _filesUnder(String bucket, String prefix) async {
+    final items = await _supabase.storage.from(bucket).list(path: prefix);
+    final paths = <String>[];
+    for (final item in items) {
+      if (item.name.isEmpty) continue;
+      final path = '$prefix/${item.name}';
+      if (item.id == null) {
+        final nested = await _supabase.storage.from(bucket).list(path: path);
+        for (final child in nested) {
+          if (child.name.isEmpty || child.id == null) continue;
+          paths.add('$path/${child.name}');
+        }
+      } else {
+        paths.add(path);
+      }
+    }
+    return paths;
   }
 
   Future<void> _deleteRemoteProfileImages(String userId) async {

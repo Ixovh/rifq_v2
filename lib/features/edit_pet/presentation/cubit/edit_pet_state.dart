@@ -46,3 +46,31 @@ final class EditPetError extends EditPetState {
   @override
   List<Object?> get props => [message];
 }
+
+final class EditPetDeleting extends EditPetState {
+  const EditPetDeleting({required this.pet});
+
+  final AccountPetEntity pet;
+
+  @override
+  List<Object?> get props => [pet];
+}
+
+final class EditPetDeleteSuccess extends EditPetState {
+  const EditPetDeleteSuccess({required this.pet});
+
+  final AccountPetEntity pet;
+
+  @override
+  List<Object?> get props => [pet];
+}
+
+final class EditPetDeleteFailure extends EditPetState {
+  const EditPetDeleteFailure({required this.pet, required this.message});
+
+  final AccountPetEntity pet;
+  final String message;
+
+  @override
+  List<Object?> get props => [pet, message];
+}

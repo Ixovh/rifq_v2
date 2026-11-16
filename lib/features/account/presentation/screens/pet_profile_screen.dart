@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rifq_v2/features/account/domain/entities/account_entity.dart';
+import 'package:rifq_v2/features/account/presentation/widgets/delete_pet_flow.dart';
 import 'package:rifq_v2/features/account/presentation/widgets/pet_label_helpers.dart';
 import 'package:rifq_v2/features/edit_pet/presentation/cubit/edit_pet_cubit.dart';
 import 'package:rifq_v2/l10n/generated/app_localizations.dart';
@@ -66,6 +67,18 @@ class _PetProfileViewState extends State<_PetProfileView>
     }
   }
 
+  Future<void> _deletePet(BuildContext context, AccountPetEntity pet) async {
+    final deleted = await confirmAndDeletePet(
+      context: context,
+      petId: pet.id,
+      petName: pet.name,
+      cubit: context.read<EditPetCubit>(),
+    );
+    if (deleted && context.mounted) {
+      context.router.maybePop(true);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<EditPetCubit, EditPetState>(
@@ -78,8 +91,12 @@ class _PetProfileViewState extends State<_PetProfileView>
           EditPetLoaded(:final pet) => pet,
           EditPetUpdating(:final pet) => pet,
           EditPetUpdateSuccess(:final pet) => pet,
+          EditPetDeleting(:final pet) => pet,
+          EditPetDeleteSuccess(:final pet) => pet,
+          EditPetDeleteFailure(:final pet) => pet,
           _ => null,
         };
+        final isDeleting = state is EditPetDeleting;
 
         if (pet == null) {
           return Scaffold(
@@ -117,7 +134,17 @@ class _PetProfileViewState extends State<_PetProfileView>
                         ),
                       ),
                       IconButton(
-                        onPressed: () => _openEdit(context),
+                        onPressed: isDeleting
+                            ? null
+                            : () => _deletePet(context, pet),
+                        icon: Icon(
+                          Icons.delete_outline,
+                          size: 24.sp,
+                          color: context.red10,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: isDeleting ? null : () => _openEdit(context),
                         icon: Icon(
                           Icons.edit_outlined,
                           size: 24.sp,

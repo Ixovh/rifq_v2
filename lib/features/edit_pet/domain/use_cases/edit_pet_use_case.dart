@@ -29,4 +29,7 @@ class EditPetUseCase {
     weight: weight,
     photoFile: photoFile,
   );
+
+  Future<Result<Null, Object>> deletePet(String petId) async =>
+      editPetRepoData.deletePet(petId);
 }
